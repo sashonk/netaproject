@@ -5,8 +5,10 @@
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/NetaProject"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="lib" path="/NetaProject/libs/gdx.jar" sourcepath="/NetaProject/libs/gdx-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/NetaProject/libs/gdx-freetype.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/gdx-backend-android.jar" sourcepath="libs/gdx-backend-android-sources.jar"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+	<classpathentry kind="lib" path="D:/adt-bundle-windows-x86_64-20131030/sdk/sources/android-19"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

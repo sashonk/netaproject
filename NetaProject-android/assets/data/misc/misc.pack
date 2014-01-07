@@ -3,10 +3,87 @@ misc.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+instruct
+  rotate: false
+  xy: 1, 1575
+  size: 930, 434
+  orig: 930, 434
+  offset: 0, 0
+  index: -1
+nikol
+  rotate: false
+  xy: 1, 1140
+  size: 927, 433
+  orig: 927, 433
+  offset: 0, 0
+  index: -1
+authorsPanel
+  rotate: false
+  xy: 933, 1578
+  size: 924, 431
+  orig: 924, 431
+  offset: 0, 0
+  index: -1
+hintPanel
+  rotate: false
+  xy: 1, 706
+  size: 922, 432
+  orig: 922, 432
+  offset: 0, 0
+  index: -1
+adultsPanel
+  rotate: false
+  xy: 1, 272
+  size: 921, 432
+  orig: 921, 432
+  offset: 0, 0
+  index: -1
+lyricsPanel
+  rotate: false
+  xy: 933, 1237
+  size: 851, 339
+  orig: 851, 339
+  offset: 0, 0
+  index: -1
 fieldsPanel
   rotate: false
+  xy: 930, 841
+  size: 575, 394
+  orig: 575, 394
+  offset: 0, 0
+  index: -1
+figuresPanel
+  rotate: false
+  xy: 1507, 839
+  size: 435, 396
+  orig: 435, 396
+  offset: 0, 0
+  index: -1
+figuresPanel2
+  rotate: false
+  xy: 925, 442
+  size: 431, 397
+  orig: 431, 397
+  offset: 0, 0
+  index: -1
+colorPanel
+  rotate: false
+  xy: 1358, 448
+  size: 410, 389
+  orig: 410, 389
+  offset: 0, 0
+  index: -1
+helpPanel
+  rotate: false
   xy: 1, 1
-  size: 1018, 509
-  orig: 1018, 509
+  size: 274, 269
+  orig: 274, 269
+  offset: 0, 0
+  index: -1
+savePanel
+  rotate: false
+  xy: 1770, 512
+  size: 273, 325
+  orig: 273, 325
   offset: 0, 0
   index: -1
