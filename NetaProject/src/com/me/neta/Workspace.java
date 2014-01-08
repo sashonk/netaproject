@@ -22,7 +22,9 @@ import java.util.Map;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -32,6 +34,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.input.GestureDetector;
 
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -40,6 +43,7 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -274,9 +278,40 @@ public class Workspace extends Group{
 							public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 								getStage().setKeyboardFocus(null);
 								Workspace.this.setSelectedFigure(null);
+								
+								
+								Stage s = getStage();
+								Camera c = s.getCamera();
+								float cx = c.position.x;
+								float cy = c.position.y;
+								float cz = c.position.z;
+						
+								System.out.println("cx="+cx+"; cy="+cy+"; cz="+cz);
+								if(Gdx.input.isKeyPressed(Keys.SHIFT_RIGHT)){
+									c.position.set(cx+50, cy+50, 0);
+									c.update();
+									s.setViewport(s.getWidth()*.9f, s.getHeight()*.9f, false);
+									//s.set
+									//c.translate(0, 0, 10f);
+								//	c.update();
+									//desktop.setScale(sx*1.1f);
+									
+								} 
+								else if(Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)){
+									c.translate(0, 0, -.1f);
+									c.update();
+									//desktop.setScale(sx*0.9f);
+
+								}
+								
 								return true;
+								
+								
 							}
 						});
+						
+						
+				
 
 					}
 					
@@ -485,7 +520,7 @@ public class Workspace extends Group{
 		settingsPanel.setHintPanel(hintPanelAct);
 		
 
-		this.addListener(new InputListener(){
+/*		this.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				if(x<10 && y < 10){
 					saveScreenshot2(Gdx.files.absolute("D:\\screenshot.png"));
@@ -493,7 +528,7 @@ public class Workspace extends Group{
 				
 				return false;
 			}
-		});
+		});*/
 		
 		
 		PanelToolGroup ptGroup = new PanelToolGroup();
@@ -528,6 +563,9 @@ public class Workspace extends Group{
 			}
 		});
 		addActor(splash);
+		
+
+		
 	}
 
 	private void registerStateListener(WorkspaceStateListener listener){

@@ -14,4 +14,11 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>gdx-backend-android-sources</name>
+			<type>2</type>
+			<location>C:/Users/Alexander/Desktop/gdx-backend-android-sources</location>
+		</link>
+	</linkedResources>
 </projectDescription>

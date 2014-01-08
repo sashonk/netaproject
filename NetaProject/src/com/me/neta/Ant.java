@@ -32,8 +32,9 @@ public class Ant extends Moveable{
 	}
 	
 	public void draw(SpriteBatch batch , float parentAlpha){
-		batch.setColor(Color.WHITE);
-		batch.draw(tr, getX(), getY(), getWidth(), getHeight());
+		batch.setColor(getColor());
+	//	batch.draw(tr, getX(), getY(), getWidth(), getHeight());
+		batch.draw(tr, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
 	}
 
 	@Override
