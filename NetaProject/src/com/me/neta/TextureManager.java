@@ -2,6 +2,7 @@ package com.me.neta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -173,7 +174,6 @@ public class TextureManager {
 //////////////////////////////////////////////
          
          
-         circles = new HashMap<Color, Texture>();
 	}
 	
 	public Skin getSkin(){
@@ -229,11 +229,49 @@ public class TextureManager {
 
 	}
 	
+	public Texture getUnmanaged(Color c){
+		Texture tex = unmanaged.get(c);
+		if(tex == null){
+			Pixmap pmap = new Pixmap(1, 1, Format.RGBA8888);
+			pmap.setColor(c);
+			pmap.fill();
+			tex = new Texture(pmap);
+			unmanaged.put(c, tex);
+		}
+		
+		return tex;
+	}
 	
-	private Map<Color, Texture> circles;
+	public static  void manage(){
+		if(instance==null){
+			return;
+		}
+		
+
+		Iterator<Map<Color, Texture>> rootIter = instance.data.values().iterator();
+		while(rootIter.hasNext()){
+			Map<Color, Texture> map = rootIter.next();
+			Iterator<Texture> texIter = map.values().iterator();
+			while(texIter.hasNext()){
+				Texture tx = texIter.next();
+				tx.dispose();
+				texIter.remove();
+			}
+			
+			rootIter.remove();
+		}
+
+		Iterator<Texture> texIter = instance.unmanaged.values().iterator();
+		while(texIter.hasNext()){
+			Texture tx = texIter.next();
+			tx.dispose();
+			texIter.remove();
+		}
+
+	}
 	
 	
-	
+	private Map<Color, Texture> unmanaged = new HashMap<Color, Texture>();
 	private Map<Integer, Map<Color, Texture>> data = new HashMap<Integer, Map<Color,Texture>>();
 	
 	////////////// FONTS /////////////////
@@ -246,6 +284,9 @@ public class TextureManager {
 		return calibriFont;
 	}
 	
+	public void showMessage(String msg){
+		System.out.println(msg);
+	}
 	
 	
 	public Texture getBottomPanelTexture(){
@@ -282,8 +323,12 @@ public class TextureManager {
 		//fieldsAtlas.dispose();
 		miscAtlas.dispose();
 		
-		for(Texture tex : fields){
+
+		Iterator<Texture> iter = fields.iterator();
+		while(iter.hasNext()){
+			Texture tex = iter.next();
 			tex.dispose();
+			iter.remove();
 		}
 
 		
@@ -296,13 +341,26 @@ public class TextureManager {
 		instructScreen.dispose();
 		
 
-		
-
-		for(Map<Color, Texture> mm : data.values()){
-			for(Texture tx : mm.values()){
+		Iterator<Map<Color, Texture>> rootIter = data.values().iterator();
+		while(rootIter.hasNext()){
+			Map<Color, Texture> map = rootIter.next();
+			Iterator<Texture> texIter = map.values().iterator();
+			while(texIter.hasNext()){
+				Texture tx = texIter.next();
 				tx.dispose();
+				texIter.remove();
 			}
+			
+			rootIter.remove();
 		}
+
+		Iterator<Texture> texIter = unmanaged.values().iterator();
+		while(texIter.hasNext()){
+			Texture tx = texIter.next();
+			tx.dispose();
+			texIter.remove();
+		}
+
 	}
 	
 	public static void dispose(){

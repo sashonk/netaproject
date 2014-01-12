@@ -58,6 +58,7 @@ import com.me.neta.events.LetterDropEvent;
 import com.me.neta.events.LyricsIconEvent;
 import com.me.neta.events.RequestFocusEvent;
 import com.me.neta.events.RotationEvent;
+import com.me.neta.events.ScreenshotEvent;
 import com.me.neta.events.SelectColorEvent;
 import com.me.neta.events.SelectFigureEvent;
 import com.me.neta.events.TrashButtonEvent;
@@ -69,7 +70,7 @@ import com.me.neta.tools.CarriageTool;
 import com.me.neta.tools.DesktopsTool;
 import com.me.neta.tools.FiguresTool;
 import com.me.neta.tools.LetterTool;
-import com.me.neta.tools.LinkTool;
+import com.me.neta.tools.ExitTool;
 import com.me.neta.tools.LyricsTool;
 import com.me.neta.tools.ColorTool;
 import com.me.neta.tools.Question;
@@ -120,7 +121,7 @@ public class Workspace extends Group{
 
 		toolbarTable.debug();
 		toolbarTable.debugTable();
-		final LinkTool linkTool = new LinkTool();
+		final ExitTool linkTool = new ExitTool();
 		toolbarTable.add(linkTool).padRight(pad).padLeft(pad);
 		
 //////////////////////////////////////////////////////////////////		
@@ -232,7 +233,7 @@ public class Workspace extends Group{
 			@Override
 			public boolean handle(Event event) {
 				if(event instanceof LyricsIconEvent){
-					
+
 					
 					LyricsIconEvent lyricsEvent = (LyricsIconEvent)event;
 
@@ -256,7 +257,7 @@ public class Workspace extends Group{
 						desktop = new Desktop(getWidth(), getHeight());
 						desktop.setZIndex(1);
 						
-						if(desktopEvent.getId()==1){
+						if(desktopEvent.getId()==1){ 
 							antDesktop();
 						}
 						if(desktopEvent.getId()==3){
@@ -273,36 +274,14 @@ public class Workspace extends Group{
 						addActorBefore(mousePositionLabel, desktop);
 
 						desktop.setId(desktopEvent.getId());
-						desktop.addAction(Actions.sequence(Actions.fadeIn(.2f)));
+						//desktop.addAction(Actions.sequence(Actions.fadeIn(.2f)));
 						desktop.addListener(new InputListener(){
 							public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 								getStage().setKeyboardFocus(null);
 								Workspace.this.setSelectedFigure(null);
 								
 								
-								Stage s = getStage();
-								Camera c = s.getCamera();
-								float cx = c.position.x;
-								float cy = c.position.y;
-								float cz = c.position.z;
-						
-								System.out.println("cx="+cx+"; cy="+cy+"; cz="+cz);
-								if(Gdx.input.isKeyPressed(Keys.SHIFT_RIGHT)){
-									c.position.set(cx+50, cy+50, 0);
-									c.update();
-									s.setViewport(s.getWidth()*.9f, s.getHeight()*.9f, false);
-									//s.set
-									//c.translate(0, 0, 10f);
-								//	c.update();
-									//desktop.setScale(sx*1.1f);
-									
-								} 
-								else if(Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)){
-									c.translate(0, 0, -.1f);
-									c.update();
-									//desktop.setScale(sx*0.9f);
 
-								}
 								
 								return true;
 								
@@ -322,6 +301,10 @@ public class Workspace extends Group{
 				
 				
 				if(event instanceof LetterDropEvent){
+
+
+				
+					
 					System.out.println("LetterDropEvent::handle");
 					LetterDropEvent dropEvent = (LetterDropEvent) event;
 					Actor letter= dropEvent.getActor();		
@@ -334,6 +317,9 @@ public class Workspace extends Group{
 				
 				
 				if(event instanceof SelectFigureEvent){
+
+					
+					
 					System.out.println("SelectFigureEvent::handle");
 					setSelectedFigure((AbstractFigure) event.getTarget());
 				}
@@ -591,8 +577,9 @@ public class Workspace extends Group{
 
 
 
-		desktop.setBackground(new Color(.72f, .86f, .48f, 1));
-		desktop.getColor().a = 0;
+		//desktop.setBackground(new Color(.72f, .86f, .48f, 1));
+		desktop.setColor(new Color(.72f, .86f, .48f, 1));
+		//desktop.getColor().a = 0;
 		
 
 		
@@ -692,8 +679,9 @@ public class Workspace extends Group{
 	}
 	
 	void spiderDesktop(){
-		desktop.setBackground(new Color(186/255f, 179/255f, 213/255f, 1));
-		desktop.getColor().a = 0;	
+		//desktop.setBackground(new Color(186/255f, 179/255f, 213/255f, 1));
+		desktop.setColor(new Color(186/255f, 179/255f, 213/255f, 1));
+		//desktop.getColor().a = 0;	
 		
 		
 ////////////////////////////////////
@@ -804,8 +792,9 @@ public class Workspace extends Group{
 	
 	
 	void tigerDesktop(){
-		desktop.setBackground(new Color(255/255f, 250/255f, 156/255f, 1));
-		desktop.getColor().a = 0;	
+		//desktop.setBackground(new Color(255/255f, 250/255f, 156/255f, 1));
+		desktop.setColor(new Color(255/255f, 250/255f, 156/255f, 1));
+	//	desktop.getColor().a = 0;	
 		
 		
 		
@@ -824,7 +813,7 @@ public class Workspace extends Group{
 	textImg.setBounds(0, 0, 330, 155);		
 	textGroup.addActor(textImg);		
 	
-	TextField author = new TextField("Приветствую!", TextureManager.get().getSkin(), "tiger");
+	TextField author = new TextField("", TextureManager.get().getSkin(), "tiger");
 	author.setName("author");
 	
 	author.setFocusTraversal(true);
@@ -911,8 +900,9 @@ public class Workspace extends Group{
 	}
 	
 	void pitonDesktop(){
-		desktop.setBackground(new Color(182/255f, 221/255f, 200/255f, 1));
-		desktop.getColor().a = 0;	
+		//desktop.setBackground(new Color(182/255f, 221/255f, 200/255f, 1));
+		desktop.setColor(new Color(182/255f, 221/255f, 200/255f, 1));
+	//	desktop.getColor().a = 0;	
 		
 		
 ////////////////////////////////////
@@ -1038,6 +1028,8 @@ public class Workspace extends Group{
     public void saveScreenshot2(FileHandle fh) {
         Pixmap pixmap = getScreenshot(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
         PixmapIO.writePNG(fh, pixmap);
+      //  BufferedI
+        
         //PixmapIO.writePNG(file, pixmap);
        
 /*      try {

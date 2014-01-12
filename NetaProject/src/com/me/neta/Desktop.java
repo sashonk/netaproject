@@ -23,11 +23,12 @@ import com.me.neta.tools.RotateTool;
 import com.me.neta.tools.ZIndexTool;
 
 public class Desktop extends Group{
-	Pixmap pm;
-	Texture tx;
+	//Pixmap pm;
+	//Texture tx;
 	ZIndexTool ztool;
 	boolean lyricsAdded = false;
 	private int id;
+	TextureManager tm;
 	
 	public void setId(int id){
 		this.id = id;
@@ -55,12 +56,13 @@ public class Desktop extends Group{
 	}
 	
 	public Desktop(float width, float height){
-		
+		tm = TextureManager.get();
 		
 		this.setBounds(0, 0, width, height);		
-		pm = new Pixmap(1, 1, Format.RGBA8888);
+/*		pm = new Pixmap(1, 1, Format.RGBA8888);
+		pm.setColor(Color.WHITE);
 		pm.fill();
-		tx = new Texture(pm);		
+		tx = new Texture(pm);	*/	
 		
 		
 
@@ -96,17 +98,19 @@ public class Desktop extends Group{
 
 	}
 	
-	void setBackground(Color c){
+/*	void setBackground(Color c){
 		pm.setColor(c);
 		pm.fill();
 		tx.draw(pm, 0, 0);
-	}
+	}*/
 	
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha){
 		
 		Color c = this.getColor();
-		batch.setColor(c.r, c.g, c.b, c.a* parentAlpha);		
+		Texture tx = tm.getUnmanaged(c);
+		
+		batch.setColor(1, 1, 1, c.a* parentAlpha);		
 		batch.draw(tx, getX(), getY(), getWidth(), getHeight());
 		
 		super.draw(batch, parentAlpha);

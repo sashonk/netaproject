@@ -5,7 +5,7 @@ import com.me.neta.Size;
 import com.me.neta.util.WorkspaceState;
 
 
-public class LinkTool extends AbstractTool{
+public class ExitTool extends AbstractTool{
 
 	@Override
 	public void doAction() {

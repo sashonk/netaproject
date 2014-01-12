@@ -28,6 +28,13 @@ import com.me.neta.tools.AbstractTool;
 
 
 public class NetaGame implements ApplicationListener {
+	
+	public static Platform platform;
+	
+	public NetaGame(Platform platform){
+		this.platform = platform;
+	}
+	
 	static final boolean debug= true;
 
 	Sprite panelSprite;
@@ -94,9 +101,10 @@ public class NetaGame implements ApplicationListener {
 			splashSprite.draw(batch);
 			batch.end();
 		}
-		else{			
-			stage.act();			
+		else{		
 			stage.draw();	
+			stage.act();			
+
 		}
 	
 		
@@ -108,14 +116,14 @@ public class NetaGame implements ApplicationListener {
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
-		
+		System.out.println("pause");
+		TextureManager.manage();
 	}
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
-		
+		System.out.println("resume");
+	
 	}
 
 	@Override
