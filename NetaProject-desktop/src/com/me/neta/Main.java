@@ -12,6 +12,6 @@ public class Main {
 		cfg.width = 1024;
 		cfg.height = 768;
 		
-		new LwjglApplication(new NetaGame(), cfg);
+		new LwjglApplication(new NetaGame(new WinPlatform()), cfg);
 	}
 }
