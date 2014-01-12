@@ -15,6 +15,6 @@ public class MainActivity extends AndroidApplication {
         
        
         
-        initialize(new NetaGame(), cfg);
+        initialize(new NetaGame(new AndroidPlatform(this)), cfg);
     }
 }

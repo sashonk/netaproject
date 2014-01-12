@@ -3,12 +3,14 @@
     package="com.me.neta"
     android:versionCode="1"
     android:versionName="1.0"
-    android:debuggable="true"
      >
+     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    
 
-    <uses-sdk android:minSdkVersion="5" android:targetSdkVersion="17" />
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="19" />
 
     <application
+        android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
         <activity
