@@ -24,9 +24,11 @@ public class Circle extends AbstractFigure{
 
 	@Override
 	public void drawFilled(SpriteBatch batch, float parentAlpha) {
-		Texture tx = tm.getCircle(getColor(), Math.max(getWidth(), getHeight()));
 		Color c = getColor();
-		batch.setColor(c.r,c.g,c.b,c.a*parentAlpha);
+		Color opaque = c.cpy();
+		opaque.a = 1;
+		Texture tx = tm.getCircle(opaque, Math.max(getWidth(), getHeight()));		
+		batch.setColor(1,1,1,c.a*parentAlpha);
 		batch.draw(tx, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation(), 0, 0, tx.getWidth(), tx.getHeight(), false, false);			
 	}
 

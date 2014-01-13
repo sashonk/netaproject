@@ -14,7 +14,7 @@ import com.me.neta.events.DragStopEvent;
 import com.me.neta.events.LetterDropEvent;
 
 public abstract class Factory extends Actor{
-	public Factory(){
+	public Factory(Actor workspace){
 		 final DragAndDrop dad = new DragAndDrop();
 		 dad.addSource(new DragAndDrop.Source(this) {
 			
@@ -46,7 +46,7 @@ public abstract class Factory extends Actor{
 			}
 		});
 		 
-		 dad.addTarget(new DragAndDrop.Target(Workspace.instance) {
+		 dad.addTarget(new DragAndDrop.Target(workspace) {
 			
 			@Override
 			public void drop(Source source, Payload payload, float x, float y,

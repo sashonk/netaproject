@@ -13,7 +13,8 @@ public class CircleFactory extends Factory{
 	private String assetName;
 	private TextureRegion tr;
 
-	public CircleFactory(float width, float height, String assetName){
+	public CircleFactory(float width, float height, String assetName, Actor workspace){
+		super(workspace);
 		this.width= width;
 		this.height= height;		
 		this.assetName = assetName;

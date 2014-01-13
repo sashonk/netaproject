@@ -12,7 +12,6 @@ import com.me.neta.util.ColorHelper;
 public class Letter extends AbstractFigure{
 
 	TextureManager tm;
-	Texture coloredCircle;
 	TextureRegion circle;
 	TextureRegion char1;
 	TextureRegion char2;
@@ -34,13 +33,16 @@ public class Letter extends AbstractFigure{
 
 	@Override
 	public void drawFilled(SpriteBatch batch, float parentAlpha) {
-		coloredCircle = tm.getCircle(getColor(), getWidth());
 		Color c = getColor();
-		batch.setColor(c.r,c.g,c.b,c.a*parentAlpha);
+		Color opaque = c.cpy();	
+		opaque.a = 1;
+		Texture coloredCircle = tm.getCircle(opaque, getWidth());
+		
+		batch.setColor(1,1,1,c.a*parentAlpha);
 		
 		batch.draw(coloredCircle, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation(), 0, 0, coloredCircle.getWidth(), coloredCircle.getHeight(), false, false);			
 		
-		if(ColorHelper.isDark(getColor())){
+		if(ColorHelper.isDark(opaque)){
 			batch.draw(char2, getX()+6, getY()+6, 9, 9, char1.getRegionWidth(), char1.getRegionHeight(), getScaleX(), getScaleY(), getRotation());
 		}
 		else{

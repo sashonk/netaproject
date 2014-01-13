@@ -4,12 +4,8 @@ import com.me.neta.Size;
 import com.me.neta.util.WorkspaceState;
 
 
-public class CarriageTool extends AbstractTool{
+public class ShopTool extends PanelTool{
 
-	@Override
-	public void doAction() {
-		
-	}
 
 	@Override
 	public String getImagePath() {

@@ -66,7 +66,7 @@ import com.me.neta.events.WorkspaceStateEvent;
 import com.me.neta.figures.AbstractFigure;
 import com.me.neta.tools.AbstractTool;
 import com.me.neta.tools.BasketTool;
-import com.me.neta.tools.CarriageTool;
+import com.me.neta.tools.ShopTool;
 import com.me.neta.tools.DesktopsTool;
 import com.me.neta.tools.FiguresTool;
 import com.me.neta.tools.LetterTool;
@@ -89,7 +89,6 @@ public class Workspace extends Group{
 	
 	static final float pad = 15;
 
-	public static Workspace instance;
 	
 	
 	private List<WorkspaceStateListener> listeners = new LinkedList<WorkspaceStateListener>();
@@ -99,7 +98,6 @@ public class Workspace extends Group{
 	
 	public Workspace(){
 		
-		instance = this;
 		
 
 		Skin skin = TextureManager.get().getSkin();		
@@ -157,12 +155,12 @@ public class Workspace extends Group{
 		
 		final FiguresTool figuresTool = new FiguresTool();
 		toolbarTable.add(figuresTool).padRight(pad).padLeft(pad);
-		FiguresPanel figPanel = new FiguresPanel();
+		FiguresPanel figPanel = new FiguresPanel(this);
 		figPanel.setColor(c);
 		figPanel.setVisible(false);
 		figPanel.setWidth(550);
 		figPanel.setHeight(450);
-		figPanel.setPosition(350, 75);
+		figPanel.setPosition(370, 75);
 		figuresTool.setPanel(figPanel);
 		this.addActor(figPanel);
 		
@@ -176,12 +174,17 @@ public class Workspace extends Group{
 		palette.setVisible(false);
 		palette.setWidth(560);
 		palette.setHeight(460);
-		palette.setPosition(320, 75);
+		palette.setPosition(340, 75);
 		paletteTool.setPanel(palette);
 		this.addActor(palette);
 		
-		final CarriageTool carriageTool = new CarriageTool();
-		toolbarTable.add(carriageTool).padRight(pad).padLeft(pad);
+		final ShopTool shopTool = new ShopTool();
+		final Image gameshopPanel = new Image(TextureManager.get().getMiscAtlas().findRegion("gameshop"));
+		gameshopPanel.setVisible(false);
+		gameshopPanel.setBounds(70, 75, 878, 358);
+		this.addActor(gameshopPanel);
+		shopTool.setPanel(gameshopPanel);
+		toolbarTable.add(shopTool).padRight(pad).padLeft(pad);
 		
 		final SaveTool saveTool = new SaveTool();
 		toolbarTable.add(saveTool).padRight(pad).padLeft(pad);
@@ -191,7 +194,7 @@ public class Workspace extends Group{
 		savePanel.setVisible(false);
 		savePanel.setWidth(260);
 		savePanel.setHeight(300);
-		savePanel.setPosition(730, 75);
+		savePanel.setPosition(750, 75);
 		saveTool.setPanel(savePanel);
 		this.addActor(savePanel);
 		
@@ -391,11 +394,6 @@ public class Workspace extends Group{
 					else{
 						fire(new WorkspaceStateEvent(WorkspaceState.WORKING));						
 					}
-	/*				linkTool.setEnabled(true);
-					fieldsTool.setEnabled(true);
-					settingTool.setEnabled(true);
-					carriageTool.setEnabled(true);
-					q.setEnabled(true);*/
 
 					
 				}
@@ -524,6 +522,8 @@ public class Workspace extends Group{
 		ptGroup.addTool(paletteTool);
 		ptGroup.addTool(saveTool);
 		ptGroup.addTool(settingTool);
+		ptGroup.addTool(shopTool);
+		
 		
 		
 		registerStateListener(linkTool);
@@ -533,7 +533,7 @@ public class Workspace extends Group{
 		registerStateListener(lyricsTool);
 		registerStateListener(figuresTool);
 		registerStateListener(paletteTool);
-		registerStateListener(carriageTool);
+		registerStateListener(shopTool);
 		registerStateListener(saveTool);
 		registerStateListener(settingTool);		
 		registerStateListener(q);
@@ -571,7 +571,7 @@ public class Workspace extends Group{
 	
 	private Desktop desktop;
 	
-	
+
 
 	void antDesktop(){
 

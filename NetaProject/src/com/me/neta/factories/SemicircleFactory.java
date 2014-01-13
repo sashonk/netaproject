@@ -14,7 +14,8 @@ public class SemicircleFactory extends Factory{
 	private String assetName;
 	private TextureRegion tr;
 
-	public SemicircleFactory(float width, float height, String assetName){
+	public SemicircleFactory(float width, float height, String assetName, Actor workspace){
+		super(workspace);
 		this.width= width;
 		this.height= height;		
 		this.assetName = assetName;

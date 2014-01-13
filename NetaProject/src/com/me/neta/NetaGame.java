@@ -37,10 +37,7 @@ public class NetaGame implements ApplicationListener {
 	
 	static final boolean debug= true;
 
-	Sprite panelSprite;
-	Sprite splashSprite;
-	Texture splashTex;
-	SpriteBatch batch;
+
 	
 	Table toolPanel;
 	ScreenUtils u;
@@ -48,23 +45,16 @@ public class NetaGame implements ApplicationListener {
 
 	Stage stage;
 	
-	
-	boolean workspaceChosen = false;
-	boolean splash = true;
+
 	
 	Workspace space;
 	@Override
 	public void create() {
-		splash =false;
-		//splashTex = new Texture(Gdx.files.internal("data/zastavka.jpg"));
-		//TextureRegion region = new TextureRegion(splashTex, 0, 0, 1024, 600);
-		//splashSprite = new Sprite(region);
-		//splashSprite.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		batch = new SpriteBatch();
+		TextureManager.destroy();
 		
+	
 		
 
-		
 		stage= new Stage(1024,768, false);
 		
 		
@@ -94,18 +84,11 @@ public class NetaGame implements ApplicationListener {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
-		
 	
-		if(splash){
-			batch.begin();
-			splashSprite.draw(batch);
-			batch.end();
-		}
-		else{		
-			stage.draw();	
-			stage.act();			
+		stage.draw();	
+		stage.act();			
 
-		}
+		
 	
 		
 		if(Gdx.input.isKeyPressed(Keys.ESCAPE)){
@@ -128,28 +111,11 @@ public class NetaGame implements ApplicationListener {
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-		batch.dispose();
-		//splashTex.dispose();
-		
+
 		TextureManager.dispose();
 	}
 	
-	
-	EventListener clickListener(final AbstractTool tool){
-		return new EventListener() {
-			
-			@Override
-			public boolean handle(Event event) {
-				if(event instanceof InputEvent){
-					if(((InputEvent) event).getType()==InputEvent.Type.touchDown){
-						tool.doAction();
-					}
-				}
-				return true;
-			}
-		};
-	}
+
 
 }
 

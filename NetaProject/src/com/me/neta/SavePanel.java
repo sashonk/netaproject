@@ -49,7 +49,7 @@ public class SavePanel extends Group{
 					//fire(new ScreenshotEvent());
 				
 					
-					Workspace.instance.addAction(run(new Runnable(){
+					SavePanel.this.addAction(run(new Runnable(){
 
 						@Override
 						public void run() {				

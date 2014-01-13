@@ -38,37 +38,44 @@ adultsPanel
   orig: 921, 432
   offset: 0, 0
   index: -1
+gameshop
+  rotate: false
+  xy: 933, 1218
+  size: 879, 358
+  orig: 879, 358
+  offset: 0, 0
+  index: -1
 lyricsPanel
   rotate: false
-  xy: 933, 1237
+  xy: 930, 877
   size: 851, 339
   orig: 851, 339
   offset: 0, 0
   index: -1
 fieldsPanel
   rotate: false
-  xy: 930, 841
+  xy: 925, 481
   size: 575, 394
   orig: 575, 394
   offset: 0, 0
   index: -1
 figuresPanel
   rotate: false
-  xy: 1507, 839
+  xy: 1502, 479
   size: 435, 396
   orig: 435, 396
   offset: 0, 0
   index: -1
 figuresPanel2
   rotate: false
-  xy: 925, 442
+  xy: 924, 82
   size: 431, 397
   orig: 431, 397
   offset: 0, 0
   index: -1
 colorPanel
   rotate: false
-  xy: 1358, 448
+  xy: 1357, 88
   size: 410, 389
   orig: 410, 389
   offset: 0, 0
@@ -82,7 +89,7 @@ helpPanel
   index: -1
 savePanel
   rotate: false
-  xy: 1770, 512
+  xy: 1769, 152
   size: 273, 325
   orig: 273, 325
   offset: 0, 0

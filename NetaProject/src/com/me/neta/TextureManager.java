@@ -46,11 +46,14 @@ public class TextureManager {
 	
 	private static TextureManager instance;
 	
+	
 	public static final String DEFAULT_CHARS = FreeTypeFontGenerator.DEFAULT_CHARS.concat(CHARS);
 	
 	public static TextureManager get(){
 		if(instance==null){
 			instance = new TextureManager();
+			
+			instance.init();
 			
 		}
 		
@@ -58,7 +61,7 @@ public class TextureManager {
 	}
 	
 	
-	private TextureManager(){
+	public void init(){
 		atlas = new TextureAtlas(Gdx.files.internal("data/main.pack"));
 		//fieldsAtlas = new TextureAtlas(Gdx.files.internal("data/fields/fields.pack"));
 		miscAtlas = new TextureAtlas(Gdx.files.internal("data/misc/misc.pack"));
@@ -175,6 +178,8 @@ public class TextureManager {
          
          
 	}
+	
+	private TextureManager(){}
 	
 	public Skin getSkin(){
 		return skin;
@@ -361,6 +366,11 @@ public class TextureManager {
 			texIter.remove();
 		}
 
+	}
+	
+	public static void destroy(){
+		dispose();
+		instance = null;
 	}
 	
 	public static void dispose(){

@@ -14,7 +14,8 @@ public class PolygonFactory extends Factory{
 	String assetName;
 	float[] polyVertices;
 	
-	public PolygonFactory(float[] vertices, String assetName, Size size){
+	public PolygonFactory(float[] vertices, String assetName, Size size,  Actor workspace){
+		super(workspace);
 		this.size =size;
 		this.setWidth(size.width);
 		this.setHeight(size.height);

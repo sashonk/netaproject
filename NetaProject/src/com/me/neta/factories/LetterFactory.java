@@ -24,7 +24,11 @@ public class LetterFactory extends Factory{
 	TextureRegion char1;
 	int id;
 	
-	public LetterFactory(int id){
+	int padx;
+	int pady;
+	
+	public LetterFactory(int id, Actor workspace){
+		super(workspace);
 		this.id = id;
 		this.setSize(30, 30);
 		 tm = TextureManager.get();
@@ -33,13 +37,16 @@ public class LetterFactory extends Factory{
 		 circle = a.findRegion("FIGURA2W");
 		 char1 = a.findRegion(String.format("CHAR%dW", id));
 		
-
+		 // "stupid designer" hack
+		 padx = (id >=31 && id <=33) ? 4 : 6;
+		 pady = (id==29) ? 4 : 6;
+				 
 	}
 	
 	public void draw(SpriteBatch batch , float parentAlpha){
 
 		batch.draw(circle, getX(), getY(), getWidth(), getHeight());
-		batch.draw(char1, getX()+6, getY()+6);			
+		batch.draw(char1, getX()+padx, getY()+pady);			
 	}
 	
 	public Actor create(){
