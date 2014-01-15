@@ -55,6 +55,8 @@ public class Pinch2ZoomListener2 extends InputListener{
 
 	public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 		
+		
+	
 		Camera c = actor.getStage().getCamera();
 		Vector3 v = new Vector3(x, y, 0);
 		c.project(v);
@@ -141,17 +143,19 @@ public class Pinch2ZoomListener2 extends InputListener{
 		cam.zoom = initialZoom/factor;		 
 		constrainZoom(cam);
 			
-		 Vector2 c = pointer1.cpy().add(pointer2).div(2);
+/*		 Vector2 c = pointer1.cpy().add(pointer2).div(2);
 		 Vector3 c3 = new Vector3(c.x, c.y, 0);
 		 cam.unproject(c3);
 		 c.set(c3.x, c3.y);
+		 Vector2 screenCoors = new Vector2(c.x, Gdx.graphics.getHeight()-c.y);
+		 Vector2 localc = actor.screenToLocalCoordinates(screenCoors);
 		 
 		 
 			
 			float w2 = actor.getStage().getWidth()/2;
 			float h2 = actor.getStage().getHeight()/2;
-			cam.position.set((w2*cam.zoom-c.x*cam.zoom+c.x-w2*Zmin)/(1- Zmin), (h2*cam.zoom-c.y*cam.zoom+c.y-h2*Zmin)/(1-Zmin), 0);
-			
+			cam.position.set((w2*cam.zoom-localc.x*cam.zoom+localc.x-w2*Zmin)/(1- Zmin), (h2*cam.zoom-localc.y*cam.zoom+localc.y-h2*Zmin)/(1-Zmin), 0);
+			*/
 			constrainPosition(cam);
 		 
 
@@ -198,8 +202,13 @@ public class Pinch2ZoomListener2 extends InputListener{
 	}
 	
 	private void pan(float x, float y, float dx, float dy){
-		//OrthographicCamera c =  (OrthographicCamera) actor.getStage().getCamera();
-		//c.position.set(x, y, 0);	
+		
+		if(!pinching){
+		OrthographicCamera c =  (OrthographicCamera) actor.getStage().getCamera();
+		c.translate(-dx, -dy);
+		
+		constrainPosition(c);
+		}
 	}
 
 	private  void constrainPosition(OrthographicCamera cam){
