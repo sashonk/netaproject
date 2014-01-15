@@ -182,7 +182,10 @@ public class Pinch2ZoomListener2 extends InputListener{
 		
 		
 		// update tracker
+		if(!pinching)
 		tracker.update(x, y, Gdx.input.getCurrentEventTime());
+		
+		
 
 		// check if we are still tapping.
 		if (inTapSquare && !isWithinTapSquare(x, y, tapSquareCenterX, tapSquareCenterY)) {
