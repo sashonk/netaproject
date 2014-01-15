@@ -292,7 +292,7 @@ public class Workspace extends Group{
 							}
 						});
 						
-						
+						desktop.addListener(new Pinch2ZoomListener2(desktop));
 				
 
 					}
