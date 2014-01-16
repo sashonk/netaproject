@@ -110,24 +110,13 @@ public class Pinch2ZoomListener2 extends InputListener{
 		if (inTapSquare && !isWithinTapSquare(x, y, tapSquareCenterX, tapSquareCenterY)) inTapSquare = false;
 
 		panning = false;
-		if (inTapSquare) {
-			// handle taps
-			if (lastTapButton != button || lastTapPointer != pointer || TimeUtils.nanoTime() - lastTapTime > tapCountInterval
-				|| !isWithinTapSquare(x, y, lastTapX, lastTapY)) tapCount = 0;
-			tapCount++;
-			lastTapTime = TimeUtils.nanoTime();
-			lastTapX = x;
-			lastTapY = y;
-			lastTapButton = button;
-			lastTapPointer = pointer;
-			gestureStartTime = 0;
-		} 
-		else if (pinching) {
+
+	
 			// handle pinch end
-			pinching = false;
-			panning = true;
+		pinching = false;
+			//panning = true;
 			
-		} 
+		
 	}
 	
 	boolean debug = true;
