@@ -23,7 +23,7 @@ public class WinPlatform implements Platform{
 
 
 	@Override
-	public void setForEmail(String to, File attachment, String text) {
+	public void setForEmail(String to, File attachment,String subject) {
 		// TODO Auto-generated method stub
 			System.out.println("win::setEmail");
 	}

@@ -94,11 +94,18 @@ public class Workspace extends Group{
 	private List<WorkspaceStateListener> listeners = new LinkedList<WorkspaceStateListener>();
 	public WorkspaceState state;
 	public boolean lyricsDropped = false;
-	
+	private Actor disableCurtain;
 	
 	public Workspace(){
-		
-		
+		setName("workspace");
+/*		disableCurtain = new Actor(){
+			public void draw(SpriteBatch b , float pa){
+				Texture tx = TextureManager.get().getUnmanaged(Color.BLACK);
+				b.draw(tx, getX(), getY(), getWidth(), height);
+			}
+		};
+		disableCurtain.setColor(new Color(1,1,1,0.3f));*/
+		//disableCurtain.setBounds(0, 0, width, height);
 
 		Skin skin = TextureManager.get().getSkin();		
 		mousePositionLabel = new Label("", skin);
@@ -240,7 +247,7 @@ public class Workspace extends Group{
 					
 					LyricsIconEvent lyricsEvent = (LyricsIconEvent)event;
 
-					desktop.addLyrics(lyricsEvent.getChoice());
+					world.addLyrics(lyricsEvent.getChoice());
 					
 					lyricsPanel.addAction(sequence(fadeOut(0.4f), visible(false)));
 					lyricsDropped = true;
@@ -253,32 +260,32 @@ public class Workspace extends Group{
 					int deskId = desktopEvent.getId();
 					
 					if(deskId>=0){
-						if(desktop!=null && desktop.getParent()!=null){
-							desktop.remove();
+						if(world!=null && world.getParent()!=null){
+							world.remove();
 						}
 						
-						desktop = new Desktop(getWidth(), getHeight());
-						desktop.setZIndex(1);
+						world = new World(getWidth(), getHeight());
+						world.setZIndex(1);
 						
 						if(desktopEvent.getId()==1){ 
-							antDesktop();
+							createAntWorld();
 						}
 						if(desktopEvent.getId()==3){
-							pitonDesktop();
+							createPitonWorld();
 						}
 						if(desktopEvent.getId()==2){
-							spiderDesktop();
+							createSpiderWorld();
 						}
 						if(desktopEvent.getId()==4){
-							tigerDesktop();
+							createTigerWorld();
 						}
 
 						fieldsPanel.setVisible(false);
-						addActorBefore(mousePositionLabel, desktop);
+						addActorBefore(mousePositionLabel, world);
 
-						desktop.setId(desktopEvent.getId());
+						world.setId(desktopEvent.getId());
 						//desktop.addAction(Actions.sequence(Actions.fadeIn(.2f)));
-						desktop.addListener(new InputListener(){
+						world.addListener(new InputListener(){
 							public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 								getStage().setKeyboardFocus(null);
 								Workspace.this.setSelectedFigure(null);
@@ -292,7 +299,7 @@ public class Workspace extends Group{
 							}
 						});
 						
-						desktop.addListener(new Pinch2ZoomListener2(desktop));
+						//desktop.addListener(new Pinch2ZoomListener2());
 				
 
 					}
@@ -312,8 +319,8 @@ public class Workspace extends Group{
 					LetterDropEvent dropEvent = (LetterDropEvent) event;
 					Actor letter= dropEvent.getActor();		
 					
-					Actor z = desktop.findActor("zactor");
-					desktop.addActorBefore(z, letter);
+					Actor z = world.findActor("zactor");
+					world.addActorBefore(z, letter);
 							
 					setSelectedFigure((AbstractFigure) letter);
 				}
@@ -355,21 +362,45 @@ public class Workspace extends Group{
 				}
 				
 				if(event instanceof RequestFocusEvent){
-					if(desktop!=null){
-						desktop.setFocus();
+					if(world!=null){
+						world.setFocus();
 					}
 				}
 				 
 				if(event instanceof WorkspaceStateEvent){
+					
+					if(state==WorkspaceState.DISABLED){
+						Actor curtain = Workspace.this.findActor("curtain");
+						if(curtain!=null){
+							curtain.remove();
+						}
+					}
+					
 					WorkspaceStateEvent wsEvent = (WorkspaceStateEvent) event;
 					 for(WorkspaceStateListener listener : listeners){
 						 listener.stateChanged(state, wsEvent.getState());
 					 }
 					 
 					 state =wsEvent.getState();
+					 
+					 if(state == WorkspaceState.DISABLED){
+						 Image curtain = new Image(TextureManager.get().getUnmanaged(new Color(0,0,0,0.3f)));
+						 curtain.setName("curtain");
+						 curtain.setBounds(0, 0, Workspace.this.getWidth(), Workspace.this.getHeight());
+						 Actor msg = Workspace.this.findActor("message");
+						 if(msg!=null){
+							 Workspace.this.addActorBefore(msg, curtain);
+						 }
+						 else{
+							 Workspace.this.addActor(msg);
+						 }
+						 
+						 
+						
+					 }
 				}
 				
-
+			
 				
 				
 				event.setBubbles(false);
@@ -388,7 +419,7 @@ public class Workspace extends Group{
 				if(x>817 && x<889 && y>101 && y<169){
 					event.getTarget().setVisible(false);
 					
-					if(desktop==null){
+					if(world==null){
 						fire(new WorkspaceStateEvent(WorkspaceState.PREPARED));
 					}
 					else{
@@ -435,7 +466,7 @@ public class Workspace extends Group{
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 			if(x>817 && x<889 && y>101 && y<169){
 				event.getTarget().setVisible(false);
-				if(desktop==null){
+				if(world==null){
 				fire(new WorkspaceStateEvent(WorkspaceState.PREPARED));
 				}
 				else{
@@ -461,7 +492,7 @@ public class Workspace extends Group{
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 			if(x>817 && x<889 && y>101 && y<169){
 				event.getTarget().setVisible(false);
-				if(desktop==null){
+				if(world==null){
 					fire(new WorkspaceStateEvent(WorkspaceState.PREPARED));
 				}
 				else{
@@ -488,7 +519,7 @@ public class Workspace extends Group{
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 			if(x>817 && x<889 && y>101 && y<169){
 				event.getTarget().setVisible(false);
-				if(desktop==null){
+				if(world==null){
 					fire(new WorkspaceStateEvent(WorkspaceState.PREPARED));
 				}
 				else{
@@ -569,16 +600,16 @@ public class Workspace extends Group{
 	
 	
 	
-	private Desktop desktop;
+	private World world;
 	
 
 
-	void antDesktop(){
+	void createAntWorld(){
 
 
 
 		//desktop.setBackground(new Color(.72f, .86f, .48f, 1));
-		desktop.setColor(new Color(.72f, .86f, .48f, 1));
+		world.setColor(new Color(.72f, .86f, .48f, 1));
 		//desktop.getColor().a = 0;
 		
 
@@ -641,7 +672,7 @@ public class Workspace extends Group{
 		textGroup.addActor(year);
 		
 		textGroup.setName("passport");
-		desktop.addActor(textGroup);
+		world.addActor(textGroup);
 		textImg.addListener(new MetricListener());
 ////////////////////////////////////////////////	
 ////////////////////////////////////////////////	
@@ -655,32 +686,32 @@ public class Workspace extends Group{
 
 		Image flower1 = new Image(TextureManager.get().getAtlas().findRegion("ZVET3"));
 		flower1.setBounds(162, 80, 57,73);
-		desktop.addActor(flower1);
+		world.addActor(flower1);
 		
 		Image flower2 = new Image(TextureManager.get().getAtlas().findRegion("ZVET4"));
 		flower2.setBounds(900, 80,57,57);
-		desktop.addActor(flower2);	
+		world.addActor(flower2);	
 		
 		Actor zactor = new Actor();
 		zactor.setName("zactor");
-		desktop.addActor(zactor);
+		world.addActor(zactor);
 		
 
 		Hero ant2 = new Hero("ant2");
 		ant2.setBounds(800, 260, 55, 115);
 		ant2.setZIndex(9);
-		desktop.addActor(ant2);
+		world.addActor(ant2);
 		
 		Ant ant = new Ant();
 		ant.setPosition(100, 250);
 		ant.setZIndex(10);
-		desktop.addActor(ant);
-		desktop.setName("ant");
+		world.addActor(ant);
+		world.setName("ant");
 	}
 	
-	void spiderDesktop(){
+	void createSpiderWorld(){
 		//desktop.setBackground(new Color(186/255f, 179/255f, 213/255f, 1));
-		desktop.setColor(new Color(186/255f, 179/255f, 213/255f, 1));
+		world.setColor(new Color(186/255f, 179/255f, 213/255f, 1));
 		//desktop.getColor().a = 0;	
 		
 		
@@ -746,7 +777,7 @@ public class Workspace extends Group{
 		textGroup.addActor(year);
 		
 		textGroup.setName("passport");
-		desktop.addActor(textGroup);
+		world.addActor(textGroup);
 		textImg.addListener(new MetricListener());
 ////////////////////////////////////////////////
 ////////////////////////////////////////////////
@@ -760,7 +791,7 @@ public class Workspace extends Group{
 		
 		Image PAUTINA = new Image(TextureManager.get().getAtlas().findRegion("PAUTINA"));
 		PAUTINA.setBounds(1024-304, 768-257,304, 257);
-		desktop.addActor(PAUTINA);
+		world.addActor(PAUTINA);
 		
 		
 
@@ -771,29 +802,29 @@ public class Workspace extends Group{
 		
 		Image flower = new Image(TextureManager.get().getAtlas().findRegion("ZVET3"));
 		flower.setBounds(875, 140,57, 73);
-		desktop.addActor(flower);
+		world.addActor(flower);
 		
 		Actor zactor = new Actor();
 		zactor.setName("zactor");
-		desktop.addActor(zactor);
+		world.addActor(zactor);
 		
 		Hero muha = new Hero("MUH");
 		muha.setBounds(550, 560,53,31);
 		muha.setZIndex(9);
-		desktop.addActor(muha);
+		world.addActor(muha);
 		
 		Spider spider = new Spider();
 		spider.setPosition(100, 250);
 		spider.setZIndex(10);
-		desktop.addActor(spider);
+		world.addActor(spider);
 		
-		desktop.setName("spider");
+		world.setName("spider");
 	}
 	
 	
-	void tigerDesktop(){
+	void createTigerWorld(){
 		//desktop.setBackground(new Color(255/255f, 250/255f, 156/255f, 1));
-		desktop.setColor(new Color(255/255f, 250/255f, 156/255f, 1));
+		world.setColor(new Color(255/255f, 250/255f, 156/255f, 1));
 	//	desktop.getColor().a = 0;	
 		
 		
@@ -860,7 +891,7 @@ public class Workspace extends Group{
 	textGroup.addActor(year);
 	
 	textGroup.setName("passport");
-	desktop.addActor(textGroup);
+	world.addActor(textGroup);
 	textImg.addListener(new MetricListener());
 ////////////////////////////////////////////////
 ////////////////////////////////////////////////
@@ -869,39 +900,39 @@ public class Workspace extends Group{
 		
 		Image flower1 = new Image(TextureManager.get().getAtlas().findRegion("ZVET5"));
 		flower1.setBounds(140, 135,78,97);
-		desktop.addActor(flower1);
+		world.addActor(flower1);
 		
 		
 		Image butterfly = new Image(TextureManager.get().getAtlas().findRegion("PARPAR"));
 		butterfly.setBounds(690, 768-200,38,38);
-		desktop.addActor(butterfly);
+		world.addActor(butterfly);
 		
 		Image flower2 = new Image(TextureManager.get().getAtlas().findRegion("ZVET6"));
 		flower2.setBounds(820,150,74,48);
-		desktop.addActor(flower2);
+		world.addActor(flower2);
 		
 		
 		Actor zactor = new Actor();
 		zactor.setName("zactor");
-		desktop.addActor(zactor);
+		world.addActor(zactor);
 		
 		Hero zebra = new Hero("ZEBRA");
 		zebra.setBounds(420, 170, 93, 72);
 		zebra.setZIndex(9);
-		desktop.addActor(zebra);
+		world.addActor(zebra);
 	//420 170
 				
 		Tiger tiger = new Tiger();
 		tiger.setPosition(120, 320);
 		tiger.setZIndex(10);
-		desktop.addActor(tiger);
+		world.addActor(tiger);
 		
-		desktop.setName("tiger");
+		world.setName("tiger");
 	}
 	
-	void pitonDesktop(){
+	void createPitonWorld(){
 		//desktop.setBackground(new Color(182/255f, 221/255f, 200/255f, 1));
-		desktop.setColor(new Color(182/255f, 221/255f, 200/255f, 1));
+		world.setColor(new Color(182/255f, 221/255f, 200/255f, 1));
 	//	desktop.getColor().a = 0;	
 		
 		
@@ -966,7 +997,7 @@ public class Workspace extends Group{
 	textGroup.addActor(year);
 	
 	textGroup.setName("passport");
-	desktop.addActor(textGroup);
+	world.addActor(textGroup);
 	textImg.addListener(new MetricListener());
 ////////////////////////////////////////////////
 ////////////////////////////////////////////////		
@@ -976,26 +1007,26 @@ public class Workspace extends Group{
 		
 		Image flower1 = new Image(TextureManager.get().getAtlas().findRegion("ZVET4"));
 		flower1.setBounds(200, 115,57,57);
-		desktop.addActor(flower1);
+		world.addActor(flower1);
 /*				
 		Image bird = new Image(TextureManager.get().getAtlas().findRegion("POPUGAI"));
 		bird.setBounds(10, 50,43,30);*/
 		
 		Actor zactor = new Actor();
 		zactor.setName("zactor");
-		desktop.addActor(zactor);
+		world.addActor(zactor);
 		
 		Piton piton = new Piton();
 		piton.setPosition(460, 130);
 		piton.setZIndex(10);
-		desktop.addActor(piton);
+		world.addActor(piton);
 		
 		Hero bird = new Hero("POPUGAI");
 		bird.setBounds(200+10, 115+50,43,30);
 		bird.setZIndex(9);
-		desktop.addActor(bird);
+		world.addActor(bird);
 		
-		desktop.setName("piton");
+		world.setName("piton");
 	}
 	
 
@@ -1019,7 +1050,7 @@ public class Workspace extends Group{
 			selectedActor.animateSelected();
 		}
 		
-		desktop.setSelectedFigure(selectedActor);
+		world.setSelectedFigure(selectedActor);
 	}
 	
 	private AbstractFigure selectedActor;

@@ -13,16 +13,19 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 
 public class TextureManager {
 	
@@ -60,6 +63,9 @@ public class TextureManager {
 		return instance;
 	}
 	
+	private Texture np9 ;
+	
+	private Texture np9Error;
 	
 	public void init(){
 		atlas = new TextureAtlas(Gdx.files.internal("data/main.pack"));
@@ -87,6 +93,10 @@ public class TextureManager {
 		 instructScreen = new Texture(Gdx.files.internal("data/instruct.jpg"));
 		 
 		 instructScreenReg =  new TextureRegion(instructScreen, 0, 0, 925, 433);
+		 
+		 np9 = new Texture(Gdx.files.internal("data/np.png"));
+		 
+		 np9Error = new Texture(Gdx.files.internal("data/errnp.png"));
 		
 		skin = new Skin();
 		
@@ -141,10 +151,35 @@ public class TextureManager {
          labelStyleLyricTitle.fontColor = new Color(.22f, .08f, .45f,1);
          skin.add("lyrics", labelStyleLyricTitle);
          
+         NinePatchDrawable npd = new NinePatchDrawable(new NinePatch(np9, 8, 8, 8, 8));
+         skin.add("npd", npd, Drawable.class);
+     
+         NinePatchDrawable npdError = new NinePatchDrawable(new NinePatch(np9Error, 8, 8, 8, 8));
+         skin.add("npdError", npd, Drawable.class);
          
          FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/arialbd.ttf"));
  		 BitmapFont cyrillicFont = generator.generateFont(12,DEFAULT_CHARS, false);
  		generator.dispose();
+ 		
+ 		
+        TextButtonStyle tbStyleSystem = new TextButtonStyle();
+        tbStyleSystem.font = cyrillicFont;
+        tbStyleSystem.fontColor = Color.BLACK;
+        tbStyleSystem.up = npd;
+        skin.add("system", tbStyleSystem);
+        
+        TextButtonStyle tbStyleError = new TextButtonStyle();
+        tbStyleError.font = cyrillicFont;
+        tbStyleError.fontColor = Color.BLACK;
+        tbStyleError.up = npdError;
+        skin.add("error", tbStyleError);
+ 		
+ 		LabelStyle lStyleSystem = new LabelStyle();
+ 		lStyleSystem.font = cyrillicFont;
+ 		lStyleSystem.fontColor = Color.BLACK;
+ 		lStyleSystem.background = skin.getDrawable("npd");
+ 		skin.add("system", lStyleSystem);
+ 		
  		TextFieldStyle tfStyleTextAnt = new TextFieldStyle();
  		tfStyleTextAnt.font = cyrillicFont;
  		tfStyleTextAnt.fontColor = new Color(215/255f, 100/255f, 40/255f, 1);
@@ -178,6 +213,8 @@ public class TextureManager {
          
          
 	}
+	
+
 	
 	private TextureManager(){}
 	
@@ -324,6 +361,9 @@ public class TextureManager {
 	private TextureRegion instructScreenReg;
 	
 	private void disposeInternal(){
+		np9.dispose();
+		np9Error.dispose();
+		
 		atlas.dispose();
 		//fieldsAtlas.dispose();
 		miscAtlas.dispose();

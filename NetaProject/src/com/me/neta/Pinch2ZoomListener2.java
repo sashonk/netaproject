@@ -13,15 +13,16 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.Timer;
 
 public class Pinch2ZoomListener2 extends InputListener{
-	private Actor actor;
+
 	
-	public Pinch2ZoomListener2(Actor a){
-		actor = a;
+	public Pinch2ZoomListener2(){
+	
 	}
 	
 	
@@ -32,32 +33,21 @@ public class Pinch2ZoomListener2 extends InputListener{
 
 	
 	private float tapSquareSize;
-	private long tapCountInterval;
-	private float longPressSeconds;
-	private long maxFlingDelay;
-	
 	private boolean inTapSquare;
-	private int tapCount;
-	private long lastTapTime;
-	private float lastTapX, lastTapY;
-	private int lastTapButton, lastTapPointer;
 	private boolean pinching;
-	private boolean panning;
-	private Vector3 initialCameraPosition;
 	
 	 float initialDistance = 0;
 	private final VelocityTracker tracker = new VelocityTracker();
 	private float tapSquareCenterX, tapSquareCenterY;
 	private long gestureStartTime;
 	private float initialZoom ;
+	private boolean canPan;
 	
 	private float Zmin = 0.5f;
 
 	public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-		
-		
-	
-		Camera c = actor.getStage().getCamera();
+						
+		Camera c = event.getStage().getCamera();
 		Vector3 v = new Vector3(x, y, 0);
 		c.project(v);
 		x= v.x;
@@ -76,14 +66,14 @@ public class Pinch2ZoomListener2 extends InputListener{
 				initialPointer1.set(pointer1);
 				initialPointer2.set(pointer2);
 				initialZoom = ((OrthographicCamera)c).zoom;
-				initialCameraPosition = c.position.cpy();
+				canPan = false;
 			} else {
 				// Normal touch down.
 				inTapSquare = true;
 				pinching = false;
 				tapSquareCenterX = x;
 				tapSquareCenterY = y;
-	
+				canPan = true;
 			}
 		} else {
 			// Start pinch.
@@ -93,8 +83,7 @@ public class Pinch2ZoomListener2 extends InputListener{
 			initialPointer1.set(pointer1);
 			initialPointer2.set(pointer2);
 			initialZoom = ((OrthographicCamera)c).zoom;
-			initialCameraPosition = c.position.cpy();
-
+			canPan = false;
 		}
 		
 		return true;
@@ -109,7 +98,6 @@ public class Pinch2ZoomListener2 extends InputListener{
 		// check if we are still tapping.
 		if (inTapSquare && !isWithinTapSquare(x, y, tapSquareCenterX, tapSquareCenterY)) inTapSquare = false;
 
-		panning = false;
 
 	
 			// handle pinch end
@@ -121,14 +109,14 @@ public class Pinch2ZoomListener2 extends InputListener{
 	
 	boolean debug = true;
 
-	 void pinchToZoom(Vector2 initialPointer1,Vector2 initialPointer2, Vector2 pointer1,Vector2 pointer2){
+	 void pinchToZoom(Vector2 initialPointer1,Vector2 initialPointer2, Vector2 pointer1,Vector2 pointer2, Stage s){
 
 		 float initialDistance = initialPointer2.dst(initialPointer1);
 		 float distance = pointer2.dst(pointer1);
 		 float factor = distance / initialDistance;
 		 
 	
-		OrthographicCamera cam =  (OrthographicCamera) actor.getStage().getCamera();
+		OrthographicCamera cam =  (OrthographicCamera) s.getCamera();
 		cam.zoom = initialZoom/factor;		 
 		constrainZoom(cam);
 			
@@ -145,13 +133,13 @@ public class Pinch2ZoomListener2 extends InputListener{
 			float h2 = actor.getStage().getHeight()/2;
 			cam.position.set((w2*cam.zoom-localc.x*cam.zoom+localc.x-w2*Zmin)/(1- Zmin), (h2*cam.zoom-localc.y*cam.zoom+localc.y-h2*Zmin)/(1-Zmin), 0);
 			*/
-			constrainPosition(cam);
+			constrainPosition(cam, s);
 		 
 
 	}
 
 	public void touchDragged (InputEvent event, float x, float y, int pointer) {
-		Camera c = actor.getStage().getCamera();
+		Camera c = event.getStage().getCamera();
 		Vector3 v = new Vector3(x, y, 0);
 		c.project(v);
 		//c.pro
@@ -165,7 +153,7 @@ public class Pinch2ZoomListener2 extends InputListener{
 				pointer2.set(x, y);
 			}
 		
-			pinchToZoom(initialPointer1, initialPointer2, pointer1, pointer2);
+			pinchToZoom(initialPointer1, initialPointer2, pointer1, pointer2, event.getStage());
 			
 		}
 		
@@ -182,9 +170,8 @@ public class Pinch2ZoomListener2 extends InputListener{
 		}
 
 		// if we have left the tap square, we are panning
-		if (!inTapSquare) {
-			panning = true;
-			 pan(x, y, tracker.deltaX, tracker.deltaY);
+		if (!inTapSquare && canPan) {
+			 pan(x, y, tracker.deltaX, tracker.deltaY, event.getStage());
 		}
 		
 	}
@@ -193,17 +180,17 @@ public class Pinch2ZoomListener2 extends InputListener{
 		return Math.abs(x - centerX) < tapSquareSize && Math.abs(y - centerY) < tapSquareSize;
 	}
 	
-	private void pan(float x, float y, float dx, float dy){
+	private void pan(float x, float y, float dx, float dy, Stage s){
 		
 		if(!pinching){
-		OrthographicCamera c =  (OrthographicCamera) actor.getStage().getCamera();
+		OrthographicCamera c =  (OrthographicCamera) s.getCamera();
 		c.translate(-dx, -dy);
 		
-		constrainPosition(c);
+		constrainPosition(c, s);
 		}
 	}
 
-	private  void constrainPosition(OrthographicCamera cam){
+	private  void constrainPosition(OrthographicCamera cam, Stage s){
 		
 		float vw = cam.viewportWidth*.5f*cam.zoom;
 		float vh = cam.viewportHeight*.5f*cam.zoom;
@@ -214,11 +201,11 @@ public class Pinch2ZoomListener2 extends InputListener{
 		if(cam.position.y - vh< 0){
 			cam.position.y = vh;
 		}
-		if(cam.position.x + vw > actor.getStage().getWidth()){
-			cam.position.x = actor.getStage().getWidth() - vw;
+		if(cam.position.x + vw > s.getWidth()){
+			cam.position.x = s.getWidth() - vw;
 		}
-		if(cam.position.y + vh > actor.getStage().getHeight()){
-			cam.position.y = actor.getStage().getHeight() - vh;
+		if(cam.position.y + vh > s.getHeight()){
+			cam.position.y = s.getHeight() - vh;
 		}
 	}
 	

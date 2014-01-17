@@ -36,14 +36,7 @@ public class NetaGame implements ApplicationListener {
 	}
 	
 	static final boolean debug= true;
-
-
-	
-	Table toolPanel;
-	ScreenUtils u;
-	
-
-	Stage stage;
+	public static Stage stage;
 	
 
 	
@@ -51,7 +44,9 @@ public class NetaGame implements ApplicationListener {
 	@Override
 	public void create() {
 		TextureManager.destroy();
-		
+		if(stage!=null){
+			stage.dispose();
+		}
 	
 		
 
@@ -67,6 +62,7 @@ public class NetaGame implements ApplicationListener {
 		
 
 		Gdx.input.setInputProcessor(stage);
+		stage.getRoot().addCaptureListener(new Pinch2ZoomListener2());
 	//	Gdx.input.setOnscreenKeyboardVisible(true);
 		
 
@@ -111,7 +107,7 @@ public class NetaGame implements ApplicationListener {
 
 	@Override
 	public void dispose() {
-
+		stage.dispose();
 		TextureManager.dispose();
 	}
 	

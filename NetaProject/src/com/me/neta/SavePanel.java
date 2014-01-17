@@ -5,6 +5,8 @@ import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.Date;
 
+import sun.security.provider.NativePRNG;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
@@ -18,6 +20,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.me.neta.events.ScreenshotEvent;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
@@ -48,7 +51,7 @@ public class SavePanel extends Group{
 					// NetaGame.platform.
 					//fire(new ScreenshotEvent());
 				
-					
+					MessageHelper.message("Пожалуйста, подождите...");
 					SavePanel.this.addAction(run(new Runnable(){
 
 						@Override
@@ -62,14 +65,14 @@ public class SavePanel extends Group{
 										.format("picture%d.png",
 												System.currentTimeMillis()));
 								PixmapIO.writePNG(handle, pixmap);
-								TextureManager.get().showMessage(
-										"Изображение сохранено");
+								
+								
+								MessageHelper.notify("Изображение сохранено");
 							} catch (Exception ex) {
-								TextureManager.get().showMessage(ex.toString());
+								MessageHelper.error("Ошибка! Изображение не сохранено!", ex);
 							}
 						} else {
-							TextureManager.get().showMessage(
-									"Файловое хранилище недоступно");
+							MessageHelper.error("Файловое хранилище недоступно!", null);
 
 						}	}}));
 					
@@ -88,14 +91,14 @@ public class SavePanel extends Group{
 									.format("picture%d.png",
 											System.currentTimeMillis()));
 							PixmapIO.writePNG(handle, pixmap);
-							p.setForEmail("golombek@mail.ru", handle.file(), "Send email...");
+							p.setForEmail("nikoldruzya@ya.ru", handle.file(), "Письмо Николь");
 
 						} catch (Exception ex) {
-							TextureManager.get().showMessage(ex.toString());
+							MessageHelper.error("Ошибка!", ex);
 						}
 					} else {
-						TextureManager.get().showMessage(
-								"Файловое хранилище недоступно");
+						MessageHelper.error("Файловое хранилище недоступно!", null);
+
 
 					}
 
@@ -105,6 +108,23 @@ public class SavePanel extends Group{
 					result = true;
 				} else if (print.contains(x, y)) {
 					// print
+					
+					MessageHelper.notify("Изображение сохранено");
+	/*				try{
+						throw new NullPointerException();
+					}
+					catch(Exception ex){
+						MessageHelper.error("Ошибка!", ex);
+					}
+					
+					SavePanel.this.addAction(delay(5, run(new Runnable() {
+						
+						@Override
+						public void run() {
+							MessageHelper.hide();
+						}
+					})));*/
+					
 					result = true;
 				}
 				

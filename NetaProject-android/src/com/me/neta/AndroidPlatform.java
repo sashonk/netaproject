@@ -36,12 +36,11 @@ public class AndroidPlatform implements Platform{
 
 
 	@Override
-	public void setForEmail(String to, File attachment, String text) {
+	public void setForEmail(String to, File attachment, String subject) {
 		Intent intent = new Intent(Intent.ACTION_SEND);
 		intent.setType("text/plain");
 		intent.putExtra(Intent.EXTRA_EMAIL, new String[] {to});
-		intent.putExtra(Intent.EXTRA_SUBJECT, "письмо Николь");
-		intent.putExtra(Intent.EXTRA_TEXT, "письмо Николь");
+		intent.putExtra(Intent.EXTRA_SUBJECT, subject);
 		Uri uri = Uri.parse("file://" + attachment);
 		intent.putExtra(Intent.EXTRA_STREAM, uri);
 		activity.startActivity(Intent.createChooser(intent, "Отправка письма..."));		

@@ -22,7 +22,7 @@ import com.me.neta.figures.AbstractFigure;
 import com.me.neta.tools.RotateTool;
 import com.me.neta.tools.ZIndexTool;
 
-public class Desktop extends Group{
+public class World extends Group{
 	//Pixmap pm;
 	//Texture tx;
 	ZIndexTool ztool;
@@ -55,7 +55,7 @@ public class Desktop extends Group{
 		lyricsAdded = true;
 	}
 	
-	public Desktop(float width, float height){
+	public World(float width, float height){
 		tm = TextureManager.get();
 		
 		this.setBounds(0, 0, width, height);		
@@ -84,8 +84,8 @@ public class Desktop extends Group{
 			public boolean handle(Event event) {
 				if(event instanceof ZIndexEvent){
 					ZIndexEvent zevent = (ZIndexEvent)event;
-					Desktop.this.removeActor(zevent.getAbove());
-					Desktop.this.addActorAfter(zevent.getBelow(),zevent.getAbove());
+					World.this.removeActor(zevent.getAbove());
+					World.this.addActorAfter(zevent.getBelow(),zevent.getAbove());
 					
 					return true;
 				}

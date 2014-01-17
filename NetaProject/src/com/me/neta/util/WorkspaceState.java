@@ -5,5 +5,6 @@ public enum WorkspaceState {
 	PREPARED,
 	WORKING,
 	SELECTION,
-	HALT;
+	HALT,
+	DISABLED;
 }
