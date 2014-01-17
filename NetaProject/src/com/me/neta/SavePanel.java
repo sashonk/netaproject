@@ -112,25 +112,14 @@ public class SavePanel extends Group{
 					p.openWebPage("https://www.facebook.com/groups/nikoldruzya/");
 					result = true;
 				} else if (print.contains(x, y)) {
-					// print
 					
-					MessageHelper.notify("Изображение сохранено");
-	/*				try{
-						throw new NullPointerException();
+					try{
+						throw new UnsupportedOperationException();
 					}
 					catch(Exception ex){
-						MessageHelper.error("Ошибка!", ex);
+						MessageHelper.error("", ex);
 					}
 					
-					SavePanel.this.addAction(delay(5, run(new Runnable() {
-						
-						@Override
-						public void run() {
-							MessageHelper.hide();
-						}
-					})));*/
-					
-					result = true;
 				}
 				
 				if(result){
