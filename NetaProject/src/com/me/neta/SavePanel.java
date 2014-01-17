@@ -37,7 +37,7 @@ public class SavePanel extends Group{
 			public boolean touchDown(InputEvent event, float x, float y,
 					int pointer, int button) {
 
-				Platform p = NetaGame.platform;
+				final Platform p = NetaGame.platform;
 
 				Rectangle save = new Rectangle(22, 238, 212, 38);
 				Rectangle email = new Rectangle(22, 183, 212, 38);
@@ -52,12 +52,13 @@ public class SavePanel extends Group{
 					//fire(new ScreenshotEvent());
 				
 					MessageHelper.message("Пожалуйста, подождите...");
-					SavePanel.this.addAction(run(new Runnable(){
+					SavePanel.this.addAction(delay(.1f,run(new Runnable(){
 
 						@Override
 						public void run() {				
 							if (Gdx.files.isExternalStorageAvailable()) {
 							try {
+					
 								Pixmap pixmap = getScreenshot(0, 0,
 										Gdx.graphics.getWidth(),
 										Gdx.graphics.getHeight(), true);
@@ -74,7 +75,7 @@ public class SavePanel extends Group{
 						} else {
 							MessageHelper.error("Файловое хранилище недоступно!", null);
 
-						}	}}));
+						}	}})));
 					
 				
 
@@ -82,6 +83,10 @@ public class SavePanel extends Group{
 					result = true;
 				} else if (email.contains(x, y)) {
 					// email
+					MessageHelper.message("Пожалуйста, подождите...");
+					SavePanel.this.addAction(delay(.1f,run(new Runnable(){
+						@Override
+						public void run() {	
 					if (Gdx.files.isExternalStorageAvailable()) {
 						try {
 							Pixmap pixmap = getScreenshot(0, 0,
@@ -92,7 +97,7 @@ public class SavePanel extends Group{
 											System.currentTimeMillis()));
 							PixmapIO.writePNG(handle, pixmap);
 							p.setForEmail("nikoldruzya@ya.ru", handle.file(), "Письмо Николь");
-
+							MessageHelper.hide();
 						} catch (Exception ex) {
 							MessageHelper.error("Ошибка!", ex);
 						}
@@ -100,7 +105,7 @@ public class SavePanel extends Group{
 						MessageHelper.error("Файловое хранилище недоступно!", null);
 
 
-					}
+					}}})));
 
 					result = true;
 				} else if (facebook.contains(x, y)) {
