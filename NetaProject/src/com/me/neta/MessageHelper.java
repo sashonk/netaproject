@@ -34,12 +34,13 @@ public class MessageHelper {
 		curtain.setBounds(0, 0, workspace.getWidth(), workspace.getHeight());
 		TextButton tb = new TextButton(text, skin, "system");
 		Group group = new Group();
+		group.setBounds(0, 0, workspace.getWidth(), workspace.getHeight());
 		group.addActor(curtain);
 		group.addActor(tb);
-		WorkHelper.center(tb);
 		workspace.addActor(group);
 		group.setZIndex(110);
 		group.setName("message");
+		WorkHelper.center(tb);
 		//tb.fire(new WorkspaceStateEvent(WorkspaceState.DISABLED));
 
 		
@@ -67,12 +68,15 @@ public class MessageHelper {
 		curtain.setBounds(0, 0, workspace.getWidth(), workspace.getHeight());
 		TextButton tb = new TextButton(sb.toString(), skin, "error");
 		Group group = new Group();
+		group.setBounds(0, 0, workspace.getWidth(), workspace.getHeight());
 		group.addActor(curtain);
 		group.addActor(tb);
 		WorkHelper.center(tb);
 		workspace.addActor(group);
 		group.setZIndex(110);
 		group.setName("message");
+		
+		group.addAction(Actions.delay(10, Actions.removeActor()));
 
 		//tb.fire(new WorkspaceStateEvent(WorkspaceState.DISABLED));	
 	}
