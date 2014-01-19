@@ -55,6 +55,8 @@ public abstract class Moveable extends Actor{
 				}
 				
 				t.setPosition(ox, oy);
+				
+				event.setBubbles(false);
 			}
 			
 			
@@ -62,7 +64,7 @@ public abstract class Moveable extends Actor{
 				Actor t = event.getTarget();
 				t.setOrigin(sx, sy);
 				
-			
+
 			}
 		};
 		

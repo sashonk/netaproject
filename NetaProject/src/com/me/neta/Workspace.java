@@ -19,6 +19,7 @@ import java.nio.ByteBuffer;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
 
 import com.badlogic.gdx.Gdx;
@@ -53,16 +54,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldFilter;
 
 
-import com.me.neta.events.DesktopIconEvent;
-import com.me.neta.events.LetterDropEvent;
-import com.me.neta.events.LyricsIconEvent;
-import com.me.neta.events.RequestFocusEvent;
-import com.me.neta.events.RotationEvent;
-import com.me.neta.events.ScreenshotEvent;
-import com.me.neta.events.SelectColorEvent;
-import com.me.neta.events.SelectFigureEvent;
-import com.me.neta.events.TrashButtonEvent;
-import com.me.neta.events.WorkspaceStateEvent;
+import com.me.neta.events.*;
 import com.me.neta.figures.AbstractFigure;
 import com.me.neta.tools.AbstractTool;
 import com.me.neta.tools.BasketTool;
@@ -78,6 +70,7 @@ import com.me.neta.tools.RotateTool;
 import com.me.neta.tools.SaveTool;
 import com.me.neta.tools.SettingsTool;
 import com.me.neta.tools.ZIndexTool;
+import com.me.neta.util.WorkHelper;
 import com.me.neta.util.WorkspaceState;
 import com.me.neta.util.WorkspaceStateListener;
 
@@ -93,19 +86,12 @@ public class Workspace extends Group{
 	
 	private List<WorkspaceStateListener> listeners = new LinkedList<WorkspaceStateListener>();
 	public WorkspaceState state;
-	public boolean lyricsDropped = false;
-	private Actor disableCurtain;
 	
-	public Workspace(){
+	public Workspace(float x, float y, float width, float height){
+		
 		setName("workspace");
-/*		disableCurtain = new Actor(){
-			public void draw(SpriteBatch b , float pa){
-				Texture tx = TextureManager.get().getUnmanaged(Color.BLACK);
-				b.draw(tx, getX(), getY(), getWidth(), height);
-			}
-		};
-		disableCurtain.setColor(new Color(1,1,1,0.3f));*/
-		//disableCurtain.setBounds(0, 0, width, height);
+		setBounds(x, y, width, height);
+
 
 		Skin skin = TextureManager.get().getSkin();		
 		mousePositionLabel = new Label("", skin);
@@ -157,6 +143,11 @@ public class Workspace extends Group{
 				
 		toolbarTable.add(lyricsTool).padRight(pad).padLeft(pad);
 		final LetterTool letterTool = new LetterTool();
+		/*PassportForm form = new PassportForm(300, 200);
+		form.setVisible(false);
+		addActor(form);
+		WorkHelper.center(form);
+		letterTool.setPanel(form);*/		
 		toolbarTable.add(letterTool).padRight(pad).padLeft(pad);
 		
 		
@@ -242,6 +233,14 @@ public class Workspace extends Group{
 			
 			@Override
 			public boolean handle(Event event) {
+				if(event instanceof DragStartEvent){
+					world.setPinch2ZoomEnabled(false);
+				}
+				if(event instanceof DragStopEvent){
+					world.setPinch2ZoomEnabled(true);
+
+				}
+				
 				if(event instanceof LyricsIconEvent){
 
 					
@@ -250,7 +249,6 @@ public class Workspace extends Group{
 					world.addLyrics(lyricsEvent.getChoice());
 					
 					lyricsPanel.addAction(sequence(fadeOut(0.4f), visible(false)));
-					lyricsDropped = true;
 				}
 				
 				if(event instanceof DesktopIconEvent){
@@ -260,8 +258,11 @@ public class Workspace extends Group{
 					int deskId = desktopEvent.getId();
 					
 					if(deskId>=0){
+						Actor abandoningWorld = null;
 						if(world!=null && world.getParent()!=null){
-							world.remove();
+							 abandoningWorld = world;
+							 abandoningWorld.setOrigin(abandoningWorld.getWidth()/2, abandoningWorld.getHeight()/2);
+							abandoningWorld.addAction(sequence(Actions.parallel(Actions.scaleTo(0, 0, 1f), Actions.rotateBy(-500, 1f), Actions.moveBy(1000, 0, 1f)) ,Actions.removeActor()));
 						}
 						
 						world = new World(getWidth(), getHeight());
@@ -281,7 +282,7 @@ public class Workspace extends Group{
 						}
 
 						fieldsPanel.setVisible(false);
-						addActorBefore(mousePositionLabel, world);
+						addActorBefore(abandoningWorld!=null ? abandoningWorld :mousePositionLabel, world);
 
 						world.setId(desktopEvent.getId());
 						//desktop.addAction(Actions.sequence(Actions.fadeIn(.2f)));
@@ -289,7 +290,7 @@ public class Workspace extends Group{
 							public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 								getStage().setKeyboardFocus(null);
 								Workspace.this.setSelectedFigure(null);
-								
+								Gdx.input.setOnscreenKeyboardVisible(false);
 								
 
 								
@@ -299,7 +300,6 @@ public class Workspace extends Group{
 							}
 						});
 						
-						//desktop.addListener(new Pinch2ZoomListener2());
 				
 
 					}
@@ -327,37 +327,47 @@ public class Workspace extends Group{
 				
 				
 				if(event instanceof SelectFigureEvent){
-
-					
-					
-					System.out.println("SelectFigureEvent::handle");
-					setSelectedFigure((AbstractFigure) event.getTarget());
+					setSelectedFigure((AbstractFigure) event.getTarget());	
+					if(world.isColorizing()){
+						world.getSelected().setColor(world.getSelectedColor());
+					}
 				}
 				
 				
 				if(event instanceof SelectColorEvent){
 					System.out.println("SelectColorEvent::handle");
 					SelectColorEvent colorEvent = (SelectColorEvent) event;
-					if(selectedActor!=null){
-						selectedActor.setColor(colorEvent.getColor());
+					world.setSelectedColor( colorEvent.getColor());
+					if(world!=null){
+						world.tintBrush(world.getSelectedColor());
 					}
-					
 				}
 				
 				if(event instanceof TrashButtonEvent){
 					System.out.println("TrashButtonEvent::handle");
-					if(selectedActor!=null){
-						selectedActor.addAction(sequence(Actions.parallel(Actions.scaleTo(0, 0, .6f), Actions.rotateBy(-360, .6f)) ,Actions.removeActor()));
+					if(world.getSelected()!=null){
+						final Actor actor = world.getSelected();
+						actor.addAction(sequence(Actions.parallel(Actions.scaleTo(0, 0, .6f), Actions.rotateBy(-360, .6f)) ,Actions.removeActor(), Actions.run(new Runnable(){
 
-						selectedActor = null;
+							@Override
+							public void run() {
+								beingRemoved.remove(actor)	;							
+							}
+							
+						})));
+						beingRemoved.add(world.getSelected());
+						
+						AbstractFigure candidate = findLast();
+						setSelectedFigure(candidate);	
+
 					}
 				}
 				
 				
 				if(event instanceof RotationEvent){
 					System.out.println("RotationEvent::handle");
-					if(selectedActor!=null){
-						selectedActor.rotate(((RotationEvent)event).getDegrees());
+					if(world.getSelected()!=null){
+						world.getSelected().rotate(((RotationEvent)event).getDegrees());
 					}
 				}
 				
@@ -369,12 +379,7 @@ public class Workspace extends Group{
 				 
 				if(event instanceof WorkspaceStateEvent){
 					
-					if(state==WorkspaceState.DISABLED){
-						Actor curtain = Workspace.this.findActor("curtain");
-						if(curtain!=null){
-							curtain.remove();
-						}
-					}
+			
 					
 					WorkspaceStateEvent wsEvent = (WorkspaceStateEvent) event;
 					 for(WorkspaceStateListener listener : listeners){
@@ -383,24 +388,13 @@ public class Workspace extends Group{
 					 
 					 state =wsEvent.getState();
 					 
-					 if(state == WorkspaceState.DISABLED){
-						 Image curtain = new Image(TextureManager.get().getUnmanaged(new Color(0,0,0,0.3f)));
-						 curtain.setName("curtain");
-						 curtain.setBounds(0, 0, Workspace.this.getWidth(), Workspace.this.getHeight());
-						 Actor msg = Workspace.this.findActor("message");
-						 if(msg!=null){
-							 Workspace.this.addActorBefore(msg, curtain);
-						 }
-						 else{
-							 Workspace.this.addActor(msg);
-						 }
-						 
-						 
-						
-					 }
+
 				}
 				
-			
+				if(event instanceof BrushToolChangeEvent){
+					BrushToolChangeEvent btcEvent = (BrushToolChangeEvent)event;
+					 world.setColorizing(btcEvent.isChecked()) ;
+				}
 				
 				
 				event.setBubbles(false);
@@ -1031,30 +1025,42 @@ public class Workspace extends Group{
 	
 
 	public AbstractFigure getSelectedFigure(){
-		return selectedActor;
+		return world.getSelected();
 	}
 	
+	
+	
 	void setSelectedFigure(AbstractFigure figure){
-		if(selectedActor==figure){
+		if(world.getSelected()==figure){
 			return;
 		}
 		
-		if(selectedActor!=null){
-			selectedActor.animateVacant();
+		if(world.getSelected()!=null){
+			world.getSelected().animateVacant();
 		}
 		
 
 		
-		selectedActor = figure;		
-		if(selectedActor!=null){
-			selectedActor.animateSelected();
+		world.setSelectedActor(figure);
+		if(world.getSelected()!=null){
+			world.getSelected().animateSelected();
 		}
 		
-		world.setSelectedFigure(selectedActor);
+		
+			
 	}
 	
-	private AbstractFigure selectedActor;
+	AbstractFigure findLast(){
+		AbstractFigure figure = null;
+		for(Actor actor : world.getChildren()){
+			if(actor instanceof AbstractFigure && !beingRemoved.contains(actor)){
+				figure = (AbstractFigure) actor;
+			}
+		}
+		return figure;
+	}
 	
+	private List<AbstractFigure> beingRemoved = new LinkedList<AbstractFigure>();
 	
     public void saveScreenshot2(FileHandle fh) {
         Pixmap pixmap = getScreenshot(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);

@@ -112,6 +112,10 @@ public class TextureManager {
          pixmap.fill();
          skin.add("black", new Texture(pixmap));
          
+         pixmap.setColor(Color.GRAY);
+         pixmap.fill();
+         skin.add("gray", new Texture(pixmap));
+         
          TextFieldStyle blueCalibri = new TextFieldStyle();
          blueCalibri.fontColor = new Color(.4f, .57f, .74f,1);
         //textFieldStyle.background = skin.newDrawable("white", new Color(.4f, .57f, .74f,1));               
@@ -151,10 +155,14 @@ public class TextureManager {
          labelStyleLyricTitle.fontColor = new Color(.22f, .08f, .45f,1);
          skin.add("lyrics", labelStyleLyricTitle);
          
-         NinePatchDrawable npd = new NinePatchDrawable(new NinePatch(np9, 8, 8, 8, 8));
+         skin.add("system", new NinePatch(atlas.findRegion("npsystem"), 8, 8, 8, 8));
+         skin.add("error", new NinePatch(atlas.findRegion("nperror"), 8, 8, 8, 8));
+
+         
+         NinePatchDrawable npd = new NinePatchDrawable(skin.getPatch("system"));
          skin.add("npd", npd, Drawable.class);
      
-         NinePatchDrawable npdError = new NinePatchDrawable(new NinePatch(np9Error, 8, 8, 8, 8));
+         NinePatchDrawable npdError = new NinePatchDrawable(skin.getPatch("error"));
          skin.add("npdError", npd, Drawable.class);
          
          FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/arialbd.ttf"));
@@ -177,9 +185,22 @@ public class TextureManager {
  		LabelStyle lStyleSystem = new LabelStyle();
  		lStyleSystem.font = cyrillicFont;
  		lStyleSystem.fontColor = Color.BLACK;
- 		lStyleSystem.background = skin.getDrawable("npd");
+ 		//lStyleSystem.background = skin.getDrawable("npd");
  		skin.add("system", lStyleSystem);
  		
+        TextFieldStyle tfStyleSystem = new TextFieldStyle();
+        tfStyleSystem.font = cyrillicFont;
+        tfStyleSystem.fontColor = Color.BLACK;
+        tfStyleSystem.background = skin.getDrawable("gray");
+        tfStyleSystem.cursor = skin.getDrawable("black");	 	
+        skin.add("system", tfStyleSystem);
+ 		
+ 		
+ 		
+        
+        
+        
+        
  		TextFieldStyle tfStyleTextAnt = new TextFieldStyle();
  		tfStyleTextAnt.font = cyrillicFont;
  		tfStyleTextAnt.fontColor = new Color(215/255f, 100/255f, 40/255f, 1);

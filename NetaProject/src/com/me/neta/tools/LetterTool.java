@@ -7,10 +7,6 @@ import com.me.neta.util.WorkspaceState;
 
 public class LetterTool extends AbstractTool{
 
-	@Override
-	public void doAction() {
-		fire(new RequestFocusEvent());
-	}
 
 	@Override
 	public String getImagePath() {
@@ -26,5 +22,11 @@ public class LetterTool extends AbstractTool{
 	@Override
 	public boolean accept(WorkspaceState state) {
 		return state==WorkspaceState.WORKING;
+	}
+
+
+	@Override
+	public void doAction() {
+		fire(new RequestFocusEvent());
 	}
 }

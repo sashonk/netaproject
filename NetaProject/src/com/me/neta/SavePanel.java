@@ -39,10 +39,10 @@ public class SavePanel extends Group{
 
 				final Platform p = NetaGame.platform;
 
-				Rectangle save = new Rectangle(22, 238, 212, 38);
-				Rectangle email = new Rectangle(22, 183, 212, 38);
-				Rectangle facebook = new Rectangle(22, 125, 212, 38);
-				Rectangle print = new Rectangle(22, 68, 212, 38);
+				Rectangle save = new Rectangle(22, 221, 237, 50);
+				Rectangle email = new Rectangle(22, 153, 237, 50);
+				Rectangle facebook = new Rectangle(22, 84, 237, 50);
+				Rectangle print = new Rectangle(22, 84, 212, 38);
 
 				boolean result = false;
 				
@@ -51,20 +51,21 @@ public class SavePanel extends Group{
 					// NetaGame.platform.
 					//fire(new ScreenshotEvent());
 				
-					MessageHelper.message("Пожалуйста, подождите...");
+
 					SavePanel.this.addAction(delay(.1f,run(new Runnable(){
 
 						@Override
 						public void run() {				
 							if (Gdx.files.isExternalStorageAvailable()) {
 							try {
-					
 								Pixmap pixmap = getScreenshot(0, 0,
 										Gdx.graphics.getWidth(),
 										Gdx.graphics.getHeight(), true);
+
 								FileHandle handle = Gdx.files.external(String
 										.format("picture%d.png",
 												System.currentTimeMillis()));
+								MessageHelper.message("Пожалуйста, подождите...");								
 								PixmapIO.writePNG(handle, pixmap);
 								
 								

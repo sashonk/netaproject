@@ -42,8 +42,13 @@ public class Pinch2ZoomListener2 extends InputListener{
 	private long gestureStartTime;
 	private float initialZoom ;
 	private boolean canPan;
+	private boolean canPanForce = true;
 	
 	private float Zmin = 0.5f;
+	
+	public void setCanPan(boolean value){
+		canPanForce = value;
+	}
 
 	public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 						
@@ -182,7 +187,7 @@ public class Pinch2ZoomListener2 extends InputListener{
 	
 	private void pan(float x, float y, float dx, float dy, Stage s){
 		
-		if(!pinching){
+		if(!pinching && canPanForce){
 		OrthographicCamera c =  (OrthographicCamera) s.getCamera();
 		c.translate(-dx, -dy);
 		

@@ -3,94 +3,94 @@ misc.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-instruct
-  rotate: false
-  xy: 1, 1575
-  size: 930, 434
-  orig: 930, 434
-  offset: 0, 0
-  index: -1
-nikol
-  rotate: false
-  xy: 1, 1140
-  size: 927, 433
-  orig: 927, 433
-  offset: 0, 0
-  index: -1
-authorsPanel
-  rotate: false
-  xy: 933, 1578
-  size: 924, 431
-  orig: 924, 431
-  offset: 0, 0
-  index: -1
 hintPanel
   rotate: false
-  xy: 1, 706
+  xy: 1, 1565
   size: 922, 432
   orig: 922, 432
   offset: 0, 0
   index: -1
 adultsPanel
   rotate: false
+  xy: 1, 1134
+  size: 917, 429
+  orig: 917, 429
+  offset: 0, 0
+  index: -1
+authorsPanel
+  rotate: false
+  xy: 925, 1568
+  size: 917, 429
+  orig: 917, 429
+  offset: 0, 0
+  index: -1
+instruct
+  rotate: false
+  xy: 1, 703
+  size: 917, 429
+  orig: 917, 429
+  offset: 0, 0
+  index: -1
+nikol
+  rotate: false
   xy: 1, 272
-  size: 921, 432
-  orig: 921, 432
+  size: 917, 429
+  orig: 917, 429
   offset: 0, 0
   index: -1
 gameshop
   rotate: false
-  xy: 933, 1218
+  xy: 925, 1208
   size: 879, 358
   orig: 879, 358
   offset: 0, 0
   index: -1
 lyricsPanel
   rotate: false
-  xy: 930, 877
+  xy: 920, 867
   size: 851, 339
   orig: 851, 339
   offset: 0, 0
   index: -1
 fieldsPanel
   rotate: false
-  xy: 925, 481
+  xy: 920, 471
   size: 575, 394
   orig: 575, 394
   offset: 0, 0
   index: -1
 figuresPanel
   rotate: false
-  xy: 1502, 479
+  xy: 1497, 469
   size: 435, 396
   orig: 435, 396
   offset: 0, 0
   index: -1
 figuresPanel2
   rotate: false
-  xy: 924, 82
+  xy: 920, 72
   size: 431, 397
   orig: 431, 397
   offset: 0, 0
   index: -1
 colorPanel
   rotate: false
-  xy: 1357, 88
+  xy: 1353, 78
   size: 410, 389
   orig: 410, 389
   offset: 0, 0
   index: -1
 helpPanel
   rotate: false
-  xy: 1, 1
+  xy: 1773, 937
   size: 274, 269
   orig: 274, 269
   offset: 0, 0
   index: -1
 savePanel
   rotate: false
-  xy: 1769, 152
-  size: 273, 325
-  orig: 273, 325
+  xy: 1, 1
+  size: 270, 269
+  orig: 270, 269
   offset: 0, 0
   index: -1

@@ -11,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.me.neta.events.DragEvent;
 import com.me.neta.events.DragStartEvent;
 import com.me.neta.events.DragStopEvent;
@@ -189,6 +191,8 @@ public class FiguresPanel extends Group{
 			addActor(tfs);
 		}
 		
+		
+
 		
 		this.addCaptureListener(new EventListener(){
 

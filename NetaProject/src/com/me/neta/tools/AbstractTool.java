@@ -27,8 +27,11 @@ public abstract class AbstractTool extends Actor implements WorkspaceStateListen
 	
 	TextureRegion region;
 	
+	protected boolean blink;
+	
 	public AbstractTool(){
 		enabled = false;
+		blink = true;
 			
 		AtlasRegion reg = TextureManager.get().getAtlas().findRegion(getImagePath());
 		Texture tex = reg.getTexture();
@@ -43,7 +46,7 @@ public abstract class AbstractTool extends Actor implements WorkspaceStateListen
 
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				if(enabled()){
-					event.getTarget().addAction(alpha(.4f));					
+					if(blink)event.getTarget().addAction(alpha(.4f));					
 					doAction();
 				}
 				
@@ -51,7 +54,7 @@ public abstract class AbstractTool extends Actor implements WorkspaceStateListen
 			}
 			
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-				event.getTarget().addAction(alpha(1, .2f));
+				if(blink)event.getTarget().addAction(alpha(1, .2f));
 			}
 		});
 		

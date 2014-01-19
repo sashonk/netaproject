@@ -54,15 +54,15 @@ public class NetaGame implements ApplicationListener {
 		
 		
 		
-		 space= new Workspace();
-		 space.setBounds(0, 0, stage.getWidth(), stage.getHeight());
+		 space= new Workspace(0, 0, stage.getWidth(), stage.getHeight());
+		// space.setBounds(0, 0, stage.getWidth(), stage.getHeight());
 		
 		//stage.addActor(new CredentialsPanel(20, stage.getHeight()-20, 100, 50));
 		stage.addActor(space);
 		
 
 		Gdx.input.setInputProcessor(stage);
-		stage.getRoot().addCaptureListener(new Pinch2ZoomListener2());
+		//stage.getRoot().addCaptureListener(new Pinch2ZoomListener2());
 	//	Gdx.input.setOnscreenKeyboardVisible(true);
 		
 

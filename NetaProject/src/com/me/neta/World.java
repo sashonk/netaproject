@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.me.neta.events.LyricsIconEvent;
 import com.me.neta.events.ZIndexEvent;
 import com.me.neta.figures.AbstractFigure;
+import com.me.neta.tools.BrushTool;
 import com.me.neta.tools.RotateTool;
 import com.me.neta.tools.ZIndexTool;
 
@@ -26,12 +27,30 @@ public class World extends Group{
 	//Pixmap pm;
 	//Texture tx;
 	ZIndexTool ztool;
+	BrushTool btool;
 	boolean lyricsAdded = false;
 	private int id;
 	TextureManager tm;
+	private boolean colorize;
+	private AbstractFigure selectedActor;
+	private Color selectedColor ;
+	private Pinch2ZoomListener2 pinch2Zoom;
+
+	
+	public AbstractFigure getSelected(){
+		return selectedActor;
+	}
+	
+	public void setSelectedActor(AbstractFigure figure){
+		selectedActor =figure;
+	}
 	
 	public void setId(int id){
 		this.id = id;
+	}
+	
+	public void setColorizing(boolean value){
+		colorize = value;
 	}
 	
 	public void addLyrics(int choice){
@@ -55,7 +74,17 @@ public class World extends Group{
 		lyricsAdded = true;
 	}
 	
+	public void setSelectedColor(Color c){
+		selectedColor = c;
+	}
+	
+	public Color getSelectedColor(){
+		return selectedColor;
+	}
+	
 	public World(float width, float height){
+		colorize = false;
+		selectedColor = Color.WHITE.cpy();
 		tm = TextureManager.get();
 		
 		this.setBounds(0, 0, width, height);		
@@ -72,7 +101,7 @@ public class World extends Group{
 		r.setBounds(492, 700, 40, 40);
 		addActor(r);	
 		
-		 ztool = new ZIndexTool();
+		ztool = new ZIndexTool();
 		ztool.setEnabled(true);
 		ztool.setBounds(536, 702, 36, 36);
 		addActor(ztool);
@@ -94,8 +123,23 @@ public class World extends Group{
 			}
 		});
 		
-		this.addListener(new MetricListener());
+		
+		 btool = new BrushTool();
+		btool.setEnabled(true);
+		btool.setBounds(536+40, 701, 40, 40);
+		addActor(btool);
+		
+		pinch2Zoom = new Pinch2ZoomListener2();
+		this.addListener(pinch2Zoom);
 
+	}
+	
+	void setPinch2ZoomEnabled(boolean value){
+		pinch2Zoom.setCanPan(value);
+	}
+	
+	void tintBrush(Color c){
+		btool.setColor(c);
 	}
 	
 /*	void setBackground(Color c){
@@ -110,8 +154,10 @@ public class World extends Group{
 		Color c = this.getColor();
 		Texture tx = tm.getUnmanaged(c);
 		
+		
 		batch.setColor(1, 1, 1, c.a* parentAlpha);		
-		batch.draw(tx, getX(), getY(), getWidth(), getHeight());
+		//batch.draw(tx, getX(), getY(), getWidth(), getHeight());
+		batch.draw(tx, getX(), getY(),getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation(),0,0,1,1 ,false, false);
 		
 		super.draw(batch, parentAlpha);
 	}
@@ -124,6 +170,10 @@ public class World extends Group{
 				break;
 			}
 		}
+	}
+	
+	public boolean isColorizing(){
+		return colorize;
 	}
 	
 	public Passport getPassport(){
