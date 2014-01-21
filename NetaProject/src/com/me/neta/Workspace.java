@@ -624,6 +624,7 @@ public class Workspace extends Group{
 		textGroup.addActor(textImg);		
 				
 		TextField author = new TextField("", TextureManager.get().getSkin(), "ant");
+		author.setColor(Color.BLUE);
 		author.setName("author");
 		author.setFocusTraversal(true);
 		author.setWidth(100);

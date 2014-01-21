@@ -2,9 +2,11 @@ package com.me.neta;
 
 import java.awt.Desktop;
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
  
-public class WinPlatform implements Platform{
+public class WinNative implements Native{
 
 	@Override
 	public void openWebPage(String address) {
@@ -25,7 +27,15 @@ public class WinPlatform implements Platform{
 	@Override
 	public void setForEmail(String to, File attachment,String subject) {
 		// TODO Auto-generated method stub
-			System.out.println("win::setEmail");
+		if(Desktop.isDesktopSupported())
+		{
+			try {
+				Desktop.getDesktop().mail(new URI("mailto:"+to));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+		}
 	}
 
 }

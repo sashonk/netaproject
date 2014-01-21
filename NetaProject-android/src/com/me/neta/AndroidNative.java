@@ -15,12 +15,12 @@ import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
-public class AndroidPlatform implements Platform{
+public class AndroidNative implements Native{
 	String ALBUM_NAME="Nikole&CO";
 	
 	private Activity activity;
 	
-	public AndroidPlatform(Activity androidApp){
+	public AndroidNative(Activity androidApp){
 		activity = androidApp;
 	}
 	

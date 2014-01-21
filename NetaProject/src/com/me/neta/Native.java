@@ -2,7 +2,7 @@ package com.me.neta;
 
 import java.io.File;
 
-public interface Platform {
+public interface Native {
 	public void openWebPage(String address);
 	
 

@@ -14,6 +14,6 @@ public class MainActivity extends AndroidApplication {
         cfg.useGL20 = false;
         
  
-        initialize(new NetaGame(new AndroidPlatform(this)), cfg);
+        initialize(new NetaGame(new AndroidNative(this)), cfg);
     }
 }

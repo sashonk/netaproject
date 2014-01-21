@@ -166,7 +166,7 @@ public class World extends Group{
 		Group passport = (Group) findActor("passport");
 		for(Actor actor : passport.getChildren()){
 			if(actor instanceof TextField){
-				getStage().setKeyboardFocus(actor);
+				getStage().setKeyboardFocus(actor);												
 				break;
 			}
 		}

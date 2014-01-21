@@ -37,7 +37,7 @@ public class SavePanel extends Group{
 			public boolean touchDown(InputEvent event, float x, float y,
 					int pointer, int button) {
 
-				final Platform p = NetaGame.platform;
+				final Native p = NetaGame.natiff;
 
 				Rectangle save = new Rectangle(22, 221, 237, 50);
 				Rectangle email = new Rectangle(22, 153, 237, 50);

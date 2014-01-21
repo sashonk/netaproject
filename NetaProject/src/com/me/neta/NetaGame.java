@@ -29,10 +29,10 @@ import com.me.neta.tools.AbstractTool;
 
 public class NetaGame implements ApplicationListener {
 	
-	public static Platform platform;
+	public static Native natiff;
 	
-	public NetaGame(Platform platform){
-		this.platform = platform;
+	public NetaGame(Native platform){
+		this.natiff = platform;
 	}
 	
 	static final boolean debug= true;
@@ -81,8 +81,13 @@ public class NetaGame implements ApplicationListener {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
 	
-		stage.draw();	
-		stage.act();			
+		try{
+			stage.draw();	
+			stage.act();
+		}
+		catch(Exception ex){
+			MessageHelper.error("Критическая ошибка!", ex);
+		}
 
 		
 	
