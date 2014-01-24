@@ -78,7 +78,7 @@ public class Workspace extends Group{
 	
 
 	
-	Label mousePositionLabel ;
+	Actor positionActor ;
 	
 	static final float pad = 15;
 
@@ -93,25 +93,11 @@ public class Workspace extends Group{
 		setBounds(x, y, width, height);
 
 
-		Skin skin = TextureManager.get().getSkin();		
-		mousePositionLabel = new Label("", skin);
-	
+		positionActor = new Actor();
+		this.addActor(positionActor);
 
-		this.addActor(mousePositionLabel);
-
-
-		mousePositionLabel.setPosition(10, 500);
-		
-		
-		
 		Image img = new Image(TextureManager.get().getBottomPanelTexture());
-
-		
 		final Table toolbarTable = new Table();
-		
-
-		toolbarTable.debug();
-		toolbarTable.debugTable();
 		final ExitTool linkTool = new ExitTool();
 		toolbarTable.add(linkTool).padRight(pad).padLeft(pad);
 		
@@ -282,7 +268,7 @@ public class Workspace extends Group{
 						}
 
 						fieldsPanel.setVisible(false);
-						addActorBefore(abandoningWorld!=null ? abandoningWorld :mousePositionLabel, world);
+						addActorBefore(abandoningWorld!=null ? abandoningWorld :positionActor, world);
 
 						world.setId(desktopEvent.getId());
 						//desktop.addAction(Actions.sequence(Actions.fadeIn(.2f)));
@@ -428,7 +414,7 @@ public class Workspace extends Group{
 
 		instructActor.setBounds(20,150, 980, 500);		
 		instructActor.setVisible(false);
-		this.addActorAfter(mousePositionLabel, instructActor);
+		this.addActorAfter(positionActor, instructActor);
 		q.setPanel(instructActor);
 		
 //////////////////////////////////////////////////
@@ -447,7 +433,7 @@ public class Workspace extends Group{
 		});
 
 		nikolActor.setBounds(20,150, 980, 500);		
-		this.addActorAfter(mousePositionLabel, nikolActor);
+		this.addActorAfter(positionActor, nikolActor);
 		
 
 		
@@ -472,7 +458,7 @@ public class Workspace extends Group{
 		});						
 		authorsAct.setBounds(20,150, 980, 500);		
 		authorsAct.setVisible(false);
-		this.addActorAfter(mousePositionLabel, authorsAct);
+		this.addActorAfter(positionActor, authorsAct);
 		settingsPanel.setAuthorsPanel(authorsAct);
 
 
@@ -498,7 +484,7 @@ public class Workspace extends Group{
 		});						
 		adultsAct.setBounds(20,150, 980, 500);		
 		adultsAct.setVisible(false);
-		this.addActorAfter(mousePositionLabel, adultsAct);
+		this.addActorAfter(positionActor, adultsAct);
 		settingsPanel.setAdultsPanel(adultsAct);
 		
 		
@@ -525,7 +511,7 @@ public class Workspace extends Group{
 		});						
 		hintPanelAct.setBounds(20,150, 980, 500);		
 		hintPanelAct.setVisible(false);
-		this.addActorAfter(mousePositionLabel, hintPanelAct);
+		this.addActorAfter(positionActor, hintPanelAct);
 		settingsPanel.setHintPanel(hintPanelAct);
 		
 
