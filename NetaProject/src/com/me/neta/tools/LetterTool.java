@@ -5,7 +5,7 @@ import com.me.neta.events.RequestFocusEvent;
 import com.me.neta.util.WorkspaceState;
 
 
-public class LetterTool extends AbstractTool{
+public class LetterTool extends PanelTool{
 
 
 	@Override
@@ -24,9 +24,4 @@ public class LetterTool extends AbstractTool{
 		return state==WorkspaceState.WORKING;
 	}
 
-
-	@Override
-	public void doAction() {
-		fire(new RequestFocusEvent());
-	}
 }

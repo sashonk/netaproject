@@ -74,7 +74,7 @@ public class LyricsPanel extends Group{
 
 				
 		Color c = this.getColor();
-		batch.setColor(c.r, c.g, c.b, c.a* parentA);
+		batch.setColor(1, 1, 1, c.a* parentA);
 		batch.draw(treg, this.getX(), this.getY(), this.getWidth(), this.getHeight());				
 		super.draw(batch, parentA);
 

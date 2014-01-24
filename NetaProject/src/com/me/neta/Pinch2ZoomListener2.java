@@ -44,10 +44,14 @@ public class Pinch2ZoomListener2 extends InputListener{
 	private boolean canPan;
 	private boolean canPanForce = true;
 	
-	private float Zmin = 0.5f;
+	private float Zmin = 0.25f;
 	
 	public void setCanPan(boolean value){
 		canPanForce = value;
+	}
+	
+	public void setZMin(float value){
+		Zmin = value;
 	}
 
 	public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -216,7 +220,7 @@ public class Pinch2ZoomListener2 extends InputListener{
 	
 	private  void constrainZoom(OrthographicCamera cam){
 		if(cam.zoom<Zmin){
-			cam.zoom = 0.5f;
+			cam.zoom = Zmin;
 		}
 		if(cam.zoom>1){
 			cam.zoom = 1;

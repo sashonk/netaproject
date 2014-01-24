@@ -167,6 +167,8 @@ public class TextureManager {
          
          FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/arialbd.ttf"));
  		 BitmapFont cyrillicFont = generator.generateFont(12,DEFAULT_CHARS, false);
+ 		 BitmapFont cyrillicFont2 = generator.generateFont(14,DEFAULT_CHARS, false);
+ 		 
  		generator.dispose();
  		
  		
@@ -191,13 +193,22 @@ public class TextureManager {
         TextFieldStyle tfStyleSystem = new TextFieldStyle();
         tfStyleSystem.font = cyrillicFont;
         tfStyleSystem.fontColor = Color.BLACK;
-        tfStyleSystem.background = skin.getDrawable("gray");
+       // tfStyleSystem.background = skin.getDrawable("gray");
         tfStyleSystem.cursor = skin.getDrawable("black");	 	
+        tfStyleSystem.messageFont = cyrillicFont;
+        tfStyleSystem.messageFontColor = Color.GRAY;
         skin.add("system", tfStyleSystem);
  		
+   	
  		
- 		
-        
+        TextFieldStyle tfStyleSystem2 = new TextFieldStyle();
+        tfStyleSystem2.font = cyrillicFont2;
+        tfStyleSystem2.fontColor = Color.BLACK;
+       // tfStyleSystem.background = skin.getDrawable("gray");
+        tfStyleSystem2.cursor = skin.getDrawable("black");	 	
+        tfStyleSystem2.messageFont = cyrillicFont2;
+        tfStyleSystem2.messageFontColor = Color.GRAY;
+        skin.add("system2", tfStyleSystem2);        
         
         
         
@@ -227,6 +238,26 @@ public class TextureManager {
  		
  
 	
+ 		
+ 		LabelStyle lStyleTextAnt = new LabelStyle();
+ 		lStyleTextAnt.font = cyrillicFont;
+ 		lStyleTextAnt.fontColor = new Color(215/255f, 100/255f, 40/255f, 1);
+ 		skin.add("ant", lStyleTextAnt);
+ 		
+ 		LabelStyle lStyleTextPiton = new LabelStyle();
+ 		lStyleTextPiton.font = cyrillicFont;
+ 		lStyleTextPiton.fontColor =Color.RED;
+ 		skin.add("piton", lStyleTextPiton);
+ 		
+ 		LabelStyle lStyleTextTiger = new LabelStyle();
+ 		lStyleTextTiger.font = cyrillicFont;
+ 		lStyleTextTiger.fontColor = Color.GREEN;
+ 		skin.add("tiger", lStyleTextTiger);
+
+ 		LabelStyle lStyleTextSpider = new LabelStyle();
+ 		lStyleTextSpider.font = cyrillicFont;
+ 		lStyleTextSpider.fontColor = Color.YELLOW;
+ 		skin.add("spider", lStyleTextSpider);
 
 ///////////////////////////////////////////////
        ///////////	 MISC 	/////////////

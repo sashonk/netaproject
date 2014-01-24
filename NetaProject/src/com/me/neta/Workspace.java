@@ -16,6 +16,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.removeActor;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -73,31 +74,61 @@ import com.me.neta.tools.ZIndexTool;
 import com.me.neta.util.WorkHelper;
 import com.me.neta.util.WorkspaceState;
 import com.me.neta.util.WorkspaceStateListener;
+import com.me.neta.worlds.AntWorld;
+import com.me.neta.worlds.PitonWorld;
+import com.me.neta.worlds.SpiderWorld;
+import com.me.neta.worlds.TigerWorld;
 
 public class Workspace extends Group{
 	
 
 	
-	Actor positionActor ;
+	Label mousePositionLabel ;
 	
 	static final float pad = 15;
 
 	
-	
+	final PanelToolGroup ptGroup;
 	private List<WorkspaceStateListener> listeners = new LinkedList<WorkspaceStateListener>();
 	public WorkspaceState state;
+	private Pinch2ZoomListener2 pinch2Zoom;
+	Passport passport;
+	Map<Integer, WorldFactory> worldFactories = new HashMap<Integer, WorldFactory>();
 	
 	public Workspace(float x, float y, float width, float height){
+		
+		
+		populateWorldFactories();
+		passport = new Passport();
+		pinch2Zoom = new Pinch2ZoomListener2();
+		pinch2Zoom.setZMin(.125f);
+		this.addCaptureListener(pinch2Zoom);
+		
+
 		
 		setName("workspace");
 		setBounds(x, y, width, height);
 
 
-		positionActor = new Actor();
-		this.addActor(positionActor);
+		Skin skin = TextureManager.get().getSkin();		
+		mousePositionLabel = new Label("", skin);
+	
 
+		this.addActor(mousePositionLabel);
+
+
+		mousePositionLabel.setPosition(10, 500);
+		
+		
+		
 		Image img = new Image(TextureManager.get().getBottomPanelTexture());
+
+		
 		final Table toolbarTable = new Table();
+		
+
+		toolbarTable.debug();
+		toolbarTable.debugTable();
 		final ExitTool linkTool = new ExitTool();
 		toolbarTable.add(linkTool).padRight(pad).padLeft(pad);
 		
@@ -129,11 +160,13 @@ public class Workspace extends Group{
 				
 		toolbarTable.add(lyricsTool).padRight(pad).padLeft(pad);
 		final LetterTool letterTool = new LetterTool();
-		/*PassportForm form = new PassportForm(300, 200);
+		final PassportForm form = new PassportForm();
+		form.setPosition(490-133, 75);
+		form.setColor(c);
 		form.setVisible(false);
 		addActor(form);
-		WorkHelper.center(form);
-		letterTool.setPanel(form);*/		
+		//WorkHelper.center(form);
+		letterTool.setPanel(form);	
 		toolbarTable.add(letterTool).padRight(pad).padLeft(pad);
 		
 		
@@ -220,10 +253,12 @@ public class Workspace extends Group{
 			@Override
 			public boolean handle(Event event) {
 				if(event instanceof DragStartEvent){
-					world.setPinch2ZoomEnabled(false);
+				//	world.setPinch2ZoomEnabled(false);
+					pinch2Zoom.setCanPan(false);
 				}
 				if(event instanceof DragStopEvent){
-					world.setPinch2ZoomEnabled(true);
+					//world.setPinch2ZoomEnabled(true);
+					pinch2Zoom.setCanPan(true);
 
 				}
 				
@@ -251,24 +286,14 @@ public class Workspace extends Group{
 							abandoningWorld.addAction(sequence(Actions.parallel(Actions.scaleTo(0, 0, 1f), Actions.rotateBy(-500, 1f), Actions.moveBy(1000, 0, 1f)) ,Actions.removeActor()));
 						}
 						
-						world = new World(getWidth(), getHeight());
+						world = worldFactories.get(desktopEvent.getId()).create();
+						world.populate();
 						world.setZIndex(1);
 						
-						if(desktopEvent.getId()==1){ 
-							createAntWorld();
-						}
-						if(desktopEvent.getId()==3){
-							createPitonWorld();
-						}
-						if(desktopEvent.getId()==2){
-							createSpiderWorld();
-						}
-						if(desktopEvent.getId()==4){
-							createTigerWorld();
-						}
+		
 
 						fieldsPanel.setVisible(false);
-						addActorBefore(abandoningWorld!=null ? abandoningWorld :positionActor, world);
+						addActorBefore(abandoningWorld!=null ? abandoningWorld :mousePositionLabel, world);
 
 						world.setId(desktopEvent.getId());
 						//desktop.addAction(Actions.sequence(Actions.fadeIn(.2f)));
@@ -276,6 +301,7 @@ public class Workspace extends Group{
 							public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 								getStage().setKeyboardFocus(null);
 								Workspace.this.setSelectedFigure(null);
+								Workspace.this.ptGroup.onShow(null);
 								Gdx.input.setOnscreenKeyboardVisible(false);
 								
 
@@ -285,9 +311,7 @@ public class Workspace extends Group{
 								
 							}
 						});
-						
-				
-
+						world.drawPassport(passport);				
 					}
 					
 					fire(new WorkspaceStateEvent(WorkspaceState.WORKING));
@@ -382,6 +406,13 @@ public class Workspace extends Group{
 					 world.setColorizing(btcEvent.isChecked()) ;
 				}
 				
+				if(event instanceof PassportEvent){
+					form.update(passport);
+					world.drawPassport(passport);
+					Workspace.this.ptGroup.onShow(null);
+
+				}
+				
 				
 				event.setBubbles(false);
 				return true;
@@ -414,7 +445,7 @@ public class Workspace extends Group{
 
 		instructActor.setBounds(20,150, 980, 500);		
 		instructActor.setVisible(false);
-		this.addActorAfter(positionActor, instructActor);
+		this.addActorAfter(mousePositionLabel, instructActor);
 		q.setPanel(instructActor);
 		
 //////////////////////////////////////////////////
@@ -433,7 +464,7 @@ public class Workspace extends Group{
 		});
 
 		nikolActor.setBounds(20,150, 980, 500);		
-		this.addActorAfter(positionActor, nikolActor);
+		this.addActorAfter(mousePositionLabel, nikolActor);
 		
 
 		
@@ -458,7 +489,7 @@ public class Workspace extends Group{
 		});						
 		authorsAct.setBounds(20,150, 980, 500);		
 		authorsAct.setVisible(false);
-		this.addActorAfter(positionActor, authorsAct);
+		this.addActorAfter(mousePositionLabel, authorsAct);
 		settingsPanel.setAuthorsPanel(authorsAct);
 
 
@@ -484,7 +515,7 @@ public class Workspace extends Group{
 		});						
 		adultsAct.setBounds(20,150, 980, 500);		
 		adultsAct.setVisible(false);
-		this.addActorAfter(positionActor, adultsAct);
+		this.addActorAfter(mousePositionLabel, adultsAct);
 		settingsPanel.setAdultsPanel(adultsAct);
 		
 		
@@ -511,22 +542,12 @@ public class Workspace extends Group{
 		});						
 		hintPanelAct.setBounds(20,150, 980, 500);		
 		hintPanelAct.setVisible(false);
-		this.addActorAfter(positionActor, hintPanelAct);
+		this.addActorAfter(mousePositionLabel, hintPanelAct);
 		settingsPanel.setHintPanel(hintPanelAct);
 		
 
-/*		this.addListener(new InputListener(){
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				if(x<10 && y < 10){
-					saveScreenshot2(Gdx.files.absolute("D:\\screenshot.png"));
-				}
-				
-				return false;
-			}
-		});*/
 		
-		
-		PanelToolGroup ptGroup = new PanelToolGroup();
+		ptGroup = new PanelToolGroup();
 		ptGroup.addTool(fieldsTool);
 		ptGroup.addTool(lyricsTool);
 		ptGroup.addTool(figuresTool);
@@ -534,7 +555,7 @@ public class Workspace extends Group{
 		ptGroup.addTool(saveTool);
 		ptGroup.addTool(settingTool);
 		ptGroup.addTool(shopTool);
-		
+		ptGroup.addTool(letterTool);
 		
 		
 		registerStateListener(linkTool);
@@ -570,420 +591,21 @@ public class Workspace extends Group{
 			listeners.add(listener);
 		}
 	}
-
-	//for email , fb, print
-	public Object getDesktopImage(){
-		
-		//TODO
-		return null;
-	}
-	
 	
 	
 	private World world;
-	
 
 
-	void createAntWorld(){
-
-
-
-		//desktop.setBackground(new Color(.72f, .86f, .48f, 1));
-		world.setColor(new Color(.72f, .86f, .48f, 1));
-		//desktop.getColor().a = 0;
-		
-
-		
-////////////////////////////////////
-/////////// PASSPORT //////////////
-////////////////////////////////////
-		Group textGroup = new Group();
-		textGroup.addCaptureListener(new InputListener(){
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				event.setBubbles(false);
-				return false;
-			}
-		});
-		textGroup.setPosition(0, getHeight()-155);
-		Image textImg = new Image(TextureManager.get().getAtlas().findRegion("passport-ant"));
-		textImg.setBounds(0, 0, 330, 155);		
-		textGroup.addActor(textImg);		
-				
-		TextField author = new TextField("", TextureManager.get().getSkin(), "ant");
-		author.setColor(Color.BLUE);
-		author.setName("author");
-		author.setFocusTraversal(true);
-		author.setWidth(100);
-		author.setPosition(122, 40);		
-		textGroup.addActor(author);		
-		
-		TextField age = new TextField("", TextureManager.get().getSkin(), "ant");
-		age.setName("age");
-		age.setFocusTraversal(true);
-
-		age.setWidth(21);				
-		age.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
-		age.setPosition(267, 40);		
-		textGroup.addActor(age);	
-		
-		
-		TextField city = new TextField("", TextureManager.get().getSkin(), "ant");
-		city.setName("city");
-		city.setFocusTraversal(true);
-		city.setWidth(72);
-		city.setPosition(86, 7);		
-		textGroup.addActor(city);
-		
-		
-		TextField state = new TextField("", TextureManager.get().getSkin(), "ant");
-		state.setName("state");		
-		state.setFocusTraversal(true);
-
-		state.setWidth(262-198);
-		state.setPosition(200, 7);		
-		textGroup.addActor(state);
-		
-		TextField year = new TextField("", TextureManager.get().getSkin(), "ant");
-		year.setName("year");
-		
-		year.setFocusTraversal(true);
-		year.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
-		year.setWidth(324-285);
-		year.setPosition(285, 7);		
-		textGroup.addActor(year);
-		
-		textGroup.setName("passport");
-		world.addActor(textGroup);
-		textImg.addListener(new MetricListener());
-////////////////////////////////////////////////	
-////////////////////////////////////////////////	
-		
-		
-
-		
-		
-
-
-
-		Image flower1 = new Image(TextureManager.get().getAtlas().findRegion("ZVET3"));
-		flower1.setBounds(162, 80, 57,73);
-		world.addActor(flower1);
-		
-		Image flower2 = new Image(TextureManager.get().getAtlas().findRegion("ZVET4"));
-		flower2.setBounds(900, 80,57,57);
-		world.addActor(flower2);	
-		
-		Actor zactor = new Actor();
-		zactor.setName("zactor");
-		world.addActor(zactor);
-		
-
-		Hero ant2 = new Hero("ant2");
-		ant2.setBounds(800, 260, 55, 115);
-		ant2.setZIndex(9);
-		world.addActor(ant2);
-		
-		Ant ant = new Ant();
-		ant.setPosition(100, 250);
-		ant.setZIndex(10);
-		world.addActor(ant);
-		world.setName("ant");
-	}
-	
-	void createSpiderWorld(){
-		//desktop.setBackground(new Color(186/255f, 179/255f, 213/255f, 1));
-		world.setColor(new Color(186/255f, 179/255f, 213/255f, 1));
-		//desktop.getColor().a = 0;	
-		
-		
-////////////////////////////////////
-/////////// PASSPORT //////////////
-////////////////////////////////////
-		Group textGroup = new Group();
-		textGroup.addCaptureListener(new InputListener(){
-		public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-		event.setBubbles(false);
-		return false;
-		}
-		});
-		textGroup.setPosition(0, getHeight()-155);
-		Image textImg = new Image(TextureManager.get().getAtlas().findRegion("passport-spider"));
-		textImg.setBounds(0, 0, 330, 155);		
-		textGroup.addActor(textImg);		
-		
-		TextField author = new TextField("", TextureManager.get().getSkin(), "spider");
-		author.setName("author");
-		author.setFocusTraversal(true);
-		author.setWidth(100);
-		author.setPosition(122, 33);		
-		textGroup.addActor(author);		
-		
-		TextField age = new TextField("", TextureManager.get().getSkin(), "spider");
-		age.setName("age");
-		
-		age.setFocusTraversal(true);
-		
-		age.setWidth(21);				
-		age.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
-		age.setPosition(260, 33);		
-		textGroup.addActor(age);	
-		
-		
-		TextField city = new TextField("", TextureManager.get().getSkin(), "spider");
-		city.setName("city");
-		
-		city.setFocusTraversal(true);
-		city.setWidth(72);
-		city.setPosition(86, 7);		
-		textGroup.addActor(city);
-		
-		
-		TextField state = new TextField("", TextureManager.get().getSkin(), "spider");
-		state.setName("state");
-		
-		state.setFocusTraversal(true);
-		
-		state.setWidth(262-198);
-		state.setPosition(200, 7);		
-		textGroup.addActor(state);
-		
-		TextField year = new TextField("", TextureManager.get().getSkin(), "spider");
-		year.setName("year");
-		
-		year.setFocusTraversal(true);
-		
-		year.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
-		year.setWidth(324-285);
-		year.setPosition(285, 7);		
-		textGroup.addActor(year);
-		
-		textGroup.setName("passport");
-		world.addActor(textGroup);
-		textImg.addListener(new MetricListener());
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-
-		
-		
-		
-
-		
-
-		
-		Image PAUTINA = new Image(TextureManager.get().getAtlas().findRegion("PAUTINA"));
-		PAUTINA.setBounds(1024-304, 768-257,304, 257);
-		world.addActor(PAUTINA);
-		
-		
-
-		
-/*		Image muha = new Image(TextureManager.get().getAtlas().findRegion("MUH"));
-		muha.setBounds(550, 560,53,31);
-		desktop.addActor(muha);*/
-		
-		Image flower = new Image(TextureManager.get().getAtlas().findRegion("ZVET3"));
-		flower.setBounds(875, 140,57, 73);
-		world.addActor(flower);
-		
-		Actor zactor = new Actor();
-		zactor.setName("zactor");
-		world.addActor(zactor);
-		
-		Hero muha = new Hero("MUH");
-		muha.setBounds(550, 560,53,31);
-		muha.setZIndex(9);
-		world.addActor(muha);
-		
-		Spider spider = new Spider();
-		spider.setPosition(100, 250);
-		spider.setZIndex(10);
-		world.addActor(spider);
-		
-		world.setName("spider");
-	}
-	
 	
 	void createTigerWorld(){
-		//desktop.setBackground(new Color(255/255f, 250/255f, 156/255f, 1));
-		world.setColor(new Color(255/255f, 250/255f, 156/255f, 1));
-	//	desktop.getColor().a = 0;	
-		
-		
-		
-////////////////////////////////////
-/////////// PASSPORT //////////////
-////////////////////////////////////
-	Group textGroup = new Group();
-	textGroup.addCaptureListener(new InputListener(){
-	public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-	event.setBubbles(false);
-	return false;
-	}
-	});
-	textGroup.setPosition(0, getHeight()-155);
-	Image textImg = new Image(TextureManager.get().getAtlas().findRegion("passport-tiger"));
-	textImg.setBounds(0, 0, 330, 155);		
-	textGroup.addActor(textImg);		
 	
-	TextField author = new TextField("", TextureManager.get().getSkin(), "tiger");
-	author.setName("author");
-	
-	author.setFocusTraversal(true);
-	author.setWidth(100);
-	author.setPosition(122, 31);		
-	textGroup.addActor(author);		
-	
-	TextField age = new TextField("", TextureManager.get().getSkin(), "tiger");
-	age.setName("age");
-	age.setFocusTraversal(true);
-	
-	age.setWidth(21);				
-	age.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
-	age.setPosition(260, 31);		
-	textGroup.addActor(age);	
-	
-	
-	TextField city = new TextField("", TextureManager.get().getSkin(), "tiger");
-	city.setName("city");
-	
-	city.setFocusTraversal(true);
-	city.setWidth(72);
-	city.setPosition(86, 7);		
-	textGroup.addActor(city);
-	
-	
-	TextField state = new TextField("", TextureManager.get().getSkin(), "tiger");
-	state.setName("state");
-	
-	state.setFocusTraversal(true);
-	
-	state.setWidth(262-198);
-	state.setPosition(200, 7);		
-	textGroup.addActor(state);
-	
-	TextField year = new TextField("", TextureManager.get().getSkin(), "tiger");
-	year.setName("year");
-	
-	year.setFocusTraversal(true);
-	
-	year.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
-	year.setWidth(324-285);
-	year.setPosition(285, 7);		
-	textGroup.addActor(year);
-	
-	textGroup.setName("passport");
-	world.addActor(textGroup);
-	textImg.addListener(new MetricListener());
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-		
 
-		
-		Image flower1 = new Image(TextureManager.get().getAtlas().findRegion("ZVET5"));
-		flower1.setBounds(140, 135,78,97);
-		world.addActor(flower1);
-		
-		
-		Image butterfly = new Image(TextureManager.get().getAtlas().findRegion("PARPAR"));
-		butterfly.setBounds(690, 768-200,38,38);
-		world.addActor(butterfly);
-		
-		Image flower2 = new Image(TextureManager.get().getAtlas().findRegion("ZVET6"));
-		flower2.setBounds(820,150,74,48);
-		world.addActor(flower2);
-		
-		
-		Actor zactor = new Actor();
-		zactor.setName("zactor");
-		world.addActor(zactor);
-		
-		Hero zebra = new Hero("ZEBRA");
-		zebra.setBounds(420, 170, 93, 72);
-		zebra.setZIndex(9);
-		world.addActor(zebra);
-	//420 170
-				
-		Tiger tiger = new Tiger();
-		tiger.setPosition(120, 320);
-		tiger.setZIndex(10);
-		world.addActor(tiger);
 		
 		world.setName("tiger");
 	}
 	
 	void createPitonWorld(){
-		//desktop.setBackground(new Color(182/255f, 221/255f, 200/255f, 1));
-		world.setColor(new Color(182/255f, 221/255f, 200/255f, 1));
-	//	desktop.getColor().a = 0;	
-		
-		
-////////////////////////////////////
-/////////// PASSPORT //////////////
-////////////////////////////////////
-	Group textGroup = new Group();
-	textGroup.addCaptureListener(new InputListener(){
-	public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-	event.setBubbles(false);
-	return false;
-	}
-	});
-	textGroup.setPosition(0, getHeight()-155);
-	Image textImg = new Image(TextureManager.get().getAtlas().findRegion("passport-piton"));
-	textImg.setBounds(0, 0, 330, 155);		
-	textGroup.addActor(textImg);		
 	
-	TextField author = new TextField("", TextureManager.get().getSkin(), "piton");
-	author.setName("author");
-	author.setFocusTraversal(true);
-	author.setWidth(100);
-	author.setPosition(122, 32);		
-	textGroup.addActor(author);		
-	
-	TextField age = new TextField("", TextureManager.get().getSkin(), "piton");
-	age.setFocusTraversal(true);
-	age.setName("age");
-	
-	age.setWidth(21);				
-	age.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
-	age.setPosition(263, 33);		
-	textGroup.addActor(age);	
-	
-	
-	TextField city = new TextField("", TextureManager.get().getSkin(), "piton");
-	city.setName("city");
-
-	city.setFocusTraversal(true);
-	city.setWidth(72);
-	city.setPosition(86, 6);		
-	textGroup.addActor(city);
-	
-	
-	TextField state = new TextField("", TextureManager.get().getSkin(), "piton");
-	state.setName("state");
-	
-	state.setFocusTraversal(true);
-	
-	state.setWidth(262-198);
-	state.setPosition(200, 6);		
-	textGroup.addActor(state);
-	
-	TextField year = new TextField("", TextureManager.get().getSkin(), "piton");
-	year.setName("year");
-	
-	year.setFocusTraversal(true);
-	
-	year.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
-	year.setWidth(324-285);
-	year.setPosition(285, 6);		
-	textGroup.addActor(year);
-	
-	textGroup.setName("passport");
-	world.addActor(textGroup);
-	textImg.addListener(new MetricListener());
-////////////////////////////////////////////////
-////////////////////////////////////////////////		
-		
-				
 
 		
 		Image flower1 = new Image(TextureManager.get().getAtlas().findRegion("ZVET4"));
@@ -1127,6 +749,41 @@ public class Workspace extends Group{
             }
             
             return pixmap;
+    }
+    
+    
+    public void populateWorldFactories(){
+    	worldFactories.put(Integer.valueOf(1), new WorldFactory() {
+			
+			@Override
+			public World create() {
+				return new AntWorld(Workspace.this.getWidth(), Workspace.this.getHeight());
+			}
+		});
+    	
+    	worldFactories.put(Integer.valueOf(2), new WorldFactory() {
+			
+			@Override
+			public World create() {
+				return new SpiderWorld(Workspace.this.getWidth(), Workspace.this.getHeight());
+			}
+		});
+    	
+    	worldFactories.put(Integer.valueOf(3), new WorldFactory() {
+			
+			@Override
+			public World create() {
+				return new PitonWorld(Workspace.this.getWidth(), Workspace.this.getHeight());
+			}
+		});
+    	
+    	worldFactories.put(Integer.valueOf(4), new WorldFactory() {
+			
+			@Override
+			public World create() {
+				return new TigerWorld(Workspace.this.getWidth(), Workspace.this.getHeight());
+			}
+		});
     }
 }
 

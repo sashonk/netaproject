@@ -9,13 +9,18 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldFilter;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.me.neta.events.LyricsIconEvent;
 import com.me.neta.events.ZIndexEvent;
 import com.me.neta.figures.AbstractFigure;
@@ -23,7 +28,7 @@ import com.me.neta.tools.BrushTool;
 import com.me.neta.tools.RotateTool;
 import com.me.neta.tools.ZIndexTool;
 
-public class World extends Group{
+public abstract class World extends Group{
 	//Pixmap pm;
 	//Texture tx;
 	ZIndexTool ztool;
@@ -34,8 +39,7 @@ public class World extends Group{
 	private boolean colorize;
 	private AbstractFigure selectedActor;
 	private Color selectedColor ;
-	private Pinch2ZoomListener2 pinch2Zoom;
-
+	protected static final float FIELD_HEIGHT= 20;
 	
 	public AbstractFigure getSelected(){
 		return selectedActor;
@@ -83,17 +87,13 @@ public class World extends Group{
 	}
 	
 	public World(float width, float height){
+		setName(getTitle());
+		
 		colorize = false;
 		selectedColor = Color.WHITE.cpy();
-		tm = TextureManager.get();
-		
+		tm = TextureManager.get();		
 		this.setBounds(0, 0, width, height);		
-/*		pm = new Pixmap(1, 1, Format.RGBA8888);
-		pm.setColor(Color.WHITE);
-		pm.fill();
-		tx = new Texture(pm);	*/	
-		
-		
+
 
 		
 		RotateTool r = new RotateTool();
@@ -129,24 +129,87 @@ public class World extends Group{
 		btool.setBounds(536+40, 701, 40, 40);
 		addActor(btool);
 		
-		pinch2Zoom = new Pinch2ZoomListener2();
-		this.addListener(pinch2Zoom);
+	//	this.addListener(pinch2Zoom);
+		this.addListener(new MetricListener());
+
+		
+		
+		
+////////////////////////////////////
+/////////// PASSPORT //////////////
+////////////////////////////////////
+	Group textGroup = new Group();
+	textGroup.addCaptureListener(new InputListener(){
+	public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+		event.setBubbles(false);
+		return false;
+	}
+	});
+	textGroup.setPosition(0, getHeight()-155);
+	Image textImg = new Image(TextureManager.get().getAtlas().findRegion("passport-"+getTitle()));
+	textImg.setBounds(0, 0, 330, 155);		
+	textGroup.addActor(textImg);		
+	
+	Label author = new Label("", TextureManager.get().getSkin(), getTitle());
+	author.setAlignment(Align.center);
+	author.setName("author");
+	Rectangle authorBounds = getAuthorBounds();
+	author.setBounds(authorBounds.x, authorBounds.y, authorBounds.width, authorBounds.height);
+	textGroup.addActor(author);		
+	
+	Label age = new Label("", TextureManager.get().getSkin(), getTitle());
+	age.setAlignment(Align.center);
+	age.setName("age");			
+	Rectangle ageBounds = getAgeBounds();
+	age.setBounds(ageBounds.x, ageBounds.y, ageBounds.width, ageBounds.height);
+	textGroup.addActor(age);	
+	
+	Label city = new Label("", TextureManager.get().getSkin(), getTitle());
+	city.setAlignment(Align.center);	
+	city.setName("city");
+	Rectangle cityBounds = getCityBounds();
+	city.setBounds(cityBounds.x, cityBounds.y, cityBounds.width, cityBounds.height);
+	textGroup.addActor(city);
+		
+	Label state = new Label("", TextureManager.get().getSkin(), getTitle());
+	state.setAlignment(Align.center);	
+	state.setName("state");				
+	Rectangle stateBounds = getStateBounds();
+	state.setBounds(stateBounds.x, stateBounds.y, stateBounds.width, stateBounds.height);
+	textGroup.addActor(state);
+	
+	Label year = new Label("", TextureManager.get().getSkin(), getTitle());
+	year.setAlignment(Align.center);	
+	year.setName("year");		
+	Rectangle yearBounds = getYearBounds();
+	year.setBounds(yearBounds.x, yearBounds.y, yearBounds.width, yearBounds.height);
+	textGroup.addActor(year);
+	
+	textGroup.setName("passport");
+	addActor(textGroup);
+	textImg.addListener(new MetricListener());
+////////////////////////////////////////////////
+////////////////////////////////////////////////
+
 
 	}
 	
+	public abstract Rectangle getAuthorBounds();	
+	public abstract Rectangle getAgeBounds();
+	public abstract Rectangle getCityBounds();
+	public abstract Rectangle getStateBounds();
+	public abstract Rectangle getYearBounds();
+
+	
 	void setPinch2ZoomEnabled(boolean value){
-		pinch2Zoom.setCanPan(value);
+	//	pinch2Zoom.setCanPan(value);
 	}
 	
 	void tintBrush(Color c){
 		btool.setColor(c);
 	}
 	
-/*	void setBackground(Color c){
-		pm.setColor(c);
-		pm.fill();
-		tx.draw(pm, 0, 0);
-	}*/
+
 	
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha){
@@ -176,6 +239,23 @@ public class World extends Group{
 		return colorize;
 	}
 	
+	public void drawPassport(Passport p){
+		Group passport = (Group) findActor("passport");
+		Label author =  (Label) passport.findActor("author");
+		Label age =  (Label) passport.findActor("age");
+		Label city =  (Label) passport.findActor("city");
+		Label state =  (Label) passport.findActor("state");
+		Label year =  (Label) passport.findActor("year");
+		
+		author.setText(p.name!=null ? p.name : "");
+		age.setText(p.age!=null ? p.age.toString() : "");
+		city.setText(p.city!=null ? p.city : "");
+		state.setText(p.country!=null ? p.country : "");
+		year.setText(p.year!=null ? p.year.toString() : "");
+	}
+	
+	public abstract String getTitle();
+	
 	public Passport getPassport(){
 		Group passport = (Group) findActor("passport");
 		TextField author =  (TextField) passport.findActor("author");
@@ -196,6 +276,8 @@ public class World extends Group{
 	public void setSelectedFigure(AbstractFigure figure){
 		ztool.setSelectedFigure(figure);
 	}
+	
+	public abstract void populate();
 	
 	private Passport pass;
 }
