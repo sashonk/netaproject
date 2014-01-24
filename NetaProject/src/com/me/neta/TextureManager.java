@@ -116,6 +116,10 @@ public class TextureManager {
          pixmap.fill();
          skin.add("gray", new Texture(pixmap));
          
+         pixmap.setColor(new Color(112/255f, 207/255f, 238/255f, 1));
+         pixmap.fill();
+         skin.add("blue", new Texture(pixmap));
+         
          TextFieldStyle blueCalibri = new TextFieldStyle();
          blueCalibri.fontColor = new Color(.4f, .57f, .74f,1);
         //textFieldStyle.background = skin.newDrawable("white", new Color(.4f, .57f, .74f,1));               
@@ -194,6 +198,7 @@ public class TextureManager {
         tfStyleSystem.font = cyrillicFont;
         tfStyleSystem.fontColor = Color.BLACK;
        // tfStyleSystem.background = skin.getDrawable("gray");
+        tfStyleSystem.selection = skin.getDrawable("blue");
         tfStyleSystem.cursor = skin.getDrawable("black");	 	
         tfStyleSystem.messageFont = cyrillicFont;
         tfStyleSystem.messageFontColor = Color.GRAY;
@@ -205,6 +210,7 @@ public class TextureManager {
         tfStyleSystem2.font = cyrillicFont2;
         tfStyleSystem2.fontColor = Color.BLACK;
        // tfStyleSystem.background = skin.getDrawable("gray");
+        tfStyleSystem2.selection = skin.getDrawable("blue");
         tfStyleSystem2.cursor = skin.getDrawable("black");	 	
         tfStyleSystem2.messageFont = cyrillicFont2;
         tfStyleSystem2.messageFontColor = Color.GRAY;

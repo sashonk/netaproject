@@ -20,6 +20,7 @@ public class PassportForm extends Group{
 	
 	static final String TEXT_FIELD_STYLE = "system2";
 	static final float PADX = 22;
+	static final float H = 22;
 	TextureRegion tr;
 	
 	TextField tfAge;
@@ -41,30 +42,30 @@ public class PassportForm extends Group{
 		
 		tfName = new TextField("", skin, TEXT_FIELD_STYLE);
 		tfName.setMessageText("Имя ребёнка");
-		tfName.setBounds(PADX, 240, 228, 20);
+		tfName.setBounds(PADX, 240, 228, H);
 		addActor(tfName);
 				
 		 tfAge = new TextField("", skin, TEXT_FIELD_STYLE);
 		tfAge.setMessageText("Возраст");
-		tfAge.setBounds(PADX, 205, 228, 20);
+		tfAge.setBounds(PADX, 205, 228, H);
 		tfAge.setMaxLength(2);
 		tfAge.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
 		addActor(tfAge);
 				
 		 tfCity = new TextField("", skin, TEXT_FIELD_STYLE);
 		tfCity.setMessageText("Город (село)");
-		tfCity.setBounds(PADX, 170, 228, 20);
+		tfCity.setBounds(PADX, 170, 228, H);
 		addActor(tfCity);
 		
 		 tfState = new TextField("", skin, TEXT_FIELD_STYLE);
 		tfState.setMessageText("Страна");
-		tfState.setBounds(PADX, 138, 228, 20);
+		tfState.setBounds(PADX, 138, 228, H);
 		addActor(tfState);
 				
 		 tfYear = new TextField("", skin, TEXT_FIELD_STYLE);
 		tfYear.setMessageText("Год");
 		tfYear.setMaxLength(4);
-		tfYear.setBounds(PADX, 105, 228, 20);
+		tfYear.setBounds(PADX, 105, 228, H);
 		tfYear.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());	
 		addActor(tfYear);
 		
