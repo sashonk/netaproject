@@ -47,6 +47,8 @@ public abstract class World extends Group{
 	
 	public void setSelectedActor(AbstractFigure figure){
 		selectedActor =figure;
+		ztool.setSelectedFigure(figure);
+
 	}
 	
 	public void setId(int id){

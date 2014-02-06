@@ -250,6 +250,8 @@ public class TextureManager {
  		lStyleTextAnt.fontColor = new Color(215/255f, 100/255f, 40/255f, 1);
  		skin.add("ant", lStyleTextAnt);
  		
+ 	
+ 		
  		LabelStyle lStyleTextPiton = new LabelStyle();
  		lStyleTextPiton.font = cyrillicFont;
  		lStyleTextPiton.fontColor =Color.RED;
@@ -268,7 +270,35 @@ public class TextureManager {
 ///////////////////////////////////////////////
        ///////////	 MISC 	/////////////
 //////////////////////////////////////////////
+ 		
+ 		skin.add("lyrics", new NinePatch(atlas.findRegion("lyricsDrawable"), 15, 15, 15, 15));
          
+ 		NinePatchDrawable lyricsNpd = new NinePatchDrawable(skin.getPatch("lyrics")); 		
+ 		skin.add("lyrics", lyricsNpd, Drawable.class);
+ 		
+ 		LabelStyle lStyleLyricsBlue = new LabelStyle();
+ 		//lStyleLyricsBlue.background =skin.getDrawable("black");
+ 		lStyleLyricsBlue.font = cyrillicFont2;
+ 		lStyleLyricsBlue.fontColor = new Color(151 / 255f, 158 / 255f , 212 / 255f, 1);
+ 		skin.add("lyricsBlue", lStyleLyricsBlue);
+ 		
+ 		LabelStyle lStyleLyricsGreen = new LabelStyle();
+ 		lStyleLyricsGreen.background =skin.getDrawable("lyrics");
+ 		lStyleLyricsGreen.font = cyrillicFont2;
+ 		lStyleLyricsGreen.fontColor =  new Color(67 / 255f, 178 / 255f , 73 / 255f, 1);
+ 		skin.add("lyricsGreen", lStyleLyricsGreen);
+ 		
+ 		LabelStyle lStyleLyricsBlack = new LabelStyle();
+ 		lStyleLyricsBlack.background =skin.getDrawable("lyrics");
+ 		lStyleLyricsBlack.font = cyrillicFont2;
+ 		lStyleLyricsBlack.fontColor =  new Color(34 / 255f, 30 / 255f , 31 / 255f, 1);;
+ 		skin.add("lyricsBlack", lStyleLyricsBlack);
+ 		
+ 		LabelStyle lStyleLyricsYellow = new LabelStyle();
+ 		lStyleLyricsYellow.background =skin.getDrawable("lyrics");
+ 		lStyleLyricsYellow.font = cyrillicFont2;
+ 		lStyleLyricsYellow.fontColor =  new Color(246 / 255f, 177 / 255f , 12 / 255f, 1);
+ 		skin.add("lyricsYellow", lStyleLyricsYellow);
          
 	}
 	

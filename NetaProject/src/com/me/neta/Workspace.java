@@ -34,6 +34,7 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.input.GestureDetector;
@@ -49,10 +50,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldFilter;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 
 
 import com.me.neta.events.*;
@@ -584,6 +587,12 @@ public class Workspace extends Group{
 		
 
 		
+		
+	///	lStyleLyrics.background = new NinePatchDrawable(new NinePatch(new Texture()));
+	//	lStyleLyrics.background = new Ninepa 
+				
+				
+				
 	}
 
 	private void registerStateListener(WorkspaceStateListener listener){
@@ -674,6 +683,10 @@ public class Workspace extends Group{
     public void saveScreenshot2(FileHandle fh) {
         Pixmap pixmap = getScreenshot(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
         PixmapIO.writePNG(fh, pixmap);
+        
+     
+        
+        
       //  BufferedI
         
         //PixmapIO.writePNG(file, pixmap);
@@ -785,5 +798,10 @@ public class Workspace extends Group{
 			}
 		});
     }
+    
+    
+    
+    
+    
 }
 
