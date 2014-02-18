@@ -5,14 +5,15 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.me.neta.Hero;
+import com.me.neta.NetaGame;
 import com.me.neta.Spider;
 import com.me.neta.TextureManager;
 import com.me.neta.World;
 
 public class SpiderWorld extends World{
 
-	public SpiderWorld(float width, float height) {
-		super(width, height);
+	public SpiderWorld(NetaGame ng, float width, float height) {
+		super(ng, width, height);
 		setColor(new Color(186/255f, 179/255f, 213/255f, 1));
 	}
 	@Override
@@ -46,11 +47,11 @@ public class SpiderWorld extends World{
 	}
 	@Override
 	public void populate() {
-		Image PAUTINA = new Image(TextureManager.get().getAtlas().findRegion("PAUTINA"));
+		Image PAUTINA = new Image(ng.getManager().getAtlas().findRegion("PAUTINA"));
 		PAUTINA.setBounds(1024-304, 768-257,304, 257);
 		addActor(PAUTINA);
 
-		Image flower = new Image(TextureManager.get().getAtlas().findRegion("ZVET3"));
+		Image flower = new Image(ng.getManager().getAtlas().findRegion("ZVET3"));
 		flower.setBounds(875, 140,57, 73);
 		addActor(flower);
 		
@@ -58,12 +59,12 @@ public class SpiderWorld extends World{
 		zactor.setName("zactor");
 		addActor(zactor);
 		
-		Hero muha = new Hero("MUH");
+		Hero muha = new Hero(ng,"MUH");
 		muha.setBounds(550, 560,53,31);
 		muha.setZIndex(9);
 		addActor(muha);
 		
-		Spider spider = new Spider();
+		Spider spider = new Spider(ng);
 		spider.setPosition(100, 250);
 		spider.setZIndex(10);
 		addActor(spider);		

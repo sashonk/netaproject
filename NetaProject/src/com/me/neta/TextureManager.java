@@ -47,21 +47,11 @@ public class TextureManager {
 			"\u04ED\u04EE\u04EF\u04F0\u04F1\u04F2\u04F3\u04F4\u04F5\u04F6\u04F7\u04F8\u04F9\u04FA\u04FB\u04FC" +
 			"\u04FD\u04FE\u04FF";
 	
-	private static TextureManager instance;
 	
 	
 	public static final String DEFAULT_CHARS = FreeTypeFontGenerator.DEFAULT_CHARS.concat(CHARS);
 	
-	public static TextureManager get(){
-		if(instance==null){
-			instance = new TextureManager();
-			
-			instance.init();
-			
-		}
-		
-		return instance;
-	}
+
 	
 	private Texture np9 ;
 	
@@ -304,7 +294,6 @@ public class TextureManager {
 	
 
 	
-	private TextureManager(){}
 	
 	public Skin getSkin(){
 		return skin;
@@ -372,13 +361,11 @@ public class TextureManager {
 		return tex;
 	}
 	
-	public static  void manage(){
-		if(instance==null){
-			return;
-		}
+	public   void manage(){
+
 		
 
-		Iterator<Map<Color, Texture>> rootIter = instance.data.values().iterator();
+		Iterator<Map<Color, Texture>> rootIter =data.values().iterator();
 		while(rootIter.hasNext()){
 			Map<Color, Texture> map = rootIter.next();
 			Iterator<Texture> texIter = map.values().iterator();
@@ -391,7 +378,7 @@ public class TextureManager {
 			rootIter.remove();
 		}
 
-		Iterator<Texture> texIter = instance.unmanaged.values().iterator();
+		Iterator<Texture> texIter = unmanaged.values().iterator();
 		while(texIter.hasNext()){
 			Texture tx = texIter.next();
 			tx.dispose();
@@ -496,16 +483,9 @@ public class TextureManager {
 
 	}
 	
-	public static void destroy(){
-		dispose();
-		instance = null;
-	}
-	
-	public static void dispose(){
-		if(instance==null){
-			return;
-		}
-		
-		instance.disposeInternal();
+
+	public void dispose(){
+
+		disposeInternal();
 	}
 }

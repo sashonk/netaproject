@@ -39,6 +39,7 @@ public abstract class World extends Group{
 	private boolean colorize;
 	private AbstractFigure selectedActor;
 	private Color selectedColor ;
+	protected NetaGame ng; 
 	protected static final float FIELD_HEIGHT= 20;
 	
 	public AbstractFigure getSelected(){
@@ -60,24 +61,7 @@ public abstract class World extends Group{
 	}
 	
 	public void addLyrics(int choice){
-		
-		
-		
-		if(lyricsAdded || choice!=id){
-			return;
-		}
-		
-		List<Actor> lyrics = LyricsGenerator.getLyrics(choice);
-		
-		int x = 220;
-		int y = 350;
-		for(Actor act : lyrics){
-			act.setPosition(x, y);
-			addActor(act);
-			y-=50;
-		}
-		
-		lyricsAdded = true;
+		//TODO
 	}
 	
 	public void setSelectedColor(Color c){
@@ -88,22 +72,24 @@ public abstract class World extends Group{
 		return selectedColor;
 	}
 	
-	public World(float width, float height){
+
+	public World(NetaGame ng, float width, float height){
+		this.ng = ng;
 		setName(getTitle());
 		
 		colorize = false;
 		selectedColor = Color.WHITE.cpy();
-		tm = TextureManager.get();		
+		tm = ng.getManager();		
 		this.setBounds(0, 0, width, height);		
 
 
 		
-		RotateTool r = new RotateTool();
+		RotateTool r = new RotateTool(ng);
 		r.setEnabled(true);
 		r.setBounds(492, 700, 40, 40);
 		addActor(r);	
 		
-		ztool = new ZIndexTool();
+		ztool = new ZIndexTool(ng);
 		ztool.setEnabled(true);
 		ztool.setBounds(536, 702, 36, 36);
 		addActor(ztool);
@@ -126,7 +112,7 @@ public abstract class World extends Group{
 		});
 		
 		
-		 btool = new BrushTool();
+		 btool = new BrushTool(ng);
 		btool.setEnabled(true);
 		btool.setBounds(536+40, 701, 40, 40);
 		addActor(btool);
@@ -148,39 +134,39 @@ public abstract class World extends Group{
 	}
 	});
 	textGroup.setPosition(0, getHeight()-155);
-	Image textImg = new Image(TextureManager.get().getAtlas().findRegion("passport-"+getTitle()));
+	Image textImg = new Image(ng.getManager().getAtlas().findRegion("passport-"+getTitle()));
 	textImg.setBounds(0, 0, 330, 155);		
 	textGroup.addActor(textImg);		
 	
-	Label author = new Label("", TextureManager.get().getSkin(), getTitle());
+	Label author = new Label("", ng.getManager().getSkin(), getTitle());
 	author.setAlignment(Align.center);
 	author.setName("author");
 	Rectangle authorBounds = getAuthorBounds();
 	author.setBounds(authorBounds.x, authorBounds.y, authorBounds.width, authorBounds.height);
 	textGroup.addActor(author);		
 	
-	Label age = new Label("", TextureManager.get().getSkin(), getTitle());
+	Label age = new Label("", ng.getManager().getSkin(), getTitle());
 	age.setAlignment(Align.center);
 	age.setName("age");			
 	Rectangle ageBounds = getAgeBounds();
 	age.setBounds(ageBounds.x, ageBounds.y, ageBounds.width, ageBounds.height);
 	textGroup.addActor(age);	
 	
-	Label city = new Label("", TextureManager.get().getSkin(), getTitle());
+	Label city = new Label("",ng.getManager().getSkin(), getTitle());
 	city.setAlignment(Align.center);	
 	city.setName("city");
 	Rectangle cityBounds = getCityBounds();
 	city.setBounds(cityBounds.x, cityBounds.y, cityBounds.width, cityBounds.height);
 	textGroup.addActor(city);
 		
-	Label state = new Label("", TextureManager.get().getSkin(), getTitle());
+	Label state = new Label("", ng.getManager().getSkin(), getTitle());
 	state.setAlignment(Align.center);	
 	state.setName("state");				
 	Rectangle stateBounds = getStateBounds();
 	state.setBounds(stateBounds.x, stateBounds.y, stateBounds.width, stateBounds.height);
 	textGroup.addActor(state);
 	
-	Label year = new Label("", TextureManager.get().getSkin(), getTitle());
+	Label year = new Label("", ng.getManager().getSkin(), getTitle());
 	year.setAlignment(Align.center);	
 	year.setName("year");		
 	Rectangle yearBounds = getYearBounds();

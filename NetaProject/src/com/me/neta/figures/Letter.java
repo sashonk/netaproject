@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.me.neta.NetaGame;
 import com.me.neta.TextureManager;
 import com.me.neta.util.ColorHelper;
 
@@ -16,10 +17,10 @@ public class Letter extends AbstractFigure{
 	TextureRegion char1;
 	TextureRegion char2;
 	
-	public Letter(int id){
+	public Letter(NetaGame ng, int id){
 		this.setSize(30, 30);
 		this.setOrigin(15, 15);
-		tm = TextureManager.get();
+		tm = ng.getManager();
 		TextureAtlas a = tm.getAtlas();	
 		 circle = a.findRegion("FIGURA2W");
 		 char1 = a.findRegion(String.format("CHAR%dW", id));

@@ -3,6 +3,7 @@ package com.me.neta.tools;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.me.neta.NetaGame;
 import com.me.neta.Size;
 import com.me.neta.TextureManager;
 import com.me.neta.events.BrushToolChangeEvent;
@@ -10,10 +11,11 @@ import com.me.neta.util.WorkspaceState;
 
 public class BrushTool extends AbstractTool{
 	TextureManager tm;
-	public BrushTool(){
+	public BrushTool(NetaGame ng){
+		super(ng);
 		blink = false;
 		checked =false;
-		tm = TextureManager.get();
+		tm = ng.getManager();
 		
 	}
 	

@@ -17,8 +17,8 @@ public class FieldsPanel extends Group{
 	
 	Sprite sprite ;
 	
-	public FieldsPanel(){
-		AtlasRegion atlasRegion = TextureManager.get().getMiscAtlas().findRegion("fieldsPanel");
+	public FieldsPanel(NetaGame ng){
+		AtlasRegion atlasRegion = ng.getManager().getMiscAtlas().findRegion("fieldsPanel");
 		Texture tex = atlasRegion.getTexture();
 		region = new TextureRegion(tex, atlasRegion.getRegionX(),atlasRegion.getRegionY(),atlasRegion.getRegionWidth(),atlasRegion.getRegionHeight() );
 		sprite= new Sprite(region);

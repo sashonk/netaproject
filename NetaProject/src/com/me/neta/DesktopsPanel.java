@@ -38,11 +38,11 @@ public class DesktopsPanel extends Group{
 	Texture field4Tex;
 
 	
-	public DesktopsPanel(float width, float height){
+	public DesktopsPanel(NetaGame ng, float width, float height){
 		this.setWidth(width);
 		this.setHeight(height);
 		
-		AtlasRegion atlasRegion = TextureManager.get().getMiscAtlas().findRegion("fieldsPanel");
+		AtlasRegion atlasRegion =ng.getManager().getMiscAtlas().findRegion("fieldsPanel");
 		Texture tex = atlasRegion.getTexture();
 		region = new TextureRegion(tex, atlasRegion.getRegionX(),atlasRegion.getRegionY(),atlasRegion.getRegionWidth(),atlasRegion.getRegionHeight() );
 		sprite= new Sprite(region);

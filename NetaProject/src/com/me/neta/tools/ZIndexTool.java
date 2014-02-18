@@ -3,6 +3,7 @@ package com.me.neta.tools;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.me.neta.NetaGame;
 import com.me.neta.Size;
 import com.me.neta.Workspace;
 import com.me.neta.events.RotationEvent;
@@ -11,6 +12,11 @@ import com.me.neta.figures.AbstractFigure;
 import com.me.neta.util.WorkspaceState;
 
 public class ZIndexTool extends AbstractTool{
+
+	public ZIndexTool(NetaGame ng) {
+		super(ng);
+		// TODO Auto-generated constructor stub
+	}
 
 	public Actor panel;
 	public AbstractFigure selected;

@@ -7,6 +7,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.visible;
 
 
 import com.me.neta.LyricsPanel;
+import com.me.neta.NetaGame;
 import com.me.neta.Size;
 import com.me.neta.util.WorkspaceState;
 
@@ -14,6 +15,11 @@ import com.me.neta.util.WorkspaceState;
 public class LyricsTool extends PanelTool{
 	
 
+
+	public LyricsTool(NetaGame ng) {
+		super(ng);
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public String getImagePath() {

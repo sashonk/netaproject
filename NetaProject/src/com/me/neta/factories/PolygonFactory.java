@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.me.neta.Factory;
+import com.me.neta.NetaGame;
 import com.me.neta.Size;
 import com.me.neta.TextureManager;
 import com.me.neta.figures.PolygonFigure;
@@ -14,15 +15,15 @@ public class PolygonFactory extends Factory{
 	String assetName;
 	float[] polyVertices;
 	
-	public PolygonFactory(float[] vertices, String assetName, Size size,  Actor workspace){
-		super(workspace);
+	public PolygonFactory(float[] vertices, String assetName, Size size,NetaGame ng ){
+		super(ng);
 		this.size =size;
 		this.setWidth(size.width);
 		this.setHeight(size.height);
 		polyVertices = vertices;
 		this.assetName = assetName;
 
-		tx = TextureManager.get().getAtlas().findRegion(assetName);
+		tx = ng.getManager().getAtlas().findRegion(assetName);
 
 	}
 	
@@ -49,7 +50,7 @@ public class PolygonFactory extends Factory{
 
 	@Override
 	public Actor createActor() {
-		return new PolygonFigure(polyVertices, assetName, size);
+		return new PolygonFigure(ng, polyVertices, assetName, size);
 	}
 
 	@Override

@@ -1,11 +1,18 @@
 package com.me.neta.tools;
 
+import com.me.neta.NetaGame;
 import com.me.neta.Size;
 import com.me.neta.events.RequestFocusEvent;
 import com.me.neta.util.WorkspaceState;
 
 
 public class LetterTool extends PanelTool{
+
+
+	public LetterTool(NetaGame ng) {
+		super(ng);
+		// TODO Auto-generated constructor stub
+	}
 
 
 	@Override

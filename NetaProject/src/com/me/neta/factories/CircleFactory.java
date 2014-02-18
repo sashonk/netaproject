@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.me.neta.Factory;
+import com.me.neta.NetaGame;
 import com.me.neta.TextureManager;
 import com.me.neta.figures.Circle;
 
@@ -13,14 +14,15 @@ public class CircleFactory extends Factory{
 	private String assetName;
 	private TextureRegion tr;
 
-	public CircleFactory(float width, float height, String assetName, Actor workspace){
-		super(workspace);
+
+	public CircleFactory( float width, float height, String assetName,NetaGame ng){
+		super(ng);
 		this.width= width;
 		this.height= height;		
 		this.assetName = assetName;
 		setSize(width, height);
 		
-		tr = TextureManager.get().getAtlas().findRegion(assetName);
+		tr = ng.getManager().getAtlas().findRegion(assetName);
 
 	}
 	
@@ -47,7 +49,7 @@ public class CircleFactory extends Factory{
 
 	@Override
 	public Actor createActor() {
-		return new Circle(width,height, assetName);
+		return new Circle(ng, width,height, assetName);
 	}
 
 	@Override

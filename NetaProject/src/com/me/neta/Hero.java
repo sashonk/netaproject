@@ -10,8 +10,8 @@ public class Hero extends Moveable{
 	
 	TextureRegion tr;
 
-	public Hero(String assetName){
-		AtlasRegion ar = TextureManager.get().getAtlas().findRegion(assetName);
+	public Hero(NetaGame ng, String assetName){
+		AtlasRegion ar = ng.getManager().getAtlas().findRegion(assetName);
 		Texture tex = ar.getTexture();
 		tr = new TextureRegion(tex, ar.getRegionX(), ar.getRegionY(), ar.getRegionWidth(), ar.getRegionHeight());
 		

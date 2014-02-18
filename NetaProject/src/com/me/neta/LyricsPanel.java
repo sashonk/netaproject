@@ -24,15 +24,15 @@ public class LyricsPanel extends Group{
 	
 	Drawable d;
 	
-	LyricsPanel(final float width,final float height){
+	LyricsPanel(NetaGame ng, final float width,final float height){
 		
-		Skin skin = TextureManager.get().getSkin();
+		Skin skin =ng.getManager().getSkin();
 		d = skin.newDrawable("white");
 		
 		setWidth(width);
 		setHeight(height);
 		
-		AtlasRegion atlasRegion = TextureManager.get().getMiscAtlas().findRegion("lyricsPanel");
+		AtlasRegion atlasRegion = ng.getManager().getMiscAtlas().findRegion("lyricsPanel");
 		Texture tex = atlasRegion.getTexture();
 		treg= new TextureRegion(tex, atlasRegion.getRegionX(),atlasRegion.getRegionY(),atlasRegion.getRegionWidth(),atlasRegion.getRegionHeight() );
 

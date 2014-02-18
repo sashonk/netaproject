@@ -1,11 +1,17 @@
 package com.me.neta.tools;
 
+import com.me.neta.NetaGame;
 import com.me.neta.Size;
 import com.me.neta.events.TrashButtonEvent;
 import com.me.neta.util.WorkspaceState;
 
 
 public class BasketTool extends AbstractTool{
+
+	public BasketTool(NetaGame ng) {
+		super(ng);
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public void doAction() {

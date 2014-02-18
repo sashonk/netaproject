@@ -6,13 +6,14 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.me.neta.Ant;
 import com.me.neta.Hero;
+import com.me.neta.NetaGame;
 import com.me.neta.TextureManager;
 import com.me.neta.World;
 
 public class AntWorld extends World{
 
-	public AntWorld(float width, float height) {
-		super(width, height);
+	public AntWorld(NetaGame ng, float width, float height) {
+		super(ng, width, height);
 		// TODO Auto-generated constructor stub
 		setColor(new Color(.72f, .86f, .48f, 1));
 	}
@@ -49,11 +50,11 @@ public class AntWorld extends World{
 
 	@Override
 	public void populate() {
-		Image flower1 = new Image(TextureManager.get().getAtlas().findRegion("ZVET3"));
+		Image flower1 = new Image(ng.getManager().getAtlas().findRegion("ZVET3"));
 		flower1.setBounds(162, 80, 57,73);
 		addActor(flower1);
 		
-		Image flower2 = new Image(TextureManager.get().getAtlas().findRegion("ZVET4"));
+		Image flower2 = new Image(ng.getManager().getAtlas().findRegion("ZVET4"));
 		flower2.setBounds(900, 80,57,57);
 		addActor(flower2);	
 		
@@ -62,12 +63,12 @@ public class AntWorld extends World{
 		addActor(zactor);
 		
 
-		Hero ant2 = new Hero("ant2");
+		Hero ant2 = new Hero(ng, "ant2");
 		ant2.setBounds(800, 260, 55, 115);
 		ant2.setZIndex(9);
 		addActor(ant2);
 		
-		Ant ant = new Ant();
+		Ant ant = new Ant(ng);
 		ant.setPosition(100, 250);
 		ant.setZIndex(10);
 		addActor(ant);		

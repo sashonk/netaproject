@@ -15,9 +15,9 @@ public abstract class AbstractTool extends Actor{
 	
 	TextureRegion region;
 	
-	AbstractTool(){
+	AbstractTool(NetaGame ng){
 			
-		AtlasRegion reg = TextureManager.get().getAtlas().findRegion(getImagePath());
+		AtlasRegion reg = ng.getManager().getAtlas().findRegion(getImagePath());
 		Texture tex = reg.getTexture();
 		
 		 region = new TextureRegion(tex, reg.getRegionX(), reg.getRegionY(), reg.getRegionWidth(), reg.getRegionHeight());

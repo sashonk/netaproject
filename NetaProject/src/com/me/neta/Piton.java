@@ -18,9 +18,9 @@ public class Piton extends Moveable{
 	float dragy = 0;
 	
 	TextureRegion tr;
-	public Piton(){
+	public Piton(NetaGame ng){
 		setSize(160, 43);
-		AtlasRegion ar = TextureManager.get().getAtlas().findRegion("UDAV");
+		AtlasRegion ar = ng.getManager().getAtlas().findRegion("UDAV");
 		Texture tex = ar.getTexture();
 		tr = new TextureRegion(tex, ar.getRegionX(), ar.getRegionY(), ar.getRegionWidth(), ar.getRegionHeight());
 		

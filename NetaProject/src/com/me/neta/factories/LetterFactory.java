@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Source;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
 import com.me.neta.Factory;
+import com.me.neta.NetaGame;
 import com.me.neta.TextureManager;
 import com.me.neta.events.DragEvent;
 import com.me.neta.events.DragStartEvent;
@@ -27,11 +28,11 @@ public class LetterFactory extends Factory{
 	int padx;
 	int pady;
 	
-	public LetterFactory(int id, Actor workspace){
-		super(workspace);
+	public LetterFactory(int id, NetaGame ng){
+		super(ng);
 		this.id = id;
 		this.setSize(30, 30);
-		 tm = TextureManager.get();
+		 tm = ng.getManager();
 		TextureAtlas a = tm.getAtlas();
 		
 		 circle = a.findRegion("FIGURA2W");
@@ -49,9 +50,7 @@ public class LetterFactory extends Factory{
 		batch.draw(char1, getX()+padx, getY()+pady);			
 	}
 	
-	public Actor create(){
-		return new Letter(id);
-	}
+
 
 	@Override
 	public Actor createDragActor() {
@@ -69,7 +68,7 @@ public class LetterFactory extends Factory{
 
 	@Override
 	public Actor createActor() {
-		return new Letter(id);
+		return new Letter(ng, id);
 	}
 
 	@Override

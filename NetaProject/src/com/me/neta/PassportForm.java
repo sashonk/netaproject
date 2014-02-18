@@ -28,10 +28,10 @@ public class PassportForm extends Group{
 	TextField tfState;
 	TextField tfCity;
 	TextField tfYear;
-	public PassportForm(){
+	public PassportForm(NetaGame ng){
 
 		setSize(275, 275);
-		TextureManager tm = TextureManager.get();
+		TextureManager tm = ng.getManager();
 		tr = tm.getAtlas().findRegion("passform");			
 		
 		Image panel = new Image(tr);

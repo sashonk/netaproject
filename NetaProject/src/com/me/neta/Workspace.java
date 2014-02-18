@@ -86,64 +86,55 @@ public class Workspace extends Group{
 	
 
 	
-	Label mousePositionLabel ;
 	
 	static final float pad = 15;
 
 	
-	final PanelToolGroup ptGroup;
+	PanelToolGroup ptGroup;
 	private List<WorkspaceStateListener> listeners = new LinkedList<WorkspaceStateListener>();
 	public WorkspaceState state;
 	private Pinch2ZoomListener2 pinch2Zoom;
 	Passport passport;
 	Map<Integer, WorldFactory> worldFactories = new HashMap<Integer, WorldFactory>();
+	NetaGame ng;
+	String bottomActorName = "bottomActor";
 	
-	public Workspace(float x, float y, float width, float height){
+	public Workspace(NetaGame ng, float x, float y, float width, float height){
+		this.ng = ng;
+		setBounds(x, y, width, height);
+		setName("workspace");
+
+	}
+	
+	public void initialize(){
 		
-		
-		populateWorldFactories();
+		populateWorldFactories(ng);
 		passport = new Passport();
 		pinch2Zoom = new Pinch2ZoomListener2();
 		pinch2Zoom.setZMin(.125f);
 		this.addCaptureListener(pinch2Zoom);
-		
+			
+		Actor bottom = new Actor();
+		bottom.setName(bottomActorName);
+		this.addActor(bottom);
 
-		
-		setName("workspace");
-		setBounds(x, y, width, height);
-
-
-		Skin skin = TextureManager.get().getSkin();		
-		mousePositionLabel = new Label("", skin);
-	
-
-		this.addActor(mousePositionLabel);
-
-
-		mousePositionLabel.setPosition(10, 500);
-		
-		
-		
-		Image img = new Image(TextureManager.get().getBottomPanelTexture());
-
-		
+		Image img = new Image(ng.getManager().getBottomPanelTexture());
 		final Table toolbarTable = new Table();
 		
-
 		toolbarTable.debug();
 		toolbarTable.debugTable();
-		final ExitTool linkTool = new ExitTool();
+		final ExitTool linkTool = new ExitTool(ng);
 		toolbarTable.add(linkTool).padRight(pad).padLeft(pad);
 		
 //////////////////////////////////////////////////////////////////		
 	////////////////// 	 TOOLS  /////////////////////////
 /////////////////////////////////////////////////////////////////
-		final BasketTool basketTool = new BasketTool(); 
+		final BasketTool basketTool = new BasketTool(ng); 
 		basketTool.setSize(68,78);
 		toolbarTable.add(basketTool).padRight(pad).padLeft(pad);
 						
-		final DesktopsTool fieldsTool = new DesktopsTool();
-		final DesktopsPanel fieldsPanel = new DesktopsPanel(600, 350);
+		final DesktopsTool fieldsTool = new DesktopsTool(ng);
+		final DesktopsPanel fieldsPanel = new DesktopsPanel(ng,600, 350);
 		fieldsPanel.setPosition(35, 75);
 		fieldsPanel.setVisible(false);
 		Color c = fieldsPanel.getColor();
@@ -153,8 +144,8 @@ public class Workspace extends Group{
 		toolbarTable.add(fieldsTool).padRight(pad).padLeft(pad);
 		
 		
-		final LyricsTool lyricsTool = new LyricsTool();
-		final LyricsPanel lyricsPanel = new LyricsPanel(800, 400);
+		final LyricsTool lyricsTool = new LyricsTool(ng);
+		final LyricsPanel lyricsPanel = new LyricsPanel(ng,800, 400);
 		lyricsPanel.setPosition(105, 75);
 		lyricsPanel.setColor(c);
 		lyricsPanel.setVisible(false);
@@ -162,20 +153,19 @@ public class Workspace extends Group{
 		lyricsTool.setPanel(lyricsPanel);
 				
 		toolbarTable.add(lyricsTool).padRight(pad).padLeft(pad);
-		final LetterTool letterTool = new LetterTool();
-		final PassportForm form = new PassportForm();
+		final LetterTool letterTool = new LetterTool(ng);
+		final PassportForm form = new PassportForm(ng);
 		form.setPosition(490-133, 75);
 		form.setColor(c);
 		form.setVisible(false);
 		addActor(form);
-		//WorkHelper.center(form);
 		letterTool.setPanel(form);	
 		toolbarTable.add(letterTool).padRight(pad).padLeft(pad);
 		
 		
-		final FiguresTool figuresTool = new FiguresTool();
+		final FiguresTool figuresTool = new FiguresTool(ng);
 		toolbarTable.add(figuresTool).padRight(pad).padLeft(pad);
-		FiguresPanel figPanel = new FiguresPanel(this);
+		FiguresPanel figPanel = new FiguresPanel(ng);
 		figPanel.setColor(c);
 		figPanel.setVisible(false);
 		figPanel.setWidth(550);
@@ -186,9 +176,9 @@ public class Workspace extends Group{
 		
 		
 		
-		final ColorTool paletteTool = new ColorTool();
+		final ColorTool paletteTool = new ColorTool(ng);
 		toolbarTable.add(paletteTool).padRight(pad).padLeft(pad);
-		ColorPanel palette= new ColorPanel();
+		ColorPanel palette= new ColorPanel(ng);
 		paletteTool.setPanel(palette);
 		palette.setColor(c);
 		palette.setVisible(false);
@@ -198,17 +188,17 @@ public class Workspace extends Group{
 		paletteTool.setPanel(palette);
 		this.addActor(palette);
 		
-		final ShopTool shopTool = new ShopTool();
-		final Image gameshopPanel = new Image(TextureManager.get().getMiscAtlas().findRegion("gameshop"));
+		final ShopTool shopTool = new ShopTool(ng);
+		final Image gameshopPanel = new Image(ng.getManager().getMiscAtlas().findRegion("gameshop"));
 		gameshopPanel.setVisible(false);
 		gameshopPanel.setBounds(70, 75, 878, 358);
 		this.addActor(gameshopPanel);
 		shopTool.setPanel(gameshopPanel);
 		toolbarTable.add(shopTool).padRight(pad).padLeft(pad);
 		
-		final SaveTool saveTool = new SaveTool();
+		final SaveTool saveTool = new SaveTool(ng);
 		toolbarTable.add(saveTool).padRight(pad).padLeft(pad);
-		SavePanel savePanel = new SavePanel();
+		SavePanel savePanel = new SavePanel(ng);
 		saveTool.setPanel(palette);
 		savePanel.setColor(c);
 		savePanel.setVisible(false);
@@ -218,9 +208,9 @@ public class Workspace extends Group{
 		saveTool.setPanel(savePanel);
 		this.addActor(savePanel);
 		
-		final SettingsTool settingTool = new SettingsTool();
+		final SettingsTool settingTool = new SettingsTool(ng);
 		toolbarTable.add(settingTool).padRight(pad).padLeft(pad);
-		SettingsPanel settingsPanel = new SettingsPanel();
+		SettingsPanel settingsPanel = new SettingsPanel(ng);
 		settingTool.setPanel(palette);
 		settingsPanel.setColor(c);
 		settingsPanel.setVisible(false);
@@ -235,7 +225,7 @@ public class Workspace extends Group{
 		toolbarTable.setZIndex(99);
 		
 		
-		final Question q = new Question();
+		final Question q = new Question(ng);
 		q.setBounds(960, 700, 40, 40);
 		addActor(q);
 
@@ -296,7 +286,7 @@ public class Workspace extends Group{
 		
 
 						fieldsPanel.setVisible(false);
-						addActorBefore(abandoningWorld!=null ? abandoningWorld :mousePositionLabel, world);
+						addActorBefore(abandoningWorld!=null ? abandoningWorld : Workspace.this.findActor(bottomActorName), world);
 
 						world.setId(desktopEvent.getId());
 						//desktop.addAction(Actions.sequence(Actions.fadeIn(.2f)));
@@ -410,7 +400,7 @@ public class Workspace extends Group{
 				}
 				
 				if(event instanceof PassportEvent){
-					form.update(passport);
+				//	form.update(passport);
 					world.drawPassport(passport);
 					Workspace.this.ptGroup.onShow(null);
 
@@ -426,7 +416,7 @@ public class Workspace extends Group{
 		//////// INSTRUCTION SCREEN //////////
 /////////////////////////////////////////////////////
 		
-		final TextureRegion instructScreen = TextureManager.get().getMiscAtlas().findRegion("instruct");
+		final TextureRegion instructScreen = ng.getManager().getMiscAtlas().findRegion("instruct");
 		final Image instructActor = new Image(instructScreen);
 		instructActor.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -448,13 +438,13 @@ public class Workspace extends Group{
 
 		instructActor.setBounds(20,150, 980, 500);		
 		instructActor.setVisible(false);
-		this.addActorAfter(mousePositionLabel, instructActor);
+		this.addActorAfter(Workspace.this.findActor(bottomActorName), instructActor);
 		q.setPanel(instructActor);
 		
 //////////////////////////////////////////////////
 			//////// NIKOL LETTER //////////
 /////////////////////////////////////////////////////		
-		final TextureRegion nikolTexture = TextureManager.get().getMiscAtlas().findRegion("nikol");
+		final TextureRegion nikolTexture = ng.getManager().getMiscAtlas().findRegion("nikol");
 		Image nikolActor = new Image(nikolTexture);
 		nikolActor.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -467,14 +457,14 @@ public class Workspace extends Group{
 		});
 
 		nikolActor.setBounds(20,150, 980, 500);		
-		this.addActorAfter(mousePositionLabel, nikolActor);
+		this.addActorAfter(Workspace.this.findActor(bottomActorName), nikolActor);
 		
 
 		
 		///////////////////////////////
 		//////// AUTHORS //////////
 		//////////////////////////////		
-		final TextureRegion authors = TextureManager.get().getMiscAtlas().findRegion("authorsPanel");
+		final TextureRegion authors = ng.getManager().getMiscAtlas().findRegion("authorsPanel");
 		Image authorsAct = new Image(authors);
 		authorsAct.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -492,7 +482,7 @@ public class Workspace extends Group{
 		});						
 		authorsAct.setBounds(20,150, 980, 500);		
 		authorsAct.setVisible(false);
-		this.addActorAfter(mousePositionLabel, authorsAct);
+		this.addActorAfter(Workspace.this.findActor(bottomActorName), authorsAct);
 		settingsPanel.setAuthorsPanel(authorsAct);
 
 
@@ -500,7 +490,7 @@ public class Workspace extends Group{
 		///////////////////////////////
 		//////// ADULTS PANEL //////////
 		//////////////////////////////		
-		final TextureRegion adultsPanel = TextureManager.get().getMiscAtlas().findRegion("adultsPanel");
+		final TextureRegion adultsPanel = ng.getManager().getMiscAtlas().findRegion("adultsPanel");
 		Image adultsAct = new Image(adultsPanel);
 		adultsAct.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -518,16 +508,14 @@ public class Workspace extends Group{
 		});						
 		adultsAct.setBounds(20,150, 980, 500);		
 		adultsAct.setVisible(false);
-		this.addActorAfter(mousePositionLabel, adultsAct);
+		this.addActorAfter(Workspace.this.findActor(bottomActorName), adultsAct);
 		settingsPanel.setAdultsPanel(adultsAct);
-		
-		
-		
+						
 		
 		///////////////////////////////
 		//////// HINT PANEL //////////
 		//////////////////////////////		
-		final TextureRegion hintPanel = TextureManager.get().getMiscAtlas().findRegion("hintPanel");
+		final TextureRegion hintPanel =ng.getManager().getMiscAtlas().findRegion("hintPanel");
 		Image hintPanelAct = new Image(hintPanel);
 		hintPanelAct.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -545,7 +533,7 @@ public class Workspace extends Group{
 		});						
 		hintPanelAct.setBounds(20,150, 980, 500);		
 		hintPanelAct.setVisible(false);
-		this.addActorAfter(mousePositionLabel, hintPanelAct);
+		this.addActorAfter(Workspace.this.findActor(bottomActorName), hintPanelAct);
 		settingsPanel.setHintPanel(hintPanelAct);
 		
 
@@ -606,40 +594,6 @@ public class Workspace extends Group{
 
 
 	
-	void createTigerWorld(){
-	
-
-		
-		world.setName("tiger");
-	}
-	
-	void createPitonWorld(){
-	
-
-		
-		Image flower1 = new Image(TextureManager.get().getAtlas().findRegion("ZVET4"));
-		flower1.setBounds(200, 115,57,57);
-		world.addActor(flower1);
-/*				
-		Image bird = new Image(TextureManager.get().getAtlas().findRegion("POPUGAI"));
-		bird.setBounds(10, 50,43,30);*/
-		
-		Actor zactor = new Actor();
-		zactor.setName("zactor");
-		world.addActor(zactor);
-		
-		Piton piton = new Piton();
-		piton.setPosition(460, 130);
-		piton.setZIndex(10);
-		world.addActor(piton);
-		
-		Hero bird = new Hero("POPUGAI");
-		bird.setBounds(200+10, 115+50,43,30);
-		bird.setZIndex(9);
-		world.addActor(bird);
-		
-		world.setName("piton");
-	}
 	
 
 	public AbstractFigure getSelectedFigure(){
@@ -765,12 +719,12 @@ public class Workspace extends Group{
     }
     
     
-    public void populateWorldFactories(){
+    public void populateWorldFactories(final NetaGame ng){
     	worldFactories.put(Integer.valueOf(1), new WorldFactory() {
 			
 			@Override
 			public World create() {
-				return new AntWorld(Workspace.this.getWidth(), Workspace.this.getHeight());
+				return new AntWorld(ng,Workspace.this.getWidth(), Workspace.this.getHeight());
 			}
 		});
     	
@@ -778,7 +732,7 @@ public class Workspace extends Group{
 			
 			@Override
 			public World create() {
-				return new SpiderWorld(Workspace.this.getWidth(), Workspace.this.getHeight());
+				return new SpiderWorld(ng,Workspace.this.getWidth(), Workspace.this.getHeight());
 			}
 		});
     	
@@ -786,7 +740,7 @@ public class Workspace extends Group{
 			
 			@Override
 			public World create() {
-				return new PitonWorld(Workspace.this.getWidth(), Workspace.this.getHeight());
+				return new PitonWorld(ng,Workspace.this.getWidth(), Workspace.this.getHeight());
 			}
 		});
     	
@@ -794,7 +748,7 @@ public class Workspace extends Group{
 			
 			@Override
 			public World create() {
-				return new TigerWorld(Workspace.this.getWidth(), Workspace.this.getHeight());
+				return new TigerWorld(ng,Workspace.this.getWidth(), Workspace.this.getHeight());
 			}
 		});
     }

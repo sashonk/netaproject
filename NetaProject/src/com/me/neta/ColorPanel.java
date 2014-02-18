@@ -20,8 +20,8 @@ public class ColorPanel extends Group{	TextureRegion treg;
 	Color[][] colors ;
 	 Texture debug;
 	
-	public ColorPanel(){
-		treg = TextureManager.get().getMiscAtlas().findRegion("colorPanel");
+	public ColorPanel(NetaGame ng){
+		treg = ng.getManager().getMiscAtlas().findRegion("colorPanel");
 		
 		final float dx = 87;
 		final float dy = 73;

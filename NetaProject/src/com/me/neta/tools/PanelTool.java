@@ -9,8 +9,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.me.neta.NetaGame;
 
 public abstract class PanelTool extends AbstractTool{
+	public PanelTool(NetaGame ng) {
+		super(ng);
+		// TODO Auto-generated constructor stub
+	}
+
 	protected final static float FADE_INTERVAL = .5f;
 
 	protected List<PanelToolListener> listeners = new LinkedList<PanelToolListener>();

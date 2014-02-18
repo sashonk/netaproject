@@ -14,7 +14,10 @@ import com.me.neta.events.DragStopEvent;
 import com.me.neta.events.LetterDropEvent;
 
 public abstract class Factory extends Actor{
-	public Factory(Actor workspace){
+	protected NetaGame ng;
+	
+	public Factory(NetaGame ng){
+		this.ng = ng;
 		 final DragAndDrop dad = new DragAndDrop();
 		 dad.addSource(new DragAndDrop.Source(this) {
 			
@@ -46,7 +49,7 @@ public abstract class Factory extends Actor{
 			}
 		});
 		 
-		 dad.addTarget(new DragAndDrop.Target(workspace) {
+		 dad.addTarget(new DragAndDrop.Target(ng.getWorkspace()) {
 			
 			@Override
 			public void drop(Source source, Payload payload, float x, float y,

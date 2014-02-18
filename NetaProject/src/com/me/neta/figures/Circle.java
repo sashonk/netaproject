@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.me.neta.NetaGame;
 import com.me.neta.TextureManager;
 
 public class Circle extends AbstractFigure{
@@ -13,8 +14,8 @@ public class Circle extends AbstractFigure{
 	String assetName;
 	TextureRegion tr;
 	
-	public Circle(float width, float height, String assetName){
-		tm = TextureManager.get();
+	public Circle(NetaGame ng, float width, float height, String assetName){
+		tm = ng.getManager();
 		setWidth(width);
 		setHeight(height);
 		setOrigin(width/2, height/2);

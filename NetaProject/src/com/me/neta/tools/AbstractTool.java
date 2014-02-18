@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.me.neta.NetaGame;
 import com.me.neta.Size;
 import com.me.neta.TextureManager;
 import com.me.neta.util.WorkspaceState;
@@ -29,11 +30,11 @@ public abstract class AbstractTool extends Actor implements WorkspaceStateListen
 	
 	protected boolean blink;
 	
-	public AbstractTool(){
+	public AbstractTool(NetaGame ng){
 		enabled = false;
 		blink = true;
 			
-		AtlasRegion reg = TextureManager.get().getAtlas().findRegion(getImagePath());
+		AtlasRegion reg = ng.getManager().getAtlas().findRegion(getImagePath());
 		Texture tex = reg.getTexture();
 		
 		 region = new TextureRegion(tex, reg.getRegionX(), reg.getRegionY(), reg.getRegionWidth(), reg.getRegionHeight());

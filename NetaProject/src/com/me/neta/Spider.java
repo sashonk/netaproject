@@ -18,10 +18,10 @@ public class Spider extends Moveable{
 	float dragy = 0;
 	
 	TextureRegion tr;
-	public Spider(){
+	public Spider(NetaGame ng){
 		this.setSize(120, 80);
 		
-		AtlasRegion ar = TextureManager.get().getAtlas().findRegion("PAUK");
+		AtlasRegion ar = ng.getManager().getAtlas().findRegion("PAUK");
 		Texture tex = ar.getTexture();
 		tr = new TextureRegion(tex, ar.getRegionX(), ar.getRegionY(), ar.getRegionWidth(), ar.getRegionHeight());
 		

@@ -1,6 +1,7 @@
 package com.me.neta.tools;
 
 
+import com.me.neta.NetaGame;
 import com.me.neta.Size;
 import com.me.neta.util.WorkspaceState;
 
@@ -9,6 +10,11 @@ import com.me.neta.util.WorkspaceState;
 public class DesktopsTool extends PanelTool{
 
 
+
+	public DesktopsTool(NetaGame ng) {
+		super(ng);
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public String getImagePath() {

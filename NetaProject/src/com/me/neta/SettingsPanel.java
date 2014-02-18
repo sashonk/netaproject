@@ -15,9 +15,9 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 public class SettingsPanel extends Group{
 	TextureRegion treg;
 	
-	public SettingsPanel(){
+	public SettingsPanel(NetaGame ng){
 
-		treg= TextureManager.get().getMiscAtlas().findRegion("helpPanel");
+		treg= ng.getManager().getMiscAtlas().findRegion("helpPanel");
 
 		this.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {

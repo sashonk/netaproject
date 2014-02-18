@@ -24,13 +24,13 @@ import com.me.neta.factories.SemicircleFactory;
 
 public class FiguresPanel extends Group{
 	TextureRegion treg;
-	Actor workspace;
 	static float dx = 40;
 	static float dy = 40;
+	Workspace workspace;
 	
-	public FiguresPanel(Actor workspace){
-
-		treg= TextureManager.get().getMiscAtlas().findRegion("figuresPanel2");
+	public FiguresPanel(NetaGame ng){
+		workspace = ng.getWorkspace();
+		treg= ng.getManager().getMiscAtlas().findRegion("figuresPanel2");
 		this.addListener(new MetricListener());
 		
 
@@ -40,7 +40,7 @@ public class FiguresPanel extends Group{
 		int letterCount = 33;
 		for(int i =1 ; i<=rows; i++){
 			for(int j=1; j<=columns; j++){				
-				LetterFactory factory = new LetterFactory(j+(i-1)*columns, workspace);
+				LetterFactory factory = new LetterFactory(j+(i-1)*columns, ng);
 				factory.setPosition(220+j*d, 435-i*d);
 				addActor(factory);
 				
@@ -56,30 +56,30 @@ public class FiguresPanel extends Group{
 			////////////  CIRCLES  //////////////
 			 ///////////// ///////////// /////////////
 		
-			CircleFactory bcf = new CircleFactory(42, 41, "FIGURA3W", workspace);
+			CircleFactory bcf = new CircleFactory(42, 41, "FIGURA3W", ng);
 			bcf.setPosition(131, 376);
 			addActor(bcf);
 			
-			CircleFactory mcf = new CircleFactory(30, 29, "FIGURA2W", workspace);
+			CircleFactory mcf = new CircleFactory(30, 29, "FIGURA2W", ng);
 			mcf.setPosition(76, 382);
 			addActor(mcf);
 			
-			CircleFactory scf = new CircleFactory(18, 18, "FIGURA1W", workspace);
+			CircleFactory scf = new CircleFactory(18, 18, "FIGURA1W", ng);
 			scf.setPosition(35, 386);
 			addActor(scf);	
 			
 			
-			CircleFactory bof = new CircleFactory(32, 65, "FIGURA20W", workspace);
+			CircleFactory bof = new CircleFactory(32, 65, "FIGURA20W", ng);
 			bof.setPosition(198, 346);
 			addActor(bof);
 			
 			
-			CircleFactory mof = new CircleFactory(23, 46, "FIGURA21W", workspace);
+			CircleFactory mof = new CircleFactory(23, 46, "FIGURA21W", ng);
 			mof.setPosition(206, 287);
 			addActor(mof);
 			
 			
-			CircleFactory sof = new CircleFactory(16, 32, "FIGURA22W", workspace);
+			CircleFactory sof = new CircleFactory(16, 32, "FIGURA22W", ng);
 			sof.setPosition(213, 239);
 			addActor(sof);
 		}	
@@ -90,15 +90,15 @@ public class FiguresPanel extends Group{
 			////////////  SEMICIRCLES  //////////////
 			 ///////////// ///////////// /////////////
 		
-			SemicircleFactory bscf = new SemicircleFactory(44, 23, "FIGURA12W", workspace);
+			SemicircleFactory bscf = new SemicircleFactory(44, 23, "FIGURA12W", ng);
 			bscf.setPosition(140, 236);
 			addActor(bscf);
 			
-			SemicircleFactory mscf = new SemicircleFactory(32, 16, "FIGURA11W", workspace);
+			SemicircleFactory mscf = new SemicircleFactory(32, 16, "FIGURA11W", ng);
 			mscf.setPosition(80, 245);
 			addActor(mscf);
 			
-			SemicircleFactory sscf = new SemicircleFactory(21, 11, "FIGURA10W", workspace);
+			SemicircleFactory sscf = new SemicircleFactory(21, 11, "FIGURA10W", ng);
 			sscf.setPosition(40, 250);
 			addActor(sscf);	
 
@@ -110,15 +110,15 @@ public class FiguresPanel extends Group{
 			////////////  SQUARES  //////////////
 			 ///////////// ///////////// /////////////
 		
-			PolygonFactory sfb = new PolygonFactory(new float[]{0f,0f, 0,41, 42,41, 42f,0f}, "FIGURA6W", new Size(42, 41), workspace);
+			PolygonFactory sfb = new PolygonFactory(new float[]{0f,0f, 0,41, 42,41, 42f,0f}, "FIGURA6W", new Size(42, 41), ng);
 			sfb.setPosition(134, 324);
 			addActor(sfb);
 			
-			PolygonFactory sfm = new PolygonFactory(new float[]{0f,0f, 0,29, 30,29, 30,0f}, "FIGURA5W", new Size(30, 29), workspace);
+			PolygonFactory sfm = new PolygonFactory(new float[]{0f,0f, 0,29, 30,29, 30,0f}, "FIGURA5W", new Size(30, 29), ng);
 			sfm.setPosition(80, 333);
 			addActor(sfm);
 			
-			PolygonFactory sfs = new PolygonFactory(new float[]{0f,0f, 0,18, 18,18, 18,0f}, "FIGURA4W", new Size(18, 18), workspace);
+			PolygonFactory sfs = new PolygonFactory(new float[]{0f,0f, 0,18, 18,18, 18,0f}, "FIGURA4W", new Size(18, 18), ng);
 			sfs.setPosition(38, 340);
 			addActor(sfs);
 		}	
@@ -128,27 +128,27 @@ public class FiguresPanel extends Group{
 			////////////  RECTANGLES  //////////////
 			 ///////////// ///////////// /////////////
 		
-			PolygonFactory rfb = new PolygonFactory(new float[]{0f,0f, 0f,84f, 42f,84f, 42f,0f}, "FIGURA19W", new Size(42, 84), workspace);
+			PolygonFactory rfb = new PolygonFactory(new float[]{0f,0f, 0f,84f, 42f,84f, 42f,0f}, "FIGURA19W", new Size(42, 84), ng);
 			rfb.setPosition(140, 83);
 			addActor(rfb);
 			
-			PolygonFactory rfm = new PolygonFactory(new float[]{0f,0f, 0f,60f, 30f,60f,30f,0f}, "FIGURA18W", new Size(30, 60), workspace);
+			PolygonFactory rfm = new PolygonFactory(new float[]{0f,0f, 0f,60f, 30f,60f,30f,0f}, "FIGURA18W", new Size(30, 60), ng);
 			rfm.setPosition(81, 96);
 			addActor(rfm);
 			
-			PolygonFactory rfs = new PolygonFactory(new float[]{0f,0f, 0f,37f, 19f,37f,19f,0f}, "FIGURA17W", new Size(19, 37), workspace);
+			PolygonFactory rfs = new PolygonFactory(new float[]{0f,0f, 0f,37f, 19f,37f,19f,0f}, "FIGURA17W", new Size(19, 37), ng);
 			rfs.setPosition(40, 110);
 			addActor(rfs);
 			
-			PolygonFactory rfsthin = new PolygonFactory(new float[]{0f,0f, 0f,26f, 6,26, 6,0f}, "FIGURA25W", new Size(6, 26), workspace);
+			PolygonFactory rfsthin = new PolygonFactory(new float[]{0f,0f, 0f,26f, 6,26, 6,0f}, "FIGURA25W", new Size(6, 26), ng);
 			rfsthin.setPosition(220, 205);
 			addActor(rfsthin);
 			
-			PolygonFactory rfmthin = new PolygonFactory(new float[]{0f,0f, 0f,41, 7,41, 7,0f}, "FIGURA24W", new Size(7, 41), workspace);
+			PolygonFactory rfmthin = new PolygonFactory(new float[]{0f,0f, 0f,41, 7,41, 7,0f}, "FIGURA24W", new Size(7, 41), ng);
 			rfmthin.setPosition(219, 155);
 			addActor(rfmthin);
 			
-			PolygonFactory rfbthin = new PolygonFactory(new float[]{0f,0f, 0f,41, 10,41,10,0f}, "FIGURA26W", new Size(10, 41), workspace);
+			PolygonFactory rfbthin = new PolygonFactory(new float[]{0f,0f, 0f,41, 10,41,10,0f}, "FIGURA26W", new Size(10, 41), ng);
 			rfbthin.setPosition(218, 86);
 			addActor(rfbthin);			
 			
@@ -159,15 +159,15 @@ public class FiguresPanel extends Group{
 		////////////  TRAPEZES  //////////////
 		 ///////////// ///////////// /////////////
 
-			PolygonFactory tfb = new PolygonFactory(new float[]{0f,0f, 10f,41f, 31f,41f, 42f,0f}, "FIGURA15W", new Size(42, 41), workspace);
+			PolygonFactory tfb = new PolygonFactory(new float[]{0f,0f, 10f,41f, 31f,41f, 42f,0f}, "FIGURA15W", new Size(42, 41), ng);
 			tfb.setPosition(140, 184);
 			addActor(tfb);
 			
-			PolygonFactory tfm = new PolygonFactory(new float[]{0f,0f, 7f,29f, 22f,29f, 30f,0f}, "FIGURA14W", new Size(30, 29), workspace);
+			PolygonFactory tfm = new PolygonFactory(new float[]{0f,0f, 7f,29f, 22f,29f, 30f,0f}, "FIGURA14W", new Size(30, 29), ng);
 			tfm.setPosition(81, 192);
 			addActor(tfm);
 					
-			PolygonFactory tfs = new PolygonFactory(new float[]{0f,0f, 4f,18f, 13f,18f, 18f,0f}, "FIGURA13W", new Size(18, 18), workspace);
+			PolygonFactory tfs = new PolygonFactory(new float[]{0f,0f, 4f,18f, 13f,18f, 18f,0f}, "FIGURA13W", new Size(18, 18), ng);
 			tfs.setPosition(41, 200);
 			addActor(tfs);
 		}
@@ -178,15 +178,15 @@ public class FiguresPanel extends Group{
 			////////////  TRIANGLES  //////////////
 			 ///////////// ///////////// /////////////
 		
-			PolygonFactory tfb = new PolygonFactory(new float[]{0f,0f, 25,42, 25,42, 50,0f}, "FIGURA9W", new Size(50, 42), workspace);
+			PolygonFactory tfb = new PolygonFactory(new float[]{0f,0f, 25,42, 25,42, 50,0f}, "FIGURA9W", new Size(50, 42), ng);
 			tfb.setPosition(133,270);
 			addActor(tfb);
 			
-			PolygonFactory tfm = new PolygonFactory(new float[]{0f,0f, 18,30, 18,30,36f,0f}, "FIGURA8W", new Size(36, 30), workspace);
+			PolygonFactory tfm = new PolygonFactory(new float[]{0f,0f, 18,30, 18,30,36f,0f}, "FIGURA8W", new Size(36, 30), ng);
 			tfm.setPosition(76,278);
 			addActor(tfm);
 			
-			PolygonFactory tfs = new PolygonFactory(new float[]{0f,0f, 11,19, 11,19,23,0f}, "FIGURA7W", new Size(23, 19), workspace);
+			PolygonFactory tfs = new PolygonFactory(new float[]{0f,0f, 11,19, 11,19,23,0f}, "FIGURA7W", new Size(23, 19), ng);
 			tfs.setPosition(38, 288);
 			addActor(tfs);
 		}

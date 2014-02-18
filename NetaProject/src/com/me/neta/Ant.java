@@ -18,9 +18,9 @@ public class Ant extends Moveable{
 	float dragy = 0;
 	
 	TextureRegion tr;
-	public Ant(){
+	public Ant(NetaGame ng){
 		setSize(90, 185);
-		AtlasRegion ar = TextureManager.get().getAtlas().findRegion("ant");
+		AtlasRegion ar =ng.getManager().getAtlas().findRegion("ant");
 		Texture tex = ar.getTexture();
 		tr = new TextureRegion(tex, ar.getRegionX(), ar.getRegionY(), ar.getRegionWidth(), ar.getRegionHeight());
 		

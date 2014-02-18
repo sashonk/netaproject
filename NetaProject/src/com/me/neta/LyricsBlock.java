@@ -12,9 +12,9 @@ public class LyricsBlock extends Moveable{
 	private static float mul = 0.4f;
 	TextureRegion region;
 	private long lastTapTime ;
-	public LyricsBlock(int i,int j){
+	public LyricsBlock(NetaGame ng, int i,int j){
 		lastTapTime = 0;
-		 region = TextureManager.get().getAtlas().findRegion(String.format("STIHI-%d-%d", i, j));
+		 region = ng.getManager().getAtlas().findRegion(String.format("STIHI-%d-%d", i, j));
 		 setSize(region.getRegionWidth()*mul, region.getRegionHeight()*mul);
 		 setOrigin(getWidth()/2, getHeight()/2);
 

@@ -8,12 +8,12 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 public abstract class CredentialsPanel extends Group{
 	
 	BitmapFont wonderFont;
-	public CredentialsPanel(float x, float y){
+	public CredentialsPanel(NetaGame ng, float x, float y){
 		this.setPosition(x, y);
 		
 		
 		
-		 wonderFont = TextureManager.get().getWonderlandFont();
+		 wonderFont = ng.getManager().getWonderlandFont();
 	}
 	
 	

@@ -30,14 +30,14 @@ public class SavePanel extends Group{
 	String ALBUM_NAME="Nikole&CO";
 	
 	TextureRegion treg;
-	public SavePanel(){
-		treg= TextureManager.get().getMiscAtlas().findRegion("savePanel");
+	public SavePanel(final NetaGame ng){
+		treg= ng.getManager().getMiscAtlas().findRegion("savePanel");
 
 		addListener(new InputListener(){
 			public boolean touchDown(InputEvent event, float x, float y,
 					int pointer, int button) {
 
-				final Native p = NetaGame.natiff;
+				final Native p = ng.getNative();
 
 				Rectangle save = new Rectangle(22, 221, 237, 50);
 				Rectangle email = new Rectangle(22, 153, 237, 50);
@@ -65,16 +65,16 @@ public class SavePanel extends Group{
 								FileHandle handle = Gdx.files.external(String
 										.format("picture%d.png",
 												System.currentTimeMillis()));
-								MessageHelper.message("Пожалуйста, подождите...");								
+								MessageHelper.message(ng, "Пожалуйста, подождите...");								
 								PixmapIO.writePNG(handle, pixmap);
 								
 								
-								MessageHelper.notify("Изображение сохранено");
+								MessageHelper.notify(ng, "Изображение сохранено");
 							} catch (Exception ex) {
-								MessageHelper.error("Ошибка! Изображение не сохранено!", ex);
+								MessageHelper.error(ng, "Ошибка! Изображение не сохранено!", ex);
 							}
 						} else {
-							MessageHelper.error("Файловое хранилище недоступно!", null);
+							MessageHelper.error(ng, "Файловое хранилище недоступно!", null);
 
 						}	}})));
 					
@@ -84,7 +84,7 @@ public class SavePanel extends Group{
 					result = true;
 				} else if (email.contains(x, y)) {
 					// email
-					MessageHelper.message("Пожалуйста, подождите...");
+					MessageHelper.message(ng, "Пожалуйста, подождите...");
 					SavePanel.this.addAction(delay(.1f,run(new Runnable(){
 						@Override
 						public void run() {	
@@ -98,12 +98,12 @@ public class SavePanel extends Group{
 											System.currentTimeMillis()));
 							PixmapIO.writePNG(handle, pixmap);
 							p.setForEmail("nikoldruzya@ya.ru", handle.file(), "Письмо Николь");
-							MessageHelper.hide();
+							MessageHelper.hide(ng);
 						} catch (Exception ex) {
-							MessageHelper.error("Ошибка!", ex);
+							MessageHelper.error(ng, "Ошибка!", ex);
 						}
 					} else {
-						MessageHelper.error("Файловое хранилище недоступно!", null);
+						MessageHelper.error(ng, "Файловое хранилище недоступно!", null);
 
 
 					}}})));
@@ -118,7 +118,7 @@ public class SavePanel extends Group{
 						throw new UnsupportedOperationException();
 					}
 					catch(Exception ex){
-						MessageHelper.error("", ex);
+						MessageHelper.error(ng, "", ex);
 					}
 					
 				}

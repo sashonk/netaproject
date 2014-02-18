@@ -5,14 +5,15 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.me.neta.Hero;
+import com.me.neta.NetaGame;
 import com.me.neta.Piton;
 import com.me.neta.TextureManager;
 import com.me.neta.World;
 
 public class PitonWorld extends World{
 
-	public PitonWorld(float width, float height) {
-		super(width, height);
+	public PitonWorld(NetaGame ng, float width, float height) {
+		super(ng, width, height);
 		setColor(new Color(182/255f, 221/255f, 200/255f, 1));
 	}
 
@@ -48,7 +49,7 @@ public class PitonWorld extends World{
 
 	@Override
 	public void populate() {
-		Image flower1 = new Image(TextureManager.get().getAtlas().findRegion("ZVET4"));
+		Image flower1 = new Image(ng.getManager().getAtlas().findRegion("ZVET4"));
 		flower1.setBounds(200, 115,57,57);
 		addActor(flower1);
 /*				
@@ -59,12 +60,12 @@ public class PitonWorld extends World{
 		zactor.setName("zactor");
 		addActor(zactor);
 		
-		Piton piton = new Piton();
+		Piton piton = new Piton(ng);
 		piton.setPosition(460, 130);
 		piton.setZIndex(10);
 		addActor(piton);
 		
-		Hero bird = new Hero("POPUGAI");
+		Hero bird = new Hero(ng,"POPUGAI");
 		bird.setBounds(200+10, 115+50,43,30);
 		bird.setZIndex(9);
 		addActor(bird);		

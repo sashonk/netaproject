@@ -18,10 +18,10 @@ public class Tiger extends Moveable{
 	float dragy = 0;
 	
 	TextureRegion tr;
-	public Tiger(){
+	public Tiger(NetaGame ng){
 		setSize(58, 50);
 		
-		AtlasRegion ar = TextureManager.get().getAtlas().findRegion("TIGR");
+		AtlasRegion ar = ng.getManager().getAtlas().findRegion("TIGR");
 		Texture tex = ar.getTexture();
 		tr = new TextureRegion(tex, ar.getRegionX(), ar.getRegionY(), ar.getRegionWidth(), ar.getRegionHeight());
 		

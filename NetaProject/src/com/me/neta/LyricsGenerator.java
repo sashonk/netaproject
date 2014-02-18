@@ -19,8 +19,8 @@ public class LyricsGenerator {
 		
 		List<Actor> regions = new ArrayList<Actor>(5);
 		for(int i = 1; i <= LyricsCounter.getBlockCount(id) ; i++){			
-				LyricsBlock block = new LyricsBlock(id, i);				
-				regions.add(block);							
+				//LyricsBlock block = new LyricsBlock(id, i);				
+				///regions.add(block);							
 		}
 		
 		return regions;

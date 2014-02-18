@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Polygon;
+import com.me.neta.NetaGame;
 import com.me.neta.Size;
 import com.me.neta.TextureManager;
 
@@ -15,8 +16,8 @@ public class PolygonFigure extends AbstractFigure{
 	Polygon poly;
 	Texture tx;
 		
-	public PolygonFigure(float[] vertices, String assetName, Size size){
-		tr = TextureManager.get().getAtlas().findRegion(assetName);
+	public PolygonFigure(NetaGame ng, float[] vertices, String assetName, Size size){
+		tr = ng.getManager().getAtlas().findRegion(assetName);
 		this.setWidth(size.width);
 		this.setHeight(size.height);
 		this.setOrigin(getWidth()/2, getHeight()/2);		

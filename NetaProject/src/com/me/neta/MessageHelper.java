@@ -23,14 +23,17 @@ import com.me.neta.util.WorkHelper;
 import com.me.neta.util.WorkspaceState;
 
 public class MessageHelper {
-	public static void message(String text){
-		hide();
+	
+
+	
+	public static void message(NetaGame ng, String text){
+		hide(ng);
 		
-		TextureManager tm = TextureManager.get();
+		TextureManager tm = ng.getManager();
 		Skin skin = tm.getSkin();
 
-		Group workspace =	(Group) NetaGame.stage.getRoot().findActor("workspace");
-		Image curtain = new Image(TextureManager.get().getUnmanaged(new Color(0,0,0,0.3f)));
+		Group workspace =	ng.getWorkspace();
+		Image curtain = new Image(ng.getManager().getUnmanaged(new Color(0,0,0,0.3f)));
 		curtain.setBounds(0, 0, workspace.getWidth(), workspace.getHeight());
 		TextButton tb = new TextButton(text, skin, "system");
 		Group group = new Group();
@@ -47,11 +50,11 @@ public class MessageHelper {
 	}
 	
 	
-	public static void error(String text, Throwable t){
-		hide();
+	public static void error(NetaGame ng,String text, Throwable t){
+		hide(ng);
 		
 		
-		TextureManager tm = TextureManager.get();
+		TextureManager tm = ng.getManager();
 		Skin skin = tm.getSkin();
 		
 		//Label label = new Label(text, s, "system");
@@ -63,8 +66,8 @@ public class MessageHelper {
 			sb.append(toString(t));
 		}
 		
-		Group workspace =	(Group) NetaGame.stage.getRoot().findActor("workspace");
-		Image curtain = new Image(TextureManager.get().getUnmanaged(new Color(0,0,0,0.3f)));
+		Group workspace =	ng.getWorkspace();
+		Image curtain = new Image(ng.getManager().getUnmanaged(new Color(0,0,0,0.3f)));
 		curtain.setBounds(0, 0, workspace.getWidth(), workspace.getHeight());
 		TextButton tb = new TextButton(sb.toString(), skin, "error");
 		Group group = new Group();
@@ -81,17 +84,17 @@ public class MessageHelper {
 		//tb.fire(new WorkspaceStateEvent(WorkspaceState.DISABLED));	
 	}
 	
-	public static void notify(String text){
-		hide();
+	public static void notify(NetaGame ng, String text){
+		hide(ng);
 		
 		
-		TextureManager tm = TextureManager.get();
+		TextureManager tm = ng.getManager();
 		Skin skin = tm.getSkin();
 		
 		//Label label = new Label(text, s, "system");
 		TextButton tb = new TextButton(text, skin, "system");
 		tb.setName("message");
-		 Group workspace =	(Group) NetaGame.stage.getRoot().findActor("workspace");
+		 Group workspace =	ng.getWorkspace();
 		 workspace.addActor(tb);
 		tb.setZIndex(110);
 		WorkHelper.center(tb);
@@ -100,8 +103,8 @@ public class MessageHelper {
 	}
 	
 	
-	public static void hide(){
-		 Group workspace =	(Group) NetaGame.stage.getRoot().findActor("workspace");
+	public static void hide(NetaGame ng){
+		 Group workspace =	ng.getWorkspace();
 		Actor msgBtn = workspace.findActor("message");
 		if(msgBtn!=null){
 			

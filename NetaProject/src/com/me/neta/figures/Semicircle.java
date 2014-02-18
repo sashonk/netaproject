@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.me.neta.NetaGame;
 import com.me.neta.TextureManager;
 
 
@@ -14,10 +15,10 @@ public class Semicircle extends AbstractFigure{
 	String assetName;
 	TextureRegion tr;
 	
-	public Semicircle(float width,float height, String assetName){
+	public Semicircle(NetaGame ng, float width,float height, String assetName){
 		setSize(width, height);
 		setOrigin(width/2, height/2);
-		tm = TextureManager.get();
+		tm = ng.getManager();
 
 		
 	//	TextureRegion tr0 = tm.getAtlas().findRegion(assetName);
