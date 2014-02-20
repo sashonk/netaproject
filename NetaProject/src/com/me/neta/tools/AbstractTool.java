@@ -13,22 +13,26 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.me.neta.Context;
+import com.me.neta.ContextListener;
 import com.me.neta.NetaGame;
 import com.me.neta.Size;
 import com.me.neta.TextureManager;
-import com.me.neta.util.WorkspaceState;
-import com.me.neta.util.WorkspaceStateListener;
+
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.alpha;
 
-public abstract class AbstractTool extends Actor implements WorkspaceStateListener{
+public abstract class AbstractTool extends Actor implements ContextListener{
 	
 	
-	final static float k = .75f;
 	
 	TextureRegion region;
 	
 	protected boolean blink;
+
+	public float getK(){
+		return .75f;
+	}
 	
 	public AbstractTool(NetaGame ng){
 		enabled = false;
@@ -50,7 +54,8 @@ public abstract class AbstractTool extends Actor implements WorkspaceStateListen
 					if(blink)event.getTarget().addAction(alpha(.4f));					
 					doAction();
 				}
-				
+				//System.out.println(new StringBuilder(AbstractTool.this.getClass().getName()).append("[w=").append(event.getTarget().getWidth()).append("; h=").append(event.getTarget().getHeight()).append("]"));
+				event.setBubbles(false);
 				return true;
 			}
 			
@@ -59,6 +64,7 @@ public abstract class AbstractTool extends Actor implements WorkspaceStateListen
 			}
 		});
 		
+		float k = getK();
 		Size size = getSize();
 		this.setSize(size.width*k, size.height*k);
 		
@@ -66,11 +72,15 @@ public abstract class AbstractTool extends Actor implements WorkspaceStateListen
 	
 	public abstract Size getSize();
 	
-	public void stateChanged(WorkspaceState oldState, WorkspaceState newState){
-		setEnabled(accept(newState));
+
+	
+	public void contextChanged(Context ctx){
+		setEnabled(accept(ctx));
 	}
 
-	public abstract boolean accept(WorkspaceState state);
+//	public abstract boolean accept(WorkspaceState state);
+	
+	public abstract boolean accept(Context ctx);
 
 	
 	@Override

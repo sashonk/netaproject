@@ -7,21 +7,23 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.me.neta.events.WorkspaceStateEvent;
-import com.me.neta.util.WorkspaceState;
+import com.me.neta.Context.ContextProperty;
+import com.me.neta.events.ContextChangeEvent;
+
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 public class SettingsPanel extends Group{
 	TextureRegion treg;
 	
-	public SettingsPanel(NetaGame ng){
+	public SettingsPanel(final NetaGame ng){
 
 		treg= ng.getManager().getMiscAtlas().findRegion("helpPanel");
 
 		this.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				
+				event.setBubbles(false);
+
 				Actor panel = null;
 				if(x>26 && x < 274 && y > 190 && y < 231){
 					panel = hintPanel;
@@ -45,7 +47,8 @@ public class SettingsPanel extends Group{
 					}
 					else{
 						panel.setVisible(true);
-						fire(new WorkspaceStateEvent(WorkspaceState.HALT));
+						ng.getContext().setProperty(ContextProperty.HALT, true);
+						fire(new ContextChangeEvent());
 
 					}
 					

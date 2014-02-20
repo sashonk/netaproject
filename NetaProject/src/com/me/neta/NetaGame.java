@@ -6,13 +6,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.me.neta.Context.ContextProperty;
 
 
 
 
 public class NetaGame implements ApplicationListener {
 	
-	public  Native natiff;
+	
+	 Native natiff;
 	
 	public Native getNative(){
 		return natiff;
@@ -22,8 +24,8 @@ public class NetaGame implements ApplicationListener {
 		this.natiff = platform;
 	}
 	
-	static final boolean debug= true;
-	public  Stage stage;
+	public static final boolean debug= true;
+	  Stage stage;
 	
 
 	
@@ -38,8 +40,23 @@ public class NetaGame implements ApplicationListener {
 		return texManager;
 	}
 	
+	Context context;
+	
+	public Context getContext(){
+		return context;
+	}
+	
+	void initContext(){
+		context.setProperty(ContextProperty.HALT, true);
+		context.setProperty(ContextProperty.PREPARED, false);
+		context.setProperty(ContextProperty.WORKING, false);
+	}
+	
 	@Override
 	public void create() {
+		
+		context = new Context();
+		initContext();
 	
 		texManager = new TextureManager();
 		texManager.init();

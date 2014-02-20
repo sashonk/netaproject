@@ -3,15 +3,16 @@ package com.me.neta.tools;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.me.neta.Context;
 import com.me.neta.NetaGame;
 import com.me.neta.Size;
 import com.me.neta.Workspace;
+import com.me.neta.Context.ContextProperty;
 import com.me.neta.events.RotationEvent;
 import com.me.neta.events.ZIndexEvent;
 import com.me.neta.figures.AbstractFigure;
-import com.me.neta.util.WorkspaceState;
 
-public class ZIndexTool extends AbstractTool{
+public class ZIndexTool extends TopTool{
 
 	public ZIndexTool(NetaGame ng) {
 		super(ng);
@@ -22,18 +23,12 @@ public class ZIndexTool extends AbstractTool{
 	public AbstractFigure selected;
 	private boolean  pressed = false;
 	
-	@Override
-	public Size getSize() {
-		return new Size(36, 36);
-	}
-	
+
 	public void pushDown(){
 		pressed =true;
 	}
 	
-	public void pushUp(){
-		
-	}
+
 	
 	public void setSelectedFigure(AbstractFigure figure){
 		if(figure!=null && selected!=null && pressed && figure!=selected){
@@ -61,8 +56,8 @@ public class ZIndexTool extends AbstractTool{
 	
 
 	@Override
-	public boolean accept(WorkspaceState state) {
-		return state==WorkspaceState.WORKING;
+	public boolean accept(Context ctx) {
+		return !ctx.getProperty(ContextProperty.HALT) &&ctx.getProperty(ContextProperty.WORKING);
 	}
 
 	private Color tint = new Color(.4f,1f,.4f, 1);

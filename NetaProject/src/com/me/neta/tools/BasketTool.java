@@ -1,9 +1,10 @@
 package com.me.neta.tools;
 
+import com.me.neta.Context;
 import com.me.neta.NetaGame;
 import com.me.neta.Size;
+import com.me.neta.Context.ContextProperty;
 import com.me.neta.events.TrashButtonEvent;
-import com.me.neta.util.WorkspaceState;
 
 
 public class BasketTool extends AbstractTool{
@@ -29,8 +30,9 @@ public class BasketTool extends AbstractTool{
 	}
 
 	@Override
-	public boolean accept(WorkspaceState state) {
-		return state==WorkspaceState.WORKING;
+	public boolean accept(Context ctx) {
+		return !ctx.getProperty(ContextProperty.HALT) &&ctx.getProperty(ContextProperty.WORKING);
+			
 	}
 
 

@@ -192,23 +192,33 @@ public class FiguresPanel extends Group{
 		}
 		
 		
-
+		this.addListener(new InputListener(){
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				event.setBubbles(false);
+				return false;
+			}
+		});
 		
 		this.addCaptureListener(new EventListener(){
 
 			@Override
 			public boolean handle(Event event) {
 				if(event instanceof DragStartEvent){
+						event.setBubbles(false);
 						Color c = FiguresPanel.this.getColor();
 						FiguresPanel.this.setColor(c.r, c.g, c.b, c.a*.5f);									
 				}
 				
 				if(event instanceof DragStopEvent){
+					event.setBubbles(false);
+
 					Color c = FiguresPanel.this.getColor();
 					FiguresPanel.this.setColor(c.r, c.g, c.b, 1);
 				}
 				
 				if(event instanceof DragEvent){
+					event.setBubbles(false);
+
 					DragEvent devent = (DragEvent)event;
 					Actor target = devent.getDragActor();
 					Rectangle thisRect = new Rectangle(getX(), getY(), getWidth(), getHeight());

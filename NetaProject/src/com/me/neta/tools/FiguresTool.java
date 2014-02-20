@@ -6,9 +6,10 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.visible;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.me.neta.Context;
 import com.me.neta.NetaGame;
 import com.me.neta.Size;
-import com.me.neta.util.WorkspaceState;
+import com.me.neta.Context.ContextProperty;
 
 
 public class FiguresTool extends PanelTool{
@@ -31,7 +32,7 @@ public class FiguresTool extends PanelTool{
 	}
 
 	@Override
-	public boolean accept(WorkspaceState state) {
-		return state==WorkspaceState.WORKING ;
+	public boolean accept(Context ctx) {
+		return !ctx.getProperty(ContextProperty.HALT) &&ctx.getProperty(ContextProperty.WORKING);
 	}
 }

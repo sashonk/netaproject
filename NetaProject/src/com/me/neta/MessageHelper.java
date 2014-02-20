@@ -18,9 +18,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.me.neta.events.WorkspaceStateEvent;
+import com.me.neta.Context.ContextProperty;
+import com.me.neta.events.ContextChangeEvent;
 import com.me.neta.util.WorkHelper;
-import com.me.neta.util.WorkspaceState;
 
 public class MessageHelper {
 	
@@ -46,7 +46,8 @@ public class MessageHelper {
 		WorkHelper.center(tb);
 		//tb.fire(new WorkspaceStateEvent(WorkspaceState.DISABLED));
 
-		
+		ng.getContext().setProperty(ContextProperty.HALT, true);
+		tb.fire(new ContextChangeEvent());
 	}
 	
 	
@@ -81,7 +82,8 @@ public class MessageHelper {
 		
 		group.addAction(Actions.delay(10, Actions.removeActor()));
 
-		//tb.fire(new WorkspaceStateEvent(WorkspaceState.DISABLED));	
+		ng.getContext().setProperty(ContextProperty.HALT, true);
+		tb.fire(new ContextChangeEvent());	
 	}
 	
 	public static void notify(NetaGame ng, String text){
@@ -109,6 +111,9 @@ public class MessageHelper {
 		if(msgBtn!=null){
 			
 			//msgBtn.fire(new WorkspaceStateEvent(WorkspaceState.WORKING));
+			
+			ng.getContext().setProperty(ContextProperty.HALT, false);
+			msgBtn.fire(new ContextChangeEvent());
 			msgBtn.remove();
 		}
 		

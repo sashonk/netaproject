@@ -69,11 +69,14 @@ public class PassportForm extends Group{
 		tfYear.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());	
 		addActor(tfYear);
 		
+		final Label ok = new Label("OK", skin, "system2");
+		ok.setPosition(188, 74);
+		addActor(ok);
 		
-		panel.addListener(new InputListener(){
+		addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				Rectangle r = new Rectangle(171,74, 220 -171, 91 - 74);
-				if(r.contains(x,y)){ //touch!
+				if(r.contains(x,y)||event.getTarget()==ok){ //touch!
 					fire(new PassportEvent());
 				}
 				return false;

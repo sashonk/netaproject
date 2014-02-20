@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.me.neta.DoubleClickListener;
 import com.me.neta.Moveable;
 import com.me.neta.events.SelectFigureEvent;
 
@@ -21,13 +22,14 @@ public abstract class AbstractFigure extends Moveable{
 		
 		filled= false;
 		
-		 this.addListener(new InputListener(){
-				public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-					Actor a = event.getTarget();
-					a.fire(new SelectFigureEvent());
-					return false;
+		 this.addListener(new DoubleClickListener(.8f) {
+				
+				@Override
+				public void doubleClick() {
+					AbstractFigure.this.fire(new SelectFigureEvent());
+					
 				}
-		 });
+			});
 	}
 	
 	@Override

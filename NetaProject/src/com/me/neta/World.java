@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
@@ -18,9 +19,11 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldFilter;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.me.neta.events.LyricsIconEvent;
 import com.me.neta.events.ZIndexEvent;
 import com.me.neta.figures.AbstractFigure;
@@ -31,14 +34,12 @@ import com.me.neta.tools.ZIndexTool;
 public abstract class World extends Group{
 	//Pixmap pm;
 	//Texture tx;
-	ZIndexTool ztool;
 	BrushTool btool;
 	boolean lyricsAdded = false;
 	private int id;
 	TextureManager tm;
 	private boolean colorize;
 	private AbstractFigure selectedActor;
-	private Color selectedColor ;
 	protected NetaGame ng; 
 	protected static final float FIELD_HEIGHT= 20;
 	
@@ -48,8 +49,6 @@ public abstract class World extends Group{
 	
 	public void setSelectedActor(AbstractFigure figure){
 		selectedActor =figure;
-		ztool.setSelectedFigure(figure);
-
 	}
 	
 	public void setId(int id){
@@ -64,63 +63,58 @@ public abstract class World extends Group{
 		//TODO
 	}
 	
-	public void setSelectedColor(Color c){
-		selectedColor = c;
-	}
-	
-	public Color getSelectedColor(){
-		return selectedColor;
-	}
-	
+
 
 	public World(NetaGame ng, float width, float height){
 		this.ng = ng;
 		setName(getTitle());
 		
 		colorize = false;
-		selectedColor = Color.WHITE.cpy();
 		tm = ng.getManager();		
 		this.setBounds(0, 0, width, height);		
+		setOrigin(getWidth()/2, getHeight()/2);
 
+		//this.addListener(new MetricListener());
 
 		
-		RotateTool r = new RotateTool(ng);
-		r.setEnabled(true);
-		r.setBounds(492, 700, 40, 40);
-		addActor(r);	
-		
-		ztool = new ZIndexTool(ng);
-		ztool.setEnabled(true);
-		ztool.setBounds(536, 702, 36, 36);
-		addActor(ztool);
-		
-		
-		this.addCaptureListener(new EventListener() {
+		this.addListener(new InputListener(){
+			Vector2 startPosition;
+			Vector2 mouseXY;
+			int pointer;
+			Actor actor;
 			
-			@Override
-			public boolean handle(Event event) {
-				if(event instanceof ZIndexEvent){
-					ZIndexEvent zevent = (ZIndexEvent)event;
-					World.this.removeActor(zevent.getAbove());
-					World.this.addActorAfter(zevent.getBelow(),zevent.getAbove());
-					
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				Actor actor = hit(x, y, false);
+				if(actor instanceof Moveable ){
+					if(actor instanceof AbstractFigure){
+						if(selectedActor!=actor){
+							return false;
+						}
+					}
+					this.pointer = pointer;
+					 startPosition = new Vector2(actor.getX(), actor.getY());
+					 mouseXY = new Vector2(x, y);
+					 //local.rotate(-actor.getRotation());
+					 this.actor = actor;
 					return true;
 				}
-				
+
 				return false;
 			}
+			
+			public void touchDragged (InputEvent event, float x, float y, int pointer) {
+				if( actor!=null){
+					actor.setPosition(startPosition.x+x-mouseXY.x,  startPosition.y +y- mouseXY.y );
+				}
+				
+			}
+			
+				public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+					if(pointer==this.pointer){
+						actor = null;
+					}
+				}
 		});
-		
-		
-		 btool = new BrushTool(ng);
-		btool.setEnabled(true);
-		btool.setBounds(536+40, 701, 40, 40);
-		addActor(btool);
-		
-	//	this.addListener(pinch2Zoom);
-		this.addListener(new MetricListener());
-
-		
 		
 		
 ////////////////////////////////////
@@ -193,9 +187,7 @@ public abstract class World extends Group{
 	//	pinch2Zoom.setCanPan(value);
 	}
 	
-	void tintBrush(Color c){
-		btool.setColor(c);
-	}
+
 	
 
 	
@@ -261,9 +253,7 @@ public abstract class World extends Group{
 		return pass;
 	}
 	
-	public void setSelectedFigure(AbstractFigure figure){
-		ztool.setSelectedFigure(figure);
-	}
+
 	
 	public abstract void populate();
 	

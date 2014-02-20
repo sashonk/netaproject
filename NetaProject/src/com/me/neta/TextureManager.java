@@ -206,7 +206,11 @@ public class TextureManager {
         tfStyleSystem2.messageFontColor = Color.GRAY;
         skin.add("system2", tfStyleSystem2);        
         
-        
+ 		
+        LabelStyle lStyleSystem2 = new LabelStyle();
+        lStyleSystem2.font = cyrillicFont2;
+        lStyleSystem2.fontColor = Color.BLACK;
+        skin.add("system2", lStyleSystem2);   
         
  		TextFieldStyle tfStyleTextAnt = new TextFieldStyle();
  		tfStyleTextAnt.font = cyrillicFont;

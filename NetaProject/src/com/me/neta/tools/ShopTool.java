@@ -1,8 +1,9 @@
 package com.me.neta.tools;
 
+import com.me.neta.Context;
 import com.me.neta.NetaGame;
 import com.me.neta.Size;
-import com.me.neta.util.WorkspaceState;
+import com.me.neta.Context.ContextProperty;
 
 
 public class ShopTool extends PanelTool{
@@ -24,7 +25,7 @@ public class ShopTool extends PanelTool{
 	}
 
 	@Override
-	public boolean accept(WorkspaceState state) {
-		return state==WorkspaceState.WORKING || state==WorkspaceState.PREPARED;
+	public boolean accept(Context ctx) {
+		return !ctx.getProperty(ContextProperty.HALT) &&ctx.getProperty(ContextProperty.PREPARED);
 	}
 }

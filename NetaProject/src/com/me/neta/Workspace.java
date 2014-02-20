@@ -1,43 +1,29 @@
 package com.me.neta;
 
 
-
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.alpha;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.visible;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.forever;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.removeActor;
 
-
-
-import java.io.File;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
-
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Camera;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.input.GestureDetector;
 
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -46,22 +32,19 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldFilter;
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 
 
+
+import com.me.neta.Context.ContextProperty;
 import com.me.neta.events.*;
 import com.me.neta.figures.AbstractFigure;
 import com.me.neta.tools.AbstractTool;
 import com.me.neta.tools.BasketTool;
+import com.me.neta.tools.BrushTool;
 import com.me.neta.tools.ShopTool;
 import com.me.neta.tools.DesktopsTool;
 import com.me.neta.tools.FiguresTool;
@@ -75,8 +58,7 @@ import com.me.neta.tools.SaveTool;
 import com.me.neta.tools.SettingsTool;
 import com.me.neta.tools.ZIndexTool;
 import com.me.neta.util.WorkHelper;
-import com.me.neta.util.WorkspaceState;
-import com.me.neta.util.WorkspaceStateListener;
+
 import com.me.neta.worlds.AntWorld;
 import com.me.neta.worlds.PitonWorld;
 import com.me.neta.worlds.SpiderWorld;
@@ -85,19 +67,22 @@ import com.me.neta.worlds.TigerWorld;
 public class Workspace extends Group{
 	
 
+	ZIndexTool zTool;
+	BrushTool bTool;
+	RotateTool rTool;
+	Question qTool;
 	
 	
 	static final float pad = 15;
-
-	
 	PanelToolGroup ptGroup;
-	private List<WorkspaceStateListener> listeners = new LinkedList<WorkspaceStateListener>();
-	public WorkspaceState state;
 	private Pinch2ZoomListener2 pinch2Zoom;
 	Passport passport;
 	Map<Integer, WorldFactory> worldFactories = new HashMap<Integer, WorldFactory>();
 	NetaGame ng;
 	String bottomActorName = "bottomActor";
+	Table toolbarTable;
+	private Color selectedColor ;
+
 	
 	public Workspace(NetaGame ng, float x, float y, float width, float height){
 		this.ng = ng;
@@ -119,7 +104,7 @@ public class Workspace extends Group{
 		this.addActor(bottom);
 
 		Image img = new Image(ng.getManager().getBottomPanelTexture());
-		final Table toolbarTable = new Table();
+		toolbarTable = new Table();
 		
 		toolbarTable.debug();
 		toolbarTable.debugTable();
@@ -225,16 +210,26 @@ public class Workspace extends Group{
 		toolbarTable.setZIndex(99);
 		
 		
-		final Question q = new Question(ng);
-		q.setBounds(960, 700, 40, 40);
-		addActor(q);
+		Table topButtons = new Table();
+		 rTool = new RotateTool(ng);
+		 zTool = new ZIndexTool(ng);
+		 bTool = new BrushTool(ng);
+		qTool = new Question(ng);
+		
+		float topPad = 2;
+		topButtons.add(rTool).padRight(topPad);
+		topButtons.add(bTool).padRight(topPad);
+		topButtons.add(zTool).padRight(topPad);
+		topButtons.add(qTool).padRight(topPad);
+		topButtons.pack();
+		topButtons.setPosition(800, 700);
+		
+		addActorAfter(this.findActor(bottomActorName), topButtons);
 
 		toolbarTable.pack();
 		
 
-		
-
-		
+			
 //////////////////////////////////////////////////////////////////////		
 //////////////////////////////////////////////////////////////////////
 ///////////        HANDLE CHILD EVENTS		//////////////////////
@@ -248,14 +243,18 @@ public class Workspace extends Group{
 				if(event instanceof DragStartEvent){
 				//	world.setPinch2ZoomEnabled(false);
 					pinch2Zoom.setCanPan(false);
+					event.setBubbles(false);
+
 				}
 				if(event instanceof DragStopEvent){
 					//world.setPinch2ZoomEnabled(true);
 					pinch2Zoom.setCanPan(true);
+					event.setBubbles(false);
 
 				}
 				
 				if(event instanceof LyricsIconEvent){
+					event.setBubbles(false);
 
 					
 					LyricsIconEvent lyricsEvent = (LyricsIconEvent)event;
@@ -266,6 +265,8 @@ public class Workspace extends Group{
 				}
 				
 				if(event instanceof DesktopIconEvent){
+					event.setBubbles(false);
+
 					System.out.println("DesktopChoseEvent::handle="+((DesktopIconEvent)event).getId());
 					DesktopIconEvent desktopEvent = (DesktopIconEvent) event;
 					
@@ -275,8 +276,8 @@ public class Workspace extends Group{
 						Actor abandoningWorld = null;
 						if(world!=null && world.getParent()!=null){
 							 abandoningWorld = world;
-							 abandoningWorld.setOrigin(abandoningWorld.getWidth()/2, abandoningWorld.getHeight()/2);
-							abandoningWorld.addAction(sequence(Actions.parallel(Actions.scaleTo(0, 0, 1f), Actions.rotateBy(-500, 1f), Actions.moveBy(1000, 0, 1f)) ,Actions.removeActor()));
+							 //abandoningWorld.setOrigin(abandoningWorld.getWidth()/2, abandoningWorld.getHeight()/2);
+							abandoningWorld.addAction(abandonWorldAction(abandoningWorld));
 						}
 						
 						world = worldFactories.get(desktopEvent.getId()).create();
@@ -290,7 +291,7 @@ public class Workspace extends Group{
 
 						world.setId(desktopEvent.getId());
 						//desktop.addAction(Actions.sequence(Actions.fadeIn(.2f)));
-						world.addListener(new InputListener(){
+/*						world.addListener(new InputListener(){
 							public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 								getStage().setKeyboardFocus(null);
 								Workspace.this.setSelectedFigure(null);
@@ -303,17 +304,19 @@ public class Workspace extends Group{
 								
 								
 							}
-						});
+						});*/
 						world.drawPassport(passport);				
 					}
 					
-					fire(new WorkspaceStateEvent(WorkspaceState.WORKING));
+					ng.getContext().setProperty(ContextProperty.WORKING, true) ;
+					fire(new ContextChangeEvent());
 	
 				}
 				
 				
 				
 				if(event instanceof LetterDropEvent){
+					event.setBubbles(false);
 
 
 				
@@ -331,33 +334,28 @@ public class Workspace extends Group{
 				
 				if(event instanceof SelectFigureEvent){
 					setSelectedFigure((AbstractFigure) event.getTarget());	
-					if(world.isColorizing()){
-						world.getSelected().setColor(world.getSelectedColor());
+					if(bTool.checked()){
+						world.getSelected().setColor(selectedColor);
 					}
+					event.setBubbles(false);
+
 				}
 				
 				
 				if(event instanceof SelectColorEvent){
-					System.out.println("SelectColorEvent::handle");
 					SelectColorEvent colorEvent = (SelectColorEvent) event;
-					world.setSelectedColor( colorEvent.getColor());
-					if(world!=null){
-						world.tintBrush(world.getSelectedColor());
-					}
+					setSelectedColor(colorEvent.getColor());
+					event.setBubbles(false);
+
 				}
 				
 				if(event instanceof TrashButtonEvent){
+					event.setBubbles(false);
+
 					System.out.println("TrashButtonEvent::handle");
 					if(world.getSelected()!=null){
 						final Actor actor = world.getSelected();
-						actor.addAction(sequence(Actions.parallel(Actions.scaleTo(0, 0, .6f), Actions.rotateBy(-360, .6f)) ,Actions.removeActor(), Actions.run(new Runnable(){
-
-							@Override
-							public void run() {
-								beingRemoved.remove(actor)	;							
-							}
-							
-						})));
+						actor.addAction(deleteFigureAction(actor));
 						beingRemoved.add(world.getSelected());
 						
 						AbstractFigure candidate = findLast();
@@ -368,6 +366,8 @@ public class Workspace extends Group{
 				
 				
 				if(event instanceof RotationEvent){
+					event.setBubbles(false);
+
 					System.out.println("RotationEvent::handle");
 					if(world.getSelected()!=null){
 						world.getSelected().rotate(((RotationEvent)event).getDegrees());
@@ -375,39 +375,45 @@ public class Workspace extends Group{
 				}
 				
 				if(event instanceof RequestFocusEvent){
+					event.setBubbles(false);
+
 					if(world!=null){
 						world.setFocus();
 					}
 				}
 				 
-				if(event instanceof WorkspaceStateEvent){
-					
-			
-					
-					WorkspaceStateEvent wsEvent = (WorkspaceStateEvent) event;
-					 for(WorkspaceStateListener listener : listeners){
-						 listener.stateChanged(state, wsEvent.getState());
-					 }
-					 
-					 state =wsEvent.getState();
-					 
-
-				}
-				
+		/*		if(event instanceof ContextChangeEvent){													
+					 for(ContextListener listener : listeners){
+						 listener.contextChanged(ng.getContext());
+					 }					 					 
+				}*/
+/*				
 				if(event instanceof BrushToolChangeEvent){
 					BrushToolChangeEvent btcEvent = (BrushToolChangeEvent)event;
 					 world.setColorizing(btcEvent.isChecked()) ;
-				}
+				}*/
 				
 				if(event instanceof PassportEvent){
-				//	form.update(passport);
+					event.setBubbles(false);
+
+					form.update(passport);
 					world.drawPassport(passport);
 					Workspace.this.ptGroup.onShow(null);
 
 				}
 				
 				
-				event.setBubbles(false);
+				if(event instanceof ZIndexEvent){
+					event.setBubbles(false);
+
+					ZIndexEvent zevent = (ZIndexEvent)event;
+					world.removeActor(zevent.getAbove());
+					world.addActorAfter(zevent.getBelow(),zevent.getAbove());
+					
+					return true;
+				}
+				
+				
 				return true;
 			}
 		});
@@ -423,12 +429,10 @@ public class Workspace extends Group{
 				if(x>817 && x<889 && y>101 && y<169){
 					event.getTarget().setVisible(false);
 					
-					if(world==null){
-						fire(new WorkspaceStateEvent(WorkspaceState.PREPARED));
-					}
-					else{
-						fire(new WorkspaceStateEvent(WorkspaceState.WORKING));						
-					}
+					ng.getContext().setProperty(ContextProperty.PREPARED, true) ;
+					ng.getContext().setProperty(ContextProperty.HALT, false) ;
+					
+					fire(new ContextChangeEvent());
 
 					
 				}
@@ -439,7 +443,7 @@ public class Workspace extends Group{
 		instructActor.setBounds(20,150, 980, 500);		
 		instructActor.setVisible(false);
 		this.addActorAfter(Workspace.this.findActor(bottomActorName), instructActor);
-		q.setPanel(instructActor);
+		qTool.setPanel(instructActor);
 		
 //////////////////////////////////////////////////
 			//////// NIKOL LETTER //////////
@@ -470,12 +474,11 @@ public class Workspace extends Group{
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 			if(x>817 && x<889 && y>101 && y<169){
 				event.getTarget().setVisible(false);
-				if(world==null){
-				fire(new WorkspaceStateEvent(WorkspaceState.PREPARED));
-				}
-				else{
-					fire(new WorkspaceStateEvent(WorkspaceState.WORKING));
-				}
+				
+				
+				ng.getContext().setProperty(ContextProperty.PREPARED, true) ;
+				ng.getContext().setProperty(ContextProperty.HALT, false) ;
+				fire(new ContextChangeEvent());
 			}
 			return false;
 			}
@@ -496,12 +499,11 @@ public class Workspace extends Group{
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 			if(x>817 && x<889 && y>101 && y<169){
 				event.getTarget().setVisible(false);
-				if(world==null){
-					fire(new WorkspaceStateEvent(WorkspaceState.PREPARED));
-				}
-				else{
-					fire(new WorkspaceStateEvent(WorkspaceState.WORKING));
-				}
+				
+				
+				ng.getContext().setProperty(ContextProperty.PREPARED, true) ;
+				ng.getContext().setProperty(ContextProperty.HALT, false) ;
+				fire(new ContextChangeEvent());
 			}
 			return false;
 			}
@@ -521,12 +523,11 @@ public class Workspace extends Group{
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 			if(x>817 && x<889 && y>101 && y<169){
 				event.getTarget().setVisible(false);
-				if(world==null){
-					fire(new WorkspaceStateEvent(WorkspaceState.PREPARED));
-				}
-				else{
-					fire(new WorkspaceStateEvent(WorkspaceState.WORKING));
-				}
+				
+				
+				ng.getContext().setProperty(ContextProperty.PREPARED, true) ;
+				ng.getContext().setProperty(ContextProperty.HALT, false) ;
+				fire(new ContextChangeEvent());
 			}
 			return false;
 			}
@@ -559,9 +560,13 @@ public class Workspace extends Group{
 		registerStateListener(shopTool);
 		registerStateListener(saveTool);
 		registerStateListener(settingTool);		
-		registerStateListener(q);
+		registerStateListener(qTool);
+		registerStateListener(bTool);
+		registerStateListener(rTool);
+		registerStateListener(zTool);
 		
-		fire(new WorkspaceStateEvent(WorkspaceState.INTRO));
+		
+
 		Image splash = new Image(new TextureRegion(new Texture(Gdx.files.internal("data/zastavka.jpg")), 0,0,1024, 600));
 		splash.setBounds(0,0,1024, 768);
 		splash.addAction(sequence(delay(3),alpha(0, 3), visible(false), Actions.removeActor()));
@@ -573,34 +578,38 @@ public class Workspace extends Group{
 		});
 		addActor(splash);
 		
+		this.addListener(new InputListener(){
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				
+				if(event.getTarget()==world){
+					getStage().setKeyboardFocus(null);
+					Workspace.this.setSelectedFigure(null);
+					Workspace.this.ptGroup.onShow(null);
+					Gdx.input.setOnscreenKeyboardVisible(false);
+				}
 
-		
-		
-	///	lStyleLyrics.background = new NinePatchDrawable(new NinePatch(new Texture()));
-	//	lStyleLyrics.background = new Ninepa 
+				
+				return true;
 				
 				
-				
+			}
+		});
+		setSelectedColor(Color.WHITE);
 	}
 
-	private void registerStateListener(WorkspaceStateListener listener){
-		if(!listeners.contains(listener)){
-			listeners.add(listener);
-		}
+	void setSelectedColor(Color clr){
+		selectedColor = clr.cpy();
+		bTool.setColor(selectedColor);
+	}
+	
+	private void registerStateListener(ContextListener listener){
+		ng.getContext().registerListener(listener);
 	}
 	
 	
 	private World world;
 
 
-	
-	
-
-	public AbstractFigure getSelectedFigure(){
-		return world.getSelected();
-	}
-	
-	
 	
 	void setSelectedFigure(AbstractFigure figure){
 		if(world.getSelected()==figure){
@@ -614,6 +623,8 @@ public class Workspace extends Group{
 
 		
 		world.setSelectedActor(figure);
+		zTool.setSelectedFigure(figure);
+		
 		if(world.getSelected()!=null){
 			world.getSelected().animateSelected();
 		}
@@ -755,7 +766,22 @@ public class Workspace extends Group{
     
     
     
-    
+     Action deleteFigureAction(final Actor figure){
+    	return sequence(Actions.parallel(Actions.scaleTo(0, 0, .6f), Actions.rotateBy(-360, .6f)) ,Actions.removeActor(), Actions.run(new Runnable(){
+
+			@Override
+			public void run() {
+				beingRemoved.remove(figure)	;							
+			}
+			
+		}));
+    }
+     
+     
+    static float abandonTime = 1;
+     static Action  abandonWorldAction(Actor world){
+    	return sequence(Actions.parallel(Actions.scaleTo(0, 0, abandonTime), Actions.rotateBy(-500, abandonTime), Actions.moveBy(1000, 0, abandonTime)) ,Actions.removeActor());
+     }
     
 }
 

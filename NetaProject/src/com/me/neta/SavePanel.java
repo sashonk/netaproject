@@ -36,6 +36,7 @@ public class SavePanel extends Group{
 		addListener(new InputListener(){
 			public boolean touchDown(InputEvent event, float x, float y,
 					int pointer, int button) {
+				event.setBubbles(false);
 
 				final Native p = ng.getNative();
 
@@ -48,8 +49,7 @@ public class SavePanel extends Group{
 				
 				
 				if (save.contains(x, y)) {
-					// NetaGame.platform.
-					//fire(new ScreenshotEvent());
+	
 				
 
 					SavePanel.this.addAction(delay(.1f,run(new Runnable(){
@@ -58,18 +58,25 @@ public class SavePanel extends Group{
 						public void run() {				
 							if (Gdx.files.isExternalStorageAvailable()) {
 							try {
-								Pixmap pixmap = getScreenshot(0, 0,
+								final Pixmap pixmap = getScreenshot(0, 0,
 										Gdx.graphics.getWidth(),
 										Gdx.graphics.getHeight(), true);
-
+								MessageHelper.message(ng, "Пожалуйста, подождите...");	
+								
+								SavePanel.this.addAction(delay(.1f, Actions.run(new Runnable(){public void run() {	
 								FileHandle handle = Gdx.files.external(String
 										.format("picture%d.png",
 												System.currentTimeMillis()));
-								MessageHelper.message(ng, "Пожалуйста, подождите...");								
-								PixmapIO.writePNG(handle, pixmap);
+	
 								
+								//for(int i = 0; i<50; i++){
+									PixmapIO.writePNG(handle, pixmap);
+							//	}
 								
-								MessageHelper.notify(ng, "Изображение сохранено");
+								String text ="Изображение сохранено "+  (NetaGame.debug ? new StringBuilder("[файл:").append(handle.file().getAbsolutePath()).append(']').toString() : "");  
+								MessageHelper.notify(ng, text);
+								
+								}})));
 							} catch (Exception ex) {
 								MessageHelper.error(ng, "Ошибка! Изображение не сохранено!", ex);
 							}
@@ -79,26 +86,29 @@ public class SavePanel extends Group{
 						}	}})));
 					
 				
-
-
 					result = true;
 				} else if (email.contains(x, y)) {
 					// email
-					MessageHelper.message(ng, "Пожалуйста, подождите...");
+
 					SavePanel.this.addAction(delay(.1f,run(new Runnable(){
 						@Override
 						public void run() {	
 					if (Gdx.files.isExternalStorageAvailable()) {
 						try {
-							Pixmap pixmap = getScreenshot(0, 0,
+							final Pixmap pixmap = getScreenshot(0, 0,
 									Gdx.graphics.getWidth(),
 									Gdx.graphics.getHeight(), true);
+							MessageHelper.message(ng, "Пожалуйста, подождите...");
+							
+							SavePanel.this.addAction(delay(.1f, Actions.run(new Runnable(){public void run() {	
+							
 							FileHandle handle = Gdx.files.external(String
 									.format("picture%d.png",
 											System.currentTimeMillis()));
 							PixmapIO.writePNG(handle, pixmap);
 							p.setForEmail("nikoldruzya@ya.ru", handle.file(), "Письмо Николь");
 							MessageHelper.hide(ng);
+							}})));
 						} catch (Exception ex) {
 							MessageHelper.error(ng, "Ошибка!", ex);
 						}

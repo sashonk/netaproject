@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 
 public abstract class Moveable extends Actor{
@@ -17,7 +18,9 @@ public abstract class Moveable extends Actor{
 	public abstract boolean isDisposable();
 	
 	
-	public Moveable(){
+	public Moveable(){/*
+		
+
 		
 	
 		
@@ -72,5 +75,5 @@ public abstract class Moveable extends Actor{
 		
 		
 		this.addListener(listener);
-	}
+	*/}
 }

@@ -3,13 +3,14 @@ package com.me.neta.tools;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.me.neta.Context;
 import com.me.neta.NetaGame;
 import com.me.neta.Size;
 import com.me.neta.TextureManager;
+import com.me.neta.Context.ContextProperty;
 import com.me.neta.events.BrushToolChangeEvent;
-import com.me.neta.util.WorkspaceState;
 
-public class BrushTool extends AbstractTool{
+public class BrushTool extends TopTool{
 	TextureManager tm;
 	public BrushTool(NetaGame ng){
 		super(ng);
@@ -21,14 +22,14 @@ public class BrushTool extends AbstractTool{
 	
 	private boolean checked;
 	
-	@Override
-	public Size getSize() {
-		return new Size(36, 36);
+	public boolean checked(){
+		return checked;
 	}
 
+
 	@Override
-	public boolean accept(WorkspaceState state) {
-		return state==WorkspaceState.WORKING;
+	public boolean accept(Context ctx) {
+		return !ctx.getProperty(ContextProperty.HALT) &&ctx.getProperty(ContextProperty.WORKING);
 	}
 
 	@Override
@@ -53,10 +54,10 @@ public class BrushTool extends AbstractTool{
 		float k = checked ? 1 : 0.5f;
 		if(enabled()){
 			batch.setColor(1, 1, 1, c.a*parentAlfa*k);
+			batch.draw(tx, this.getX()+4, this.getY()+4, this.getWidth()-8, this.getHeight()-8);
 		}else{
 			batch.setColor(1, 1, 1, c.a*.4f*parentAlfa*k);
 		}
-		batch.draw(tx, this.getX()+4, this.getY()+4, this.getWidth()-8, this.getHeight()-8);
 		batch.draw(region, this.getX(), this.getY(), this.getWidth(), this.getHeight());
 	}
 
