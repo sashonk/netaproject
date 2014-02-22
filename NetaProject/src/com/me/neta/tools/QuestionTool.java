@@ -5,14 +5,14 @@ import com.me.neta.Context;
 import com.me.neta.NetaGame;
 import com.me.neta.Size;
 import com.me.neta.Context.ContextProperty;
-import com.me.neta.events.ContextChangeEvent;
+import com.me.neta.events.QuestionEvent;
 
 
 
-public class Question extends TopTool{
+public class QuestionTool extends TopTool{
 
 	Context context;
-	public Question(NetaGame ng) {
+	public QuestionTool(NetaGame ng) {
 		super(ng);
 		context = ng.getContext();
 		// TODO Auto-generated constructor stub
@@ -27,7 +27,7 @@ public class Question extends TopTool{
 		if(!panel.isVisible()){
 			panel.setVisible(true);
 			context.setProperty(ContextProperty.HALT, true) ;
-			fire(new ContextChangeEvent());
+			fire(new QuestionEvent());
 		}
 		else{
 			panel.setVisible(false);

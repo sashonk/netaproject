@@ -46,19 +46,17 @@ public class SpiderWorld extends World{
 		return "spider";
 	}
 	@Override
-	public void populate() {
+	public void populateBackground() {
 		Image PAUTINA = new Image(ng.getManager().getAtlas().findRegion("PAUTINA"));
 		PAUTINA.setBounds(1024-304, 768-257,304, 257);
 		addActor(PAUTINA);
 
 		Image flower = new Image(ng.getManager().getAtlas().findRegion("ZVET3"));
-		flower.setBounds(875, 140,57, 73);
+		flower.setBounds(875, 340,57, 73);
 		addActor(flower);
-		
-		Actor zactor = new Actor();
-		zactor.setName("zactor");
-		addActor(zactor);
-		
+	}
+	public void populateForeground() {
+	
 		Hero muha = new Hero(ng,"MUH");
 		muha.setBounds(550, 560,53,31);
 		muha.setZIndex(9);

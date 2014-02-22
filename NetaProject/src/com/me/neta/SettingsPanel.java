@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.me.neta.Context.ContextProperty;
-import com.me.neta.events.ContextChangeEvent;
+import com.me.neta.events.QuestionEvent;
 
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
@@ -48,7 +48,6 @@ public class SettingsPanel extends Group{
 					else{
 						panel.setVisible(true);
 						ng.getContext().setProperty(ContextProperty.HALT, true);
-						fire(new ContextChangeEvent());
 
 					}
 					

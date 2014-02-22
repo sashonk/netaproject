@@ -20,6 +20,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
@@ -66,6 +68,21 @@ public class TextureManager {
 		fields.add(new Texture(Gdx.files.internal("data/field2.jpg")));
 		fields.add(new Texture(Gdx.files.internal("data/field3.jpg")));
 		fields.add(new Texture(Gdx.files.internal("data/field4.jpg")));
+		
+		
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/arialbd.ttf"));
+		 BitmapFont cyrillicFont = generator.generateFont(12,DEFAULT_CHARS, false);
+		 BitmapFont cyrillicFont2 = generator.generateFont(14,DEFAULT_CHARS, false);		 
+		generator.dispose();
+		
+		
+        FreeTypeFontGenerator generatorCalibri = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/calibri.ttf"));
+		BitmapFont calibri12 = generatorCalibri.generateFont(12,DEFAULT_CHARS, false);
+		BitmapFont calibri14 = generatorCalibri.generateFont(14,DEFAULT_CHARS, false);
+		BitmapFont calibri16 = generatorCalibri.generateFont(16,DEFAULT_CHARS, false);
+		BitmapFont calibri18 = generatorCalibri.generateFont(18,DEFAULT_CHARS, false);
+		generatorCalibri.dispose();
+		
 
 		wonderlandFont = new BitmapFont(Gdx.files.internal("data/fonts/wond.fnt"), false);
 		
@@ -102,6 +119,9 @@ public class TextureManager {
          pixmap.fill();
          skin.add("black", new Texture(pixmap));
          
+         
+         
+         
          pixmap.setColor(Color.GRAY);
          pixmap.fill();
          skin.add("gray", new Texture(pixmap));
@@ -109,6 +129,23 @@ public class TextureManager {
          pixmap.setColor(new Color(112/255f, 207/255f, 238/255f, 1));
          pixmap.fill();
          skin.add("blue", new Texture(pixmap));
+         
+         
+         Pixmap p2 = new Pixmap(4, 4, Format.RGBA8888);
+         p2.setColor(Color.BLACK);
+         p2.fill();
+         skin.add("black4", new Texture(p2));
+         
+         Pixmap p8 = new Pixmap(8, 8, Format.RGBA8888);
+         p8.setColor(Color.BLACK);
+         p8.drawRectangle(0, 0, p8.getWidth(), p8.getHeight());
+         skin.add("line8black", new Texture(p8));
+         
+         Pixmap debugTable = new Pixmap(4,4, Format.RGBA8888);
+         debugTable.setColor(Color.BLACK);
+         debugTable.drawRectangle(0, 0, 4, 4);
+         skin.add("debugTable", new NinePatch(new Texture(debugTable), 1, 1, 1, 1));
+         
          
          TextFieldStyle blueCalibri = new TextFieldStyle();
          blueCalibri.fontColor = new Color(.4f, .57f, .74f,1);
@@ -159,11 +196,7 @@ public class TextureManager {
          NinePatchDrawable npdError = new NinePatchDrawable(skin.getPatch("error"));
          skin.add("npdError", npd, Drawable.class);
          
-         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/arialbd.ttf"));
- 		 BitmapFont cyrillicFont = generator.generateFont(12,DEFAULT_CHARS, false);
- 		 BitmapFont cyrillicFont2 = generator.generateFont(14,DEFAULT_CHARS, false);
- 		 
- 		generator.dispose();
+       
  		
  		
         TextButtonStyle tbStyleSystem = new TextButtonStyle();
@@ -260,13 +293,15 @@ public class TextureManager {
  		lStyleTextSpider.font = cyrillicFont;
  		lStyleTextSpider.fontColor = Color.YELLOW;
  		skin.add("spider", lStyleTextSpider);
+ 		
+ 		
+
 
 ///////////////////////////////////////////////
-       ///////////	 MISC 	/////////////
+       ///////////	 LYRICS 	/////////////
 //////////////////////////////////////////////
  		
  		skin.add("lyrics", new NinePatch(atlas.findRegion("lyricsDrawable"), 15, 15, 15, 15));
-         
  		NinePatchDrawable lyricsNpd = new NinePatchDrawable(skin.getPatch("lyrics")); 		
  		skin.add("lyrics", lyricsNpd, Drawable.class);
  		
@@ -294,6 +329,65 @@ public class TextureManager {
  		lStyleLyricsYellow.fontColor =  new Color(246 / 255f, 177 / 255f , 12 / 255f, 1);
  		skin.add("lyricsYellow", lStyleLyricsYellow);
          
+///////////////////////////////////////////////
+///////////	 INSTRUCTIONS 	/////////////
+//////////////////////////////////////////////
+		LabelStyle lStyleMarker = new LabelStyle();
+		lStyleMarker.font = calibri14;
+		lStyleMarker.fontColor = Color.BLUE;
+		skin.add("marker", lStyleMarker);	
+
+		LabelStyle lStyleInsruction = new LabelStyle();
+		lStyleInsruction.font = calibri14;
+		lStyleInsruction.fontColor = Color.BLACK;
+		skin.add("instruction", lStyleInsruction);	
+				
+		LabelStyle lStyleInstructionTitle = new LabelStyle();
+		lStyleInstructionTitle.font = calibri14;
+		lStyleInstructionTitle.fontColor = Color.RED;
+		skin.add("instructionTitle", lStyleInstructionTitle);	
+		
+		LabelStyle lStyleInstruction2 = new LabelStyle();
+		lStyleInstruction2.font = calibri14;
+		lStyleInstruction2.fontColor = new Color(105 /255f , 160 /255f, 200 /255f, 1);
+		skin.add("instruction2", lStyleInstruction2);	
+		
+ 		NinePatch vscrollNP = new NinePatch(atlas.findRegion("vscroll"), 0, 0, 20, 20);
+ 		skin.add("vscroll_", vscrollNP);
+
+ 		NinePatch vknobNP = new NinePatch(atlas.findRegion("vknob3"), 0, 0, 10, 10);
+ 		skin.add("vknob", vknobNP);
+ 		
+ 		NinePatch vscroll2NP = new NinePatch(atlas.findRegion("vscroll3"), 0, 0, 10, 10);
+ 		skin.add("vscroll", vscroll2NP);
+
+ 		TextureRegion frameTex = atlas.findRegion("frame");
+ 		NinePatch frameNP = new NinePatch(frameTex, 28, 30, 27, 33);
+ 		skin.add("frame", frameNP);
+ 		
+ 		TextureRegion fillTex = atlas.findRegion("fill");
+ 		NinePatch fillNP = new NinePatch(fillTex, 3, 3, 3, 3);		
+ 		skin.add("fill", fillNP);
+ 		
+ 		ScrollPaneStyle spStyle = new ScrollPaneStyle();
+ 		//spStyle.background = skin.getDrawable("white");
+ 		spStyle.corner = skin.getDrawable("debugTable");
+ 		spStyle.vScroll =  skin.getDrawable("vscroll");
+ 		spStyle.vScrollKnob = skin.getDrawable("vknob");
+  		
+ 		skin.add("default", spStyle);
+ 		
+ 		
+ 		
+ 		
+ 		ListStyle listStyle = new ListStyle();
+ 		listStyle.font = calibri14;
+ 		listStyle.selection = skin.getDrawable("white"); 		
+ 		listStyle.fontColorSelected = Color.RED;
+ 		listStyle.fontColorUnselected = Color.BLUE;
+ 		//listStyle.
+ 		skin.add("default", listStyle);
+ 		
 	}
 	
 

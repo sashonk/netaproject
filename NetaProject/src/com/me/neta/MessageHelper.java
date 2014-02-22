@@ -19,7 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.me.neta.Context.ContextProperty;
-import com.me.neta.events.ContextChangeEvent;
+import com.me.neta.events.QuestionEvent;
 import com.me.neta.util.WorkHelper;
 
 public class MessageHelper {
@@ -47,7 +47,6 @@ public class MessageHelper {
 		//tb.fire(new WorkspaceStateEvent(WorkspaceState.DISABLED));
 
 		ng.getContext().setProperty(ContextProperty.HALT, true);
-		tb.fire(new ContextChangeEvent());
 	}
 	
 	
@@ -83,7 +82,6 @@ public class MessageHelper {
 		group.addAction(Actions.delay(10, Actions.removeActor()));
 
 		ng.getContext().setProperty(ContextProperty.HALT, true);
-		tb.fire(new ContextChangeEvent());	
 	}
 	
 	public static void notify(NetaGame ng, String text){
@@ -113,7 +111,6 @@ public class MessageHelper {
 			//msgBtn.fire(new WorkspaceStateEvent(WorkspaceState.WORKING));
 			
 			ng.getContext().setProperty(ContextProperty.HALT, false);
-			msgBtn.fire(new ContextChangeEvent());
 			msgBtn.remove();
 		}
 		

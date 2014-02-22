@@ -46,7 +46,7 @@ public class TigerWorld extends World{
 		return "tiger";
 	}
 	@Override
-	public void populate() {
+	public void populateBackground() {
 		Image flower1 = new Image(ng.getManager().getAtlas().findRegion("ZVET5"));
 		flower1.setBounds(140, 135,78,97);
 		addActor(flower1);
@@ -61,10 +61,8 @@ public class TigerWorld extends World{
 		addActor(flower2);
 		
 		
-		Actor zactor = new Actor();
-		zactor.setName("zactor");
-		addActor(zactor);
-		
+	}
+	public void populateForeground(){
 		Hero zebra = new Hero(ng,"ZEBRA");
 		zebra.setBounds(420, 170, 93, 72);
 		zebra.setZIndex(9);

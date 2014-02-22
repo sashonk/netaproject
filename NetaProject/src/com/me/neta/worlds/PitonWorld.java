@@ -48,18 +48,16 @@ public class PitonWorld extends World{
 	}
 
 	@Override
-	public void populate() {
+	public void populateBackground() {
 		Image flower1 = new Image(ng.getManager().getAtlas().findRegion("ZVET4"));
 		flower1.setBounds(200, 115,57,57);
 		addActor(flower1);
 /*				
 		Image bird = new Image(TextureManager.get().getAtlas().findRegion("POPUGAI"));
 		bird.setBounds(10, 50,43,30);*/
-		
-		Actor zactor = new Actor();
-		zactor.setName("zactor");
-		addActor(zactor);
-		
+	}
+	
+	public void populateForeground(){ 	
 		Piton piton = new Piton(ng);
 		piton.setPosition(460, 130);
 		piton.setZIndex(10);

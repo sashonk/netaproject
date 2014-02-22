@@ -63,7 +63,9 @@ public abstract class World extends Group{
 		//TODO
 	}
 	
-
+	public boolean verticalTopPanel(){
+		return false;
+	}
 
 	public World(NetaGame ng, float width, float height){
 		this.ng = ng;
@@ -254,8 +256,20 @@ public abstract class World extends Group{
 	}
 	
 
+	public abstract void populateBackground();
 	
-	public abstract void populate();
+	public abstract void populateForeground();
+	
+	
+	public  void populate(){
+		populateBackground();
+		
+		Actor zactor = new Actor();
+		zactor.setName("zactor");
+		addActor(zactor);
+		
+		populateForeground();
+	}
 	
 	private Passport pass;
 }

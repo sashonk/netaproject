@@ -34,6 +34,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
@@ -52,7 +54,7 @@ import com.me.neta.tools.LetterTool;
 import com.me.neta.tools.ExitTool;
 import com.me.neta.tools.LyricsTool;
 import com.me.neta.tools.ColorTool;
-import com.me.neta.tools.Question;
+import com.me.neta.tools.QuestionTool;
 import com.me.neta.tools.RotateTool;
 import com.me.neta.tools.SaveTool;
 import com.me.neta.tools.SettingsTool;
@@ -70,7 +72,7 @@ public class Workspace extends Group{
 	ZIndexTool zTool;
 	BrushTool bTool;
 	RotateTool rTool;
-	Question qTool;
+	QuestionTool qTool;
 	
 	
 	static final float pad = 15;
@@ -214,9 +216,13 @@ public class Workspace extends Group{
 		 rTool = new RotateTool(ng);
 		 zTool = new ZIndexTool(ng);
 		 bTool = new BrushTool(ng);
-		qTool = new Question(ng);
+		qTool = new QuestionTool(ng);
 		
 		float topPad = 2;
+		float topPadRight ;
+		float topPadLeft ;
+		
+		
 		topButtons.add(rTool).padRight(topPad);
 		topButtons.add(bTool).padRight(topPad);
 		topButtons.add(zTool).padRight(topPad);
@@ -309,7 +315,6 @@ public class Workspace extends Group{
 					}
 					
 					ng.getContext().setProperty(ContextProperty.WORKING, true) ;
-					fire(new ContextChangeEvent());
 	
 				}
 				
@@ -382,11 +387,9 @@ public class Workspace extends Group{
 					}
 				}
 				 
-		/*		if(event instanceof ContextChangeEvent){													
-					 for(ContextListener listener : listeners){
-						 listener.contextChanged(ng.getContext());
-					 }					 					 
-				}*/
+				if(event instanceof QuestionEvent){													
+					ptGroup.onShow(null);					 					 
+				}
 /*				
 				if(event instanceof BrushToolChangeEvent){
 					BrushToolChangeEvent btcEvent = (BrushToolChangeEvent)event;
@@ -419,10 +422,14 @@ public class Workspace extends Group{
 		});
 		
 //////////////////////////////////////////////////
-		//////// INSTRUCTION SCREEN //////////
+		//////// INSTRUCTION  //////////
 /////////////////////////////////////////////////////
-		
-		final TextureRegion instructScreen = ng.getManager().getMiscAtlas().findRegion("instruct");
+		final Group instructionPanel = new InstructionPanel(ng);
+		instructionPanel.setPosition(20,150);		
+		instructionPanel.setVisible(false);
+		this.addActorAfter(Workspace.this.findActor(bottomActorName), instructionPanel);
+		qTool.setPanel(instructionPanel);	
+/*		final TextureRegion instructScreen = ng.getManager().getMiscAtlas().findRegion("instruct");
 		final Image instructActor = new Image(instructScreen);
 		instructActor.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -443,7 +450,7 @@ public class Workspace extends Group{
 		instructActor.setBounds(20,150, 980, 500);		
 		instructActor.setVisible(false);
 		this.addActorAfter(Workspace.this.findActor(bottomActorName), instructActor);
-		qTool.setPanel(instructActor);
+		qTool.setPanel(instructActor);*/
 		
 //////////////////////////////////////////////////
 			//////// NIKOL LETTER //////////
@@ -454,7 +461,7 @@ public class Workspace extends Group{
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				if(x>445 && x<518 && y>162 && y<231){
 					event.getTarget().remove();
-					instructActor.setVisible(true);
+					instructionPanel.setVisible(true);
 				}
 				return false;
 			}
@@ -467,33 +474,45 @@ public class Workspace extends Group{
 		
 		///////////////////////////////
 		//////// AUTHORS //////////
-		//////////////////////////////		
+		//////////////////////////////
+		final Group athorsPanel = new AuthorsPanel(ng);
+		athorsPanel.setPosition(20,150);		
+		athorsPanel.setVisible(false);
+		this.addActorAfter(Workspace.this.findActor(bottomActorName), athorsPanel);
+		settingsPanel.setAuthorsPanel(athorsPanel);;	
+		
+/*		final Group authorsPanel = new Group();
+		authorsPanel.setBounds(20,150, 980, 500);		
+		authorsPanel.setVisible(false);
+
 		final TextureRegion authors = ng.getManager().getMiscAtlas().findRegion("authorsPanel");
 		Image authorsAct = new Image(authors);
-		authorsAct.addListener(new InputListener(){
+		authorsPanel.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 			if(x>817 && x<889 && y>101 && y<169){
-				event.getTarget().setVisible(false);
+				event.getListenerActor().setVisible(false);
 				
 				
 				ng.getContext().setProperty(ContextProperty.PREPARED, true) ;
 				ng.getContext().setProperty(ContextProperty.HALT, false) ;
 				fire(new ContextChangeEvent());
 			}
-			return false;
+				return false;
 			}
 		});						
-		authorsAct.setBounds(20,150, 980, 500);		
-		authorsAct.setVisible(false);
-		this.addActorAfter(Workspace.this.findActor(bottomActorName), authorsAct);
-		settingsPanel.setAuthorsPanel(authorsAct);
+		authorsAct.setBounds(0, 0, authorsPanel.getWidth(), authorsPanel.getHeight());		
+		authorsPanel.addActor(authorsAct);		
+		authorsPanel.addListener(new MetricListener());
+		this.addActorAfter(Workspace.this.findActor(bottomActorName), authorsPanel);
+		settingsPanel.setAuthorsPanel(authorsPanel);*/
+
 
 
 		
 		///////////////////////////////
 		//////// ADULTS PANEL //////////
 		//////////////////////////////		
-		final TextureRegion adultsPanel = ng.getManager().getMiscAtlas().findRegion("adultsPanel");
+/*		final TextureRegion adultsPanel = ng.getManager().getMiscAtlas().findRegion("adultsPanel");
 		Image adultsAct = new Image(adultsPanel);
 		adultsAct.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -511,8 +530,12 @@ public class Workspace extends Group{
 		adultsAct.setBounds(20,150, 980, 500);		
 		adultsAct.setVisible(false);
 		this.addActorAfter(Workspace.this.findActor(bottomActorName), adultsAct);
-		settingsPanel.setAdultsPanel(adultsAct);
-						
+		settingsPanel.setAdultsPanel(adultsAct);*/
+		final Group adults2Panel = new AdultsPanel(ng);
+		adults2Panel.setPosition(20,150);		
+		adults2Panel.setVisible(false);
+		this.addActorAfter(Workspace.this.findActor(bottomActorName), adults2Panel);
+		settingsPanel.setAdultsPanel(adults2Panel);			
 		
 		///////////////////////////////
 		//////// HINT PANEL //////////
@@ -527,7 +550,6 @@ public class Workspace extends Group{
 				
 				ng.getContext().setProperty(ContextProperty.PREPARED, true) ;
 				ng.getContext().setProperty(ContextProperty.HALT, false) ;
-				fire(new ContextChangeEvent());
 			}
 			return false;
 			}
@@ -548,6 +570,7 @@ public class Workspace extends Group{
 		ptGroup.addTool(settingTool);
 		ptGroup.addTool(shopTool);
 		ptGroup.addTool(letterTool);
+	
 		
 		
 		registerStateListener(linkTool);

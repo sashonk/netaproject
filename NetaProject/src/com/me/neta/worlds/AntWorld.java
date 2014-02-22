@@ -49,7 +49,7 @@ public class AntWorld extends World{
 	}
 
 	@Override
-	public void populate() {
+	public void populateBackground() {
 		Image flower1 = new Image(ng.getManager().getAtlas().findRegion("ZVET3"));
 		flower1.setBounds(162, 80, 57,73);
 		addActor(flower1);
@@ -57,12 +57,9 @@ public class AntWorld extends World{
 		Image flower2 = new Image(ng.getManager().getAtlas().findRegion("ZVET4"));
 		flower2.setBounds(900, 80,57,57);
 		addActor(flower2);	
+	}
 		
-		Actor zactor = new Actor();
-		zactor.setName("zactor");
-		addActor(zactor);
-		
-
+	public void populateForeground() {
 		Hero ant2 = new Hero(ng, "ant2");
 		ant2.setBounds(800, 260, 55, 115);
 		ant2.setZIndex(9);
