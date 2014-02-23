@@ -15,6 +15,7 @@ public class NetaGame implements ApplicationListener {
 	
 	
 	 Native natiff;
+	 boolean error = false;
 	
 	public Native getNative(){
 		return natiff;
@@ -89,10 +90,18 @@ public class NetaGame implements ApplicationListener {
 	
 		try{
 			stage.draw();	
-			stage.act();
+			
+			if(!error){
+				stage.act();
+			}
+			else{
+				if(Gdx.input.isTouched()){
+					Gdx.app.exit();
+				}			}
 		}
 		catch(Exception ex){
 			MessageHelper.error(this, "Критическая ошибка!", ex);
+			error = true;
 		}
 
 		

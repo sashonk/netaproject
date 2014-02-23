@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -49,8 +51,8 @@ public class MessageHelper {
 		ng.getContext().setProperty(ContextProperty.HALT, true);
 	}
 	
-	
-	public static void error(NetaGame ng,String text, Throwable t){
+	public static void error(NetaGame ng,String text, Throwable t, boolean critical){
+
 		hide(ng);
 		
 		
@@ -79,9 +81,25 @@ public class MessageHelper {
 		group.setZIndex(110);
 		group.setName("message");
 		
-		group.addAction(Actions.delay(10, Actions.removeActor()));
+		if(!critical){
+			group.addAction(Actions.delay(5, Actions.removeActor()));
+		}
+		else{
+			group.addListener(new InputListener(){
+				public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+					Gdx.app.exit();
+					return false;
+				}
+			});
+		}
 
 		ng.getContext().setProperty(ContextProperty.HALT, true);
+	
+	}
+
+		
+	public static void error(NetaGame ng,String text, Throwable t){
+		error(ng, text, t, false);
 	}
 	
 	public static void notify(NetaGame ng, String text){
