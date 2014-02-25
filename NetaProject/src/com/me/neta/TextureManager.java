@@ -61,7 +61,6 @@ public class TextureManager {
 	
 	public void init(){
 		atlas = new TextureAtlas(Gdx.files.internal("data/main.pack"));
-		//fieldsAtlas = new TextureAtlas(Gdx.files.internal("data/fields/fields.pack"));
 		miscAtlas = new TextureAtlas(Gdx.files.internal("data/misc/misc.pack"));
 
 		fields.add(new Texture(Gdx.files.internal("data/field1.jpg")));
@@ -69,46 +68,34 @@ public class TextureManager {
 		fields.add(new Texture(Gdx.files.internal("data/field3.jpg")));
 		fields.add(new Texture(Gdx.files.internal("data/field4.jpg")));
 		
+		skin = new Skin();
+
+
 		
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/arialbd.ttf"));
-		 BitmapFont cyrillicFont = generator.generateFont(12,DEFAULT_CHARS, false);
-		 BitmapFont cyrillicFont2 = generator.generateFont(14,DEFAULT_CHARS, false);		 
-		generator.dispose();
-		
-		
-        FreeTypeFontGenerator generatorCalibri = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/calibri.ttf"));
+        FreeTypeFontGenerator generatorCalibri = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/wonderland.ttf"));
 		BitmapFont calibri12 = generatorCalibri.generateFont(12,DEFAULT_CHARS, false);
 		BitmapFont calibri14 = generatorCalibri.generateFont(14,DEFAULT_CHARS, false);
 		BitmapFont calibri16 = generatorCalibri.generateFont(16,DEFAULT_CHARS, false);
 		BitmapFont calibri18 = generatorCalibri.generateFont(18,DEFAULT_CHARS, false);
 		generatorCalibri.dispose();
 		
+		skin.add("calibri12", calibri12);
+		skin.add("calibri14", calibri14);
+		skin.add("default", calibri14);
+		skin.add("calibri16", calibri16);
+		skin.add("calibri18", calibri18);
 
-		wonderlandFont = new BitmapFont(Gdx.files.internal("data/fonts/wond.fnt"), false);
-		
-		calibriFont = new BitmapFont(Gdx.files.internal("data/fonts/calibri.fnt"), false);
-		
-		calibri14Font = new BitmapFont(Gdx.files.internal("data/fonts/calibri14.fnt"), false);
 
-		
 		bottomPanelTexture = new Texture(Gdx.files.internal("data/panel.png"));
-		
 		nickolLetter = new Texture(Gdx.files.internal("data/nikol.jpg"));
-		
 		 nikolLetterRegion = new TextureRegion(nickolLetter, 0, 0, 925, 433);
-		
 		 instructScreen = new Texture(Gdx.files.internal("data/instruct.jpg"));
-		 
 		 instructScreenReg =  new TextureRegion(instructScreen, 0, 0, 925, 433);
-		 
 		 np9 = new Texture(Gdx.files.internal("data/np.png"));
-		 
 		 np9Error = new Texture(Gdx.files.internal("data/errnp.png"));
 		
-		skin = new Skin();
-		
-		skin.add("default", calibriFont);
-		skin.add("violet_calibri14", calibri14Font);
+
+
 		
 		 Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
          pixmap.setColor(Color.WHITE);
@@ -118,10 +105,7 @@ public class TextureManager {
          pixmap.setColor(Color.BLACK);
          pixmap.fill();
          skin.add("black", new Texture(pixmap));
-         
-         
-         
-         
+                           
          pixmap.setColor(Color.GRAY);
          pixmap.fill();
          skin.add("gray", new Texture(pixmap));
@@ -129,8 +113,7 @@ public class TextureManager {
          pixmap.setColor(new Color(112/255f, 207/255f, 238/255f, 1));
          pixmap.fill();
          skin.add("blue", new Texture(pixmap));
-         
-         
+                  
          Pixmap p2 = new Pixmap(4, 4, Format.RGBA8888);
          p2.setColor(Color.BLACK);
          p2.fill();
@@ -175,16 +158,6 @@ public class TextureManager {
          labelStyle.fontColor = Color.BLACK;
          skin.add("default", labelStyle);
          
-         LabelStyle labelStyleCalibri14Violet = new LabelStyle();
-         labelStyleCalibri14Violet.font = calibri14Font;
-         labelStyleCalibri14Violet.fontColor = new Color(.22f, .08f, .45f,1);
-         skin.add("violet_calibri14", labelStyleCalibri14Violet);
-         
-    
-         LabelStyle labelStyleLyricTitle = new LabelStyle();
-         labelStyleLyricTitle.font = skin.getFont("violet_calibri14");                 
-         labelStyleLyricTitle.fontColor = new Color(.22f, .08f, .45f,1);
-         skin.add("lyrics", labelStyleLyricTitle);
          
          skin.add("system", new NinePatch(atlas.findRegion("npsystem"), 8, 8, 8, 8));
          skin.add("error", new NinePatch(atlas.findRegion("nperror"), 8, 8, 8, 8));
@@ -200,71 +173,71 @@ public class TextureManager {
  		
  		
         TextButtonStyle tbStyleSystem = new TextButtonStyle();
-        tbStyleSystem.font = cyrillicFont;
+        tbStyleSystem.font = calibri12;
         tbStyleSystem.fontColor = Color.BLACK;
         tbStyleSystem.up = npd;
         skin.add("system", tbStyleSystem);
         
         TextButtonStyle tbStyleError = new TextButtonStyle();
-        tbStyleError.font = cyrillicFont;
+        tbStyleError.font = calibri12;
         tbStyleError.fontColor = Color.BLACK;
         tbStyleError.up = npdError;
         skin.add("error", tbStyleError);
  		
  		LabelStyle lStyleSystem = new LabelStyle();
- 		lStyleSystem.font = cyrillicFont;
+ 		lStyleSystem.font = calibri12;
  		lStyleSystem.fontColor = Color.BLACK;
  		//lStyleSystem.background = skin.getDrawable("npd");
  		skin.add("system", lStyleSystem);
  		
         TextFieldStyle tfStyleSystem = new TextFieldStyle();
-        tfStyleSystem.font = cyrillicFont;
+        tfStyleSystem.font = calibri12;
         tfStyleSystem.fontColor = Color.BLACK;
        // tfStyleSystem.background = skin.getDrawable("gray");
         tfStyleSystem.selection = skin.getDrawable("blue");
         tfStyleSystem.cursor = skin.getDrawable("black");	 	
-        tfStyleSystem.messageFont = cyrillicFont;
+        tfStyleSystem.messageFont = calibri12;
         tfStyleSystem.messageFontColor = Color.GRAY;
         skin.add("system", tfStyleSystem);
  		
    	
  		
         TextFieldStyle tfStyleSystem2 = new TextFieldStyle();
-        tfStyleSystem2.font = cyrillicFont2;
+        tfStyleSystem2.font = calibri14;
         tfStyleSystem2.fontColor = Color.BLACK;
        // tfStyleSystem.background = skin.getDrawable("gray");
         tfStyleSystem2.selection = skin.getDrawable("blue");
         tfStyleSystem2.cursor = skin.getDrawable("black");	 	
-        tfStyleSystem2.messageFont = cyrillicFont2;
+        tfStyleSystem2.messageFont = calibri14;
         tfStyleSystem2.messageFontColor = Color.GRAY;
         skin.add("system2", tfStyleSystem2);        
         
  		
         LabelStyle lStyleSystem2 = new LabelStyle();
-        lStyleSystem2.font = cyrillicFont2;
+        lStyleSystem2.font = calibri14;
         lStyleSystem2.fontColor = Color.BLACK;
         skin.add("system2", lStyleSystem2);   
         
  		TextFieldStyle tfStyleTextAnt = new TextFieldStyle();
- 		tfStyleTextAnt.font = cyrillicFont;
+ 		tfStyleTextAnt.font = calibri12;
  		tfStyleTextAnt.fontColor = new Color(215/255f, 100/255f, 40/255f, 1);
  		tfStyleTextAnt.cursor = skin.getDrawable("black");	 	
  		skin.add("ant", tfStyleTextAnt);
  		
  		TextFieldStyle tfStyleTextPiton = new TextFieldStyle();
- 		tfStyleTextPiton.font = cyrillicFont;
+ 		tfStyleTextPiton.font = calibri12;
  		tfStyleTextPiton.fontColor =Color.RED;
  		tfStyleTextPiton.cursor = skin.getDrawable("black");	 	 		
  		skin.add("piton", tfStyleTextPiton);
  		
  		TextFieldStyle tfStyleTextTiger = new TextFieldStyle();
- 		tfStyleTextTiger.font = cyrillicFont;
+ 		tfStyleTextTiger.font = calibri12;
  		tfStyleTextTiger.fontColor = Color.GREEN;
  		tfStyleTextTiger.cursor = skin.getDrawable("black");	 	 		 		
  		skin.add("tiger", tfStyleTextTiger);
 
  		TextFieldStyle tfStyleTextSpider = new TextFieldStyle();
- 		tfStyleTextSpider.font = cyrillicFont;
+ 		tfStyleTextSpider.font = calibri12;
  		tfStyleTextSpider.fontColor = Color.YELLOW;
  		tfStyleTextSpider.cursor = skin.getDrawable("black");	 	 		 		 		
  		skin.add("spider", tfStyleTextSpider);
@@ -273,24 +246,24 @@ public class TextureManager {
 	
  		
  		LabelStyle lStyleTextAnt = new LabelStyle();
- 		lStyleTextAnt.font = cyrillicFont;
+ 		lStyleTextAnt.font = calibri12;
  		lStyleTextAnt.fontColor = new Color(215/255f, 100/255f, 40/255f, 1);
  		skin.add("ant", lStyleTextAnt);
  		
  	
  		
  		LabelStyle lStyleTextPiton = new LabelStyle();
- 		lStyleTextPiton.font = cyrillicFont;
+ 		lStyleTextPiton.font = calibri12;
  		lStyleTextPiton.fontColor =Color.RED;
  		skin.add("piton", lStyleTextPiton);
  		
  		LabelStyle lStyleTextTiger = new LabelStyle();
- 		lStyleTextTiger.font = cyrillicFont;
+ 		lStyleTextTiger.font = calibri12;
  		lStyleTextTiger.fontColor = Color.GREEN;
  		skin.add("tiger", lStyleTextTiger);
 
  		LabelStyle lStyleTextSpider = new LabelStyle();
- 		lStyleTextSpider.font = cyrillicFont;
+ 		lStyleTextSpider.font = calibri12;
  		lStyleTextSpider.fontColor = Color.YELLOW;
  		skin.add("spider", lStyleTextSpider);
  		
@@ -307,25 +280,25 @@ public class TextureManager {
  		
  		LabelStyle lStyleLyricsBlue = new LabelStyle();
  		//lStyleLyricsBlue.background =skin.getDrawable("black");
- 		lStyleLyricsBlue.font = cyrillicFont2;
+ 		lStyleLyricsBlue.font = calibri14;
  		lStyleLyricsBlue.fontColor = new Color(151 / 255f, 158 / 255f , 212 / 255f, 1);
  		skin.add("lyricsBlue", lStyleLyricsBlue);
  		
  		LabelStyle lStyleLyricsGreen = new LabelStyle();
  		lStyleLyricsGreen.background =skin.getDrawable("lyrics");
- 		lStyleLyricsGreen.font = cyrillicFont2;
+ 		lStyleLyricsGreen.font = calibri14;
  		lStyleLyricsGreen.fontColor =  new Color(67 / 255f, 178 / 255f , 73 / 255f, 1);
  		skin.add("lyricsGreen", lStyleLyricsGreen);
  		
  		LabelStyle lStyleLyricsBlack = new LabelStyle();
  		lStyleLyricsBlack.background =skin.getDrawable("lyrics");
- 		lStyleLyricsBlack.font = cyrillicFont2;
+ 		lStyleLyricsBlack.font = calibri14;
  		lStyleLyricsBlack.fontColor =  new Color(34 / 255f, 30 / 255f , 31 / 255f, 1);;
  		skin.add("lyricsBlack", lStyleLyricsBlack);
  		
  		LabelStyle lStyleLyricsYellow = new LabelStyle();
  		lStyleLyricsYellow.background =skin.getDrawable("lyrics");
- 		lStyleLyricsYellow.font = cyrillicFont2;
+ 		lStyleLyricsYellow.font = calibri14;
  		lStyleLyricsYellow.fontColor =  new Color(246 / 255f, 177 / 255f , 12 / 255f, 1);
  		skin.add("lyricsYellow", lStyleLyricsYellow);
          
@@ -491,13 +464,9 @@ public class TextureManager {
 	
 	////////////// FONTS /////////////////
 	
-	public BitmapFont getWonderlandFont(){
-		return wonderlandFont;
-	}
+
 	
-	public BitmapFont getCalibriFont(){
-		return calibriFont;
-	}
+
 	
 	public void showMessage(String msg){
 		System.out.println(msg);
@@ -515,11 +484,8 @@ public class TextureManager {
 	
 	private TextureAtlas miscAtlas;
 	
-	private BitmapFont wonderlandFont ;
 	
-	private BitmapFont calibriFont;
 	
-	private BitmapFont calibri14Font;
 	
 	private Texture bottomPanelTexture;
 	
@@ -549,16 +515,11 @@ public class TextureManager {
 			iter.remove();
 		}
 
-		
 		bottomPanelTexture.dispose();
-		wonderlandFont.dispose();
-		calibriFont.dispose();
 		skin.dispose();
-		calibri14Font.dispose();
 		nickolLetter.dispose();
 		instructScreen.dispose();
 		
-
 		Iterator<Map<Color, Texture>> rootIter = data.values().iterator();
 		while(rootIter.hasNext()){
 			Map<Color, Texture> map = rootIter.next();
