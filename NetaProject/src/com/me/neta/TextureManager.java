@@ -1,5 +1,6 @@
 package com.me.neta;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -59,6 +60,8 @@ public class TextureManager {
 	
 	private Texture np9Error;
 	
+
+	
 	public void init(){
 		atlas = new TextureAtlas(Gdx.files.internal("data/main.pack"));
 		miscAtlas = new TextureAtlas(Gdx.files.internal("data/misc/misc.pack"));
@@ -70,9 +73,33 @@ public class TextureManager {
 		
 		skin = new Skin();
 
+///////////////////////////////////////////////
+///////////	 WONDERLAND 	/////////////
+//////////////////////////////////////////////
+FreeTypeFontGenerator wondGenerator = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/wonderland.ttf"));
+BitmapFont wond12 = wondGenerator.generateFont(12,DEFAULT_CHARS, false);
+BitmapFont wond14 = wondGenerator.generateFont(14,DEFAULT_CHARS, false);
+BitmapFont wond16 = wondGenerator.generateFont(16,DEFAULT_CHARS, false);
+BitmapFont wond18 = wondGenerator.generateFont(18,DEFAULT_CHARS, false);
+BitmapFont wond20 = wondGenerator.generateFont(20,DEFAULT_CHARS, false);
+BitmapFont wond28 = wondGenerator.generateFont(28,DEFAULT_CHARS, false);
+BitmapFont wond36 = wondGenerator.generateFont(36,DEFAULT_CHARS, false);
 
-		
-        FreeTypeFontGenerator generatorCalibri = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/wonderland.ttf"));
+wondGenerator.dispose();
+
+	skin.add("wond12", wond12);
+	skin.add("wond14", wond14);
+	skin.add("wond16", wond16);
+	skin.add("wond18", wond18);
+	skin.add("wond20", wond20);
+	skin.add("wond28", wond28);
+	skin.add("wond36", wond36);
+	skin.add("title", wond28);
+
+///////////////////////////////////////////////
+///////////	 CALIBRI 	/////////////
+//////////////////////////////////////////////	
+        FreeTypeFontGenerator generatorCalibri = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/calibri.ttf"));
 		BitmapFont calibri12 = generatorCalibri.generateFont(12,DEFAULT_CHARS, false);
 		BitmapFont calibri14 = generatorCalibri.generateFont(14,DEFAULT_CHARS, false);
 		BitmapFont calibri16 = generatorCalibri.generateFont(16,DEFAULT_CHARS, false);
@@ -95,8 +122,6 @@ public class TextureManager {
 		 np9Error = new Texture(Gdx.files.internal("data/errnp.png"));
 		
 
-
-		
 		 Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
          pixmap.setColor(Color.WHITE);
          pixmap.fill();
@@ -210,8 +235,7 @@ public class TextureManager {
         tfStyleSystem2.cursor = skin.getDrawable("black");	 	
         tfStyleSystem2.messageFont = calibri14;
         tfStyleSystem2.messageFontColor = Color.GRAY;
-        skin.add("system2", tfStyleSystem2);        
-        
+        skin.add("system2", tfStyleSystem2);                
  		
         LabelStyle lStyleSystem2 = new LabelStyle();
         lStyleSystem2.font = calibri14;
@@ -242,15 +266,10 @@ public class TextureManager {
  		tfStyleTextSpider.cursor = skin.getDrawable("black");	 	 		 		 		
  		skin.add("spider", tfStyleTextSpider);
  		
- 
-	
- 		
  		LabelStyle lStyleTextAnt = new LabelStyle();
  		lStyleTextAnt.font = calibri12;
  		lStyleTextAnt.fontColor = new Color(215/255f, 100/255f, 40/255f, 1);
  		skin.add("ant", lStyleTextAnt);
- 		
- 	
  		
  		LabelStyle lStyleTextPiton = new LabelStyle();
  		lStyleTextPiton.font = calibri12;
@@ -267,9 +286,77 @@ public class TextureManager {
  		lStyleTextSpider.fontColor = Color.YELLOW;
  		skin.add("spider", lStyleTextSpider);
  		
+///////////////////////////////////////////////
+///////////	 TITLES 	/////////////
+////////////////////////////////////////////// 		
+ 		LabelStyle titleOrange = new LabelStyle();
+ 		titleOrange.font = skin.getFont("title");
+ 		titleOrange.fontColor = Color.ORANGE;
+ 		skin.add("title_orange", titleOrange);	
  		
-
-
+ 		LabelStyle titleRed = new LabelStyle();
+ 		titleRed.font = skin.getFont("title");
+ 		titleRed.fontColor = Color.RED;
+ 		skin.add("title_red", titleRed);	
+ 		
+ 		LabelStyle titleBlue = new LabelStyle();
+ 		titleBlue.font = skin.getFont("title");
+ 		titleBlue.fontColor = Color.BLUE;
+ 		skin.add("title_blue", titleBlue);	
+ 		
+ 		LabelStyle titleGreen = new LabelStyle();
+ 		titleGreen.font = skin.getFont("title");
+ 		titleGreen.fontColor = Color.GREEN;
+ 		skin.add("title_green", titleGreen);	
+ 		
+ 		LabelStyle titleYellow = new LabelStyle();
+ 		titleYellow.font = skin.getFont("title");
+ 		titleYellow.fontColor = Color.YELLOW;
+ 		skin.add("title_yellow", titleYellow);	
+ 		
+ 		LabelStyle titleGray = new LabelStyle();
+ 		titleGray.font = skin.getFont("title");
+ 		titleGray.fontColor = Color.GRAY;
+ 		skin.add("title_gray", titleGray);
+ 		
+ 		LabelStyle titleViolet = new LabelStyle();
+ 		titleViolet.font = skin.getFont("title");
+ 		titleViolet.fontColor = Colors.DarkViolet;
+ 		skin.add("title_violet", titleViolet);	
+ 		
+///////////////////////////////////////////////
+///////////	 MULTICOLOR 	/////////////
+//////////////////////////////////////////////
+		LabelStyle orange = new LabelStyle();
+		orange.font = skin.getFont("default");
+		orange.fontColor = Color.ORANGE;
+		skin.add("orange", orange);	
+		
+		LabelStyle red = new LabelStyle();
+		red.font = skin.getFont("default");
+		red.fontColor = Color.RED;
+		skin.add("red", red);	
+		
+		LabelStyle blue = new LabelStyle();
+		blue.font = skin.getFont("default");
+		blue.fontColor = Color.BLUE;
+		skin.add("blue", blue);	
+		
+		LabelStyle green = new LabelStyle();
+		green.font = skin.getFont("default");
+		green.fontColor = Color.GREEN;
+		skin.add("green", green);	
+		
+		LabelStyle yellow = new LabelStyle();
+		yellow.font = skin.getFont("default");
+		yellow.fontColor = Color.YELLOW;
+		skin.add("yellow", yellow);	
+		
+		LabelStyle gray = new LabelStyle();
+		gray.font = skin.getFont("default");
+		gray.fontColor = Color.GRAY;
+		skin.add("gray", gray);	 		
+		
 ///////////////////////////////////////////////
        ///////////	 LYRICS 	/////////////
 //////////////////////////////////////////////
@@ -361,6 +448,13 @@ public class TextureManager {
  		//listStyle.
  		skin.add("default", listStyle);
  		
+ 		try {
+			Gdx.files.absolute("D:\\skin.json").file().createNewFile();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+ 		skin.load(Gdx.files.absolute("D:\\skin.json"));
 	}
 	
 

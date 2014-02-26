@@ -19,11 +19,13 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldFilter;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
+import com.badlogic.gdx.utils.StringBuilder;
 import com.me.neta.events.LyricsIconEvent;
 import com.me.neta.events.ZIndexEvent;
 import com.me.neta.figures.AbstractFigure;
@@ -65,6 +67,31 @@ public abstract class World extends Group{
 	
 	public boolean verticalTopPanel(){
 		return false;
+	}
+	
+	public boolean showPassport(){
+		return true;
+	}
+	
+	
+	public static Actor multiColorLabel(String text, String baseStyle, String[] colorNames, Skin skin){
+		Table table = new Table();
+		boolean styleSet = false;
+		for(int i = 0; i<text.length(); i++){
+			char c = text.charAt(i);
+			
+			
+			String style =new StringBuilder(baseStyle).append("_").append(colorNames[i]).toString() ; 									
+			Label label = new Label(new String(new char[]{c}), skin, style);
+			if(!styleSet){
+				table.defaults().padRight(label.getStyle().font.getBounds(" ").width);
+				styleSet = true;
+			}
+			table.add(label);
+		}
+		table.pack();
+		
+		return table;
 	}
 
 	public World(NetaGame ng, float width, float height){
@@ -172,6 +199,9 @@ public abstract class World extends Group{
 	textGroup.setName("passport");
 	addActor(textGroup);
 	textImg.addListener(new MetricListener());
+	
+	
+	textGroup.setVisible(showPassport());
 ////////////////////////////////////////////////
 ////////////////////////////////////////////////
 
