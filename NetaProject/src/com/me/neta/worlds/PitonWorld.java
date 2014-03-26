@@ -8,6 +8,7 @@ import com.me.neta.Hero;
 import com.me.neta.NetaGame;
 import com.me.neta.Piton;
 import com.me.neta.TextureManager;
+import com.me.neta.Util;
 import com.me.neta.World;
 
 public class PitonWorld extends World{
@@ -16,31 +17,20 @@ public class PitonWorld extends World{
 		super(ng, width, height);
 		setColor(new Color(182/255f, 221/255f, 200/255f, 1));
 	}
-
+	
+	public String getPassportColor(){
+		return "piton";
+	}
+	
+	public String getAuthors(){
+		return "Владимир Орлов";
+	}
+	
 	@Override
-	public Rectangle getAuthorBounds() {
-		return new Rectangle(122, 32, 100, FIELD_HEIGHT);
+	public Actor createTitle() {
+		return Util.multiColorLabel("питон", "title", new String[]{"red", "orange", "yellow", "green", "blue"}, ng.getManager().getSkin());
 	}
 
-	@Override
-	public Rectangle getAgeBounds() {
-		return new Rectangle(263, 33, 21, FIELD_HEIGHT);
-	}
-
-	@Override
-	public Rectangle getCityBounds() {
-		return new Rectangle(86, 6, 72, FIELD_HEIGHT);
-	}
-
-	@Override
-	public Rectangle getStateBounds() {
-		return new Rectangle(200, 6, 262-198, FIELD_HEIGHT);
-	}
-
-	@Override
-	public Rectangle getYearBounds() {
-		return new Rectangle(285, 6, 324-285, FIELD_HEIGHT);
-	}
 
 	@Override
 	public String getTitle() {

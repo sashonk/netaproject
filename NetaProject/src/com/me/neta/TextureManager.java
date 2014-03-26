@@ -94,12 +94,12 @@ wondGenerator.dispose();
 	skin.add("wond20", wond20);
 	skin.add("wond28", wond28);
 	skin.add("wond36", wond36);
-	skin.add("title", wond28);
+	skin.add("title", wond36);
 
 ///////////////////////////////////////////////
 ///////////	 CALIBRI 	/////////////
 //////////////////////////////////////////////	
-        FreeTypeFontGenerator generatorCalibri = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/calibri.ttf"));
+        FreeTypeFontGenerator generatorCalibri = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/arialbd.ttf"));
 		BitmapFont calibri12 = generatorCalibri.generateFont(12,DEFAULT_CHARS, false);
 		BitmapFont calibri14 = generatorCalibri.generateFont(14,DEFAULT_CHARS, false);
 		BitmapFont calibri16 = generatorCalibri.generateFont(16,DEFAULT_CHARS, false);
@@ -267,22 +267,22 @@ wondGenerator.dispose();
  		skin.add("spider", tfStyleTextSpider);
  		
  		LabelStyle lStyleTextAnt = new LabelStyle();
- 		lStyleTextAnt.font = calibri12;
+ 		lStyleTextAnt.font = skin.getFont("default");
  		lStyleTextAnt.fontColor = new Color(215/255f, 100/255f, 40/255f, 1);
  		skin.add("ant", lStyleTextAnt);
  		
  		LabelStyle lStyleTextPiton = new LabelStyle();
- 		lStyleTextPiton.font = calibri12;
+ 		lStyleTextPiton.font = skin.getFont("default");
  		lStyleTextPiton.fontColor =Color.RED;
  		skin.add("piton", lStyleTextPiton);
  		
  		LabelStyle lStyleTextTiger = new LabelStyle();
- 		lStyleTextTiger.font = calibri12;
+ 		lStyleTextTiger.font =skin.getFont("default");
  		lStyleTextTiger.fontColor = Color.GREEN;
  		skin.add("tiger", lStyleTextTiger);
 
  		LabelStyle lStyleTextSpider = new LabelStyle();
- 		lStyleTextSpider.font = calibri12;
+ 		lStyleTextSpider.font = skin.getFont("default");
  		lStyleTextSpider.fontColor = Color.YELLOW;
  		skin.add("spider", lStyleTextSpider);
  		
@@ -321,11 +321,11 @@ wondGenerator.dispose();
  		
  		LabelStyle titleViolet = new LabelStyle();
  		titleViolet.font = skin.getFont("title");
- 		titleViolet.fontColor = Colors.DarkViolet;
+ 		titleViolet.fontColor = Colors.Violet;
  		skin.add("title_violet", titleViolet);	
  		
 ///////////////////////////////////////////////
-///////////	 MULTICOLOR 	/////////////
+///////////	 LABELs 	/////////////
 //////////////////////////////////////////////
 		LabelStyle orange = new LabelStyle();
 		orange.font = skin.getFont("default");
@@ -355,7 +355,28 @@ wondGenerator.dispose();
 		LabelStyle gray = new LabelStyle();
 		gray.font = skin.getFont("default");
 		gray.fontColor = Color.GRAY;
-		skin.add("gray", gray);	 		
+		skin.add("gray", gray);	 	
+		
+		LabelStyle violet = new LabelStyle();
+		violet.font = skin.getFont("default");
+		violet.fontColor = Colors.DarkViolet;
+		skin.add("darkViolet", violet);	 	
+		
+		LabelStyle dsb = new LabelStyle();
+		dsb.font = skin.getFont("default");
+		dsb.fontColor = Colors.DeepBlue;
+		skin.add("deepBlue", dsb);	 	
+		
+		LabelStyle metal = new LabelStyle();
+		metal.font = skin.getFont("default");
+		metal.fontColor = Colors.MetalGray;
+		skin.add("metal", metal);	 
+		
+		LabelStyle lightBlue = new LabelStyle();
+		//lightBlue.background = skin.getDrawable("white");
+		lightBlue.font = skin.getFont("default");
+		lightBlue.fontColor = Colors.LightBlue;
+		skin.add("lightBlue", lightBlue);	 
 		
 ///////////////////////////////////////////////
        ///////////	 LYRICS 	/////////////
@@ -448,13 +469,7 @@ wondGenerator.dispose();
  		//listStyle.
  		skin.add("default", listStyle);
  		
- 		try {
-			Gdx.files.absolute("D:\\skin.json").file().createNewFile();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
- 		skin.load(Gdx.files.absolute("D:\\skin.json"));
+
 	}
 	
 

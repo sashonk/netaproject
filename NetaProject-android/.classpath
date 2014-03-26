@@ -6,7 +6,7 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="lib" path="/NetaProject/libs/gdx.jar" sourcepath="/NetaProject/libs/gdx-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="/NetaProject/libs/gdx-freetype.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/gdx-backend-android.jar" sourcepath="C:/Users/Alexander/Desktop/gdx-backend-android-sources.jar">
+	<classpathentry exported="true" kind="lib" path="libs/gdx-backend-android.jar" sourcepath="libs/gdx-backend-android-sources.jar">
 		<attributes>
 			<attribute name="source_encoding" value="UTF-8"/>
 		</attributes>

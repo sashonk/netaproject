@@ -85,25 +85,35 @@ public class PassportForm extends Group{
 	}
 	
 	public void update(Passport passport){
-//		form.
-		passport.name = tfName.getText();
-		
+		if(tfName.getText().length()>0){
+			passport.name = tfName.getText();
+		}
+		else{
+			passport.name = null;
+		}		
 		if(tfAge.getText().length()>0)
-		passport.age = Integer.valueOf(tfAge.getText());
+			passport.age = Integer.valueOf(tfAge.getText());
 		else{
 			passport.age = null;
-		}
-		
+		}		
 		if(tfYear.getText().length()>0){
 			passport.year = Integer.valueOf(tfYear.getText());
 		}
 		else{
 			passport.year = null;
+		}		
+		if(tfState.getText().length()>0){
+			passport.country = tfState.getText();
 		}
-		
-		passport.country = tfState.getText();
-		passport.city = tfCity.getText();
-				
+		else{
+			passport.country = null;
+		}
+		if(tfCity.getText().length()>0){
+			passport.city = tfCity.getText();
+		}
+		else{
+			passport.city = null;
+		}
 	}
 	
 

@@ -8,6 +8,7 @@ import com.me.neta.Ant;
 import com.me.neta.Hero;
 import com.me.neta.NetaGame;
 import com.me.neta.TextureManager;
+import com.me.neta.Util;
 import com.me.neta.World;
 
 public class AntWorld extends World{
@@ -17,30 +18,26 @@ public class AntWorld extends World{
 		// TODO Auto-generated constructor stub
 		setColor(new Color(.72f, .86f, .48f, 1));
 	}
-
+	
+	public String getPassportColor(){
+		return "ant";
+	}
+	
+	public String getAuthors(){
+		return "Вадим Левин и Рената Муха";
+	}
+	
 	@Override
-	public Rectangle getAuthorBounds() {
-		return new Rectangle(122, 40, 100, FIELD_HEIGHT);
+	public Actor createTitle() {
+		return Util.multiColorLabel("муравей", "title", new String[]{"red", "orange", "yellow", "green", "blue", "green", "orange"}, ng.getManager().getSkin());
 	}
 
 	@Override
-	public Rectangle getAgeBounds() {
-		return new Rectangle(267, 40, 21, FIELD_HEIGHT);
-	}
-
-	@Override
-	public Rectangle getCityBounds() {
-		return new Rectangle(86, 7, 72, FIELD_HEIGHT);
-	}
-
-	@Override
-	public Rectangle getStateBounds() {
-		return new Rectangle(200, 7, 262-198, FIELD_HEIGHT);
-	}
-
-	@Override
-	public Rectangle getYearBounds() {
-		return new Rectangle(285, 7, 324-285, FIELD_HEIGHT);
+	protected
+	void createCellars(){
+		Image cellar1 = new Image(ng.getManager().getAtlas().findRegion("DOM1"));
+		cellar1.setBounds(300, 300, 167, 137);
+		addActor(cellar1);
 	}
 
 	@Override

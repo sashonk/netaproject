@@ -70,7 +70,7 @@ public abstract class World extends Group{
 	}
 	
 	public boolean showPassport(){
-		return true;
+		return false;
 	}
 	
 	
@@ -145,82 +145,13 @@ public abstract class World extends Group{
 				}
 		});
 		
+
+
+	}
+
+	protected void createCellars(){
 		
-////////////////////////////////////
-/////////// PASSPORT //////////////
-////////////////////////////////////
-	Group textGroup = new Group();
-	textGroup.addCaptureListener(new InputListener(){
-	public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-		event.setBubbles(false);
-		return false;
 	}
-	});
-	textGroup.setPosition(0, getHeight()-155);
-	Image textImg = new Image(ng.getManager().getAtlas().findRegion("passport-"+getTitle()));
-	textImg.setBounds(0, 0, 330, 155);		
-	textGroup.addActor(textImg);		
-	
-	Label author = new Label("", ng.getManager().getSkin(), getTitle());
-	author.setAlignment(Align.center);
-	author.setName("author");
-	Rectangle authorBounds = getAuthorBounds();
-	author.setBounds(authorBounds.x, authorBounds.y, authorBounds.width, authorBounds.height);
-	textGroup.addActor(author);		
-	
-	Label age = new Label("", ng.getManager().getSkin(), getTitle());
-	age.setAlignment(Align.center);
-	age.setName("age");			
-	Rectangle ageBounds = getAgeBounds();
-	age.setBounds(ageBounds.x, ageBounds.y, ageBounds.width, ageBounds.height);
-	textGroup.addActor(age);	
-	
-	Label city = new Label("",ng.getManager().getSkin(), getTitle());
-	city.setAlignment(Align.center);	
-	city.setName("city");
-	Rectangle cityBounds = getCityBounds();
-	city.setBounds(cityBounds.x, cityBounds.y, cityBounds.width, cityBounds.height);
-	textGroup.addActor(city);
-		
-	Label state = new Label("", ng.getManager().getSkin(), getTitle());
-	state.setAlignment(Align.center);	
-	state.setName("state");				
-	Rectangle stateBounds = getStateBounds();
-	state.setBounds(stateBounds.x, stateBounds.y, stateBounds.width, stateBounds.height);
-	textGroup.addActor(state);
-	
-	Label year = new Label("", ng.getManager().getSkin(), getTitle());
-	year.setAlignment(Align.center);	
-	year.setName("year");		
-	Rectangle yearBounds = getYearBounds();
-	year.setBounds(yearBounds.x, yearBounds.y, yearBounds.width, yearBounds.height);
-	textGroup.addActor(year);
-	
-	textGroup.setName("passport");
-	addActor(textGroup);
-	textImg.addListener(new MetricListener());
-	
-	
-	textGroup.setVisible(showPassport());
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-
-
-	}
-	
-	public abstract Rectangle getAuthorBounds();	
-	public abstract Rectangle getAgeBounds();
-	public abstract Rectangle getCityBounds();
-	public abstract Rectangle getStateBounds();
-	public abstract Rectangle getYearBounds();
-
-	
-	void setPinch2ZoomEnabled(boolean value){
-	//	pinch2Zoom.setCanPan(value);
-	}
-	
-
-	
 
 	
 	@Override
@@ -251,6 +182,7 @@ public abstract class World extends Group{
 		return colorize;
 	}
 	
+
 	public void drawPassport(Passport p){
 		Group passport = (Group) findActor("passport");
 		Label author =  (Label) passport.findActor("author");
@@ -268,35 +200,138 @@ public abstract class World extends Group{
 	
 	public abstract String getTitle();
 	
-	public Passport getPassport(){
-		Group passport = (Group) findActor("passport");
-		TextField author =  (TextField) passport.findActor("author");
-		TextField age =  (TextField) passport.findActor("age");
-		TextField city =  (TextField) passport.findActor("city");
-		TextField state =  (TextField) passport.findActor("state");
-		TextField year =  (TextField) passport.findActor("year");
-		
-		pass.year = Integer.parseInt(year.getText());
-		pass.age = Integer.parseInt(age.getText());
-		pass.name = author.getText();
-		pass.city = city.getText();
-		pass.country = state.getText();
-		
-		return pass;
-	}
+
 	
 
 	public abstract void populateBackground();
 	
 	public abstract void populateForeground();
 	
+	public abstract Actor createTitle();
+	
+	public abstract String getAuthors();
+	
+	public abstract String getPassportColor(); 
+	
+	public void createPassport() {
+		Actor title = createTitle();//Util.multiColorLabel("ПАУЧОК", "title", new String[]{"red", "orange", "yellow", "green", "blue", "green"}, ng.getManager().getSkin());
+	
+		Label description = new Label("Шагалка - искалка", ng.getManager().getSkin(), "metal"); 
+		Label authorLabel = new Label("Авторы стихов ", ng.getManager().getSkin(), "lightBlue"); 
+		Label authorValue = new Label(getAuthors()/*"Вадим Левин и Рената Муха"*/, ng.getManager().getSkin(), "darkViolet"); 
+		Label nameLabel = new Label("Автор иллюстратор ", ng.getManager().getSkin(), "lightBlue");
+		
+		Label nameValue0 = new Label(".", ng.getManager().getSkin(), getPassportColor());
+		Label nameValue = new Label(".......................", ng.getManager().getSkin(), "lightBlue");
+		nameValue0.setName("author");
+		Group nameGroup = new Group();
+		nameGroup.addActor(nameValue);
+		nameValue0.setY(5);
+		nameValue0.setWidth(nameValue.getWidth());
+		nameGroup.addActor(nameValue0);
+		nameGroup.setSize(nameValue.getWidth(), nameValue.getHeight());
+		nameValue0.setAlignment(Align.center);
+
+		Label ageLabel = new Label(", возраст", ng.getManager().getSkin(), "lightBlue");
+		Label ageValue0 = new Label(".", ng.getManager().getSkin(), getPassportColor());
+		Label ageValue = new Label(".....", ng.getManager().getSkin(), "lightBlue");
+		ageValue0.setName("age");
+		Group ageGroup = new Group();
+		ageGroup.addActor(ageValue);
+		ageValue0.setY(5);
+		ageValue0.setWidth(ageValue.getWidth());
+		ageGroup.addActor(ageValue0);
+		ageGroup.setSize(ageValue.getWidth(), ageValue.getHeight());
+		ageValue0.setAlignment(Align.center);		
+						
+		Label cityName = new Label("Город (село) ", ng.getManager().getSkin(), "lightBlue");		
+		Label cityValue0 = new Label(".", ng.getManager().getSkin(), getPassportColor());		
+		Label cityValue = new Label("......................", ng.getManager().getSkin(), "lightBlue");
+		cityValue0.setName("city");
+		Group cityGroup = new Group();
+		cityGroup.addActor(cityValue);
+		cityValue0.setY(5);
+		cityValue0.setWidth(cityValue.getWidth());
+		cityGroup.addActor(cityValue0);
+		cityGroup.setSize(cityValue.getWidth(), cityValue.getHeight());
+		cityValue0.setAlignment(Align.center);			
+		
+				
+		Label countryName = new Label(", страна ", ng.getManager().getSkin(), "lightBlue");
+		Label countryValue0 = new Label(".", ng.getManager().getSkin(), getPassportColor());		
+		Label countryValue = new Label(".....................", ng.getManager().getSkin(), "lightBlue");
+		countryValue0.setName("state");
+		Group countryGroup = new Group();
+		countryGroup.addActor(countryValue);
+		countryValue0.setY(5);
+		countryValue0.setWidth(countryValue.getWidth());
+		countryGroup.addActor(countryValue0);
+		countryGroup.setSize(countryValue.getWidth(), countryValue.getHeight());
+		countryValue0.setAlignment(Align.center);				
+		
+		
+		Label yearName = new Label(", год ", ng.getManager().getSkin(), "lightBlue");
+		Label yearValue0 = new Label(".", ng.getManager().getSkin(), getPassportColor());				
+		Label yearValue = new Label(".........", ng.getManager().getSkin(), "lightBlue");
+		yearValue0.setName("year");
+		Group yearGroup = new Group();
+		yearGroup.addActor(yearValue);
+		yearValue0.setY(5);
+		yearValue0.setWidth(yearValue.getWidth());
+		yearGroup.addActor(yearValue0);
+		yearGroup.setSize(yearValue.getWidth(), yearValue.getHeight());
+		yearValue0.setAlignment(Align.center);	
+		
+		Table table = new Table();
+		table.defaults().align(Align.left);
+		table.add(title).row();
+		table.add(description).row().padBottom(10);
+		
+		Table authRow = new Table();
+		authRow.add(authorLabel);
+		authRow.add(authorValue);
+		authRow.pack();
+		table.add(authRow).row();
+		
+		Table nameRow = new Table();
+		nameRow.add(nameLabel);
+		nameRow.add(nameGroup);
+		nameRow.add(ageLabel);
+		nameRow.add(ageGroup);
+		nameRow.pack();
+		table.add(nameRow).row();
+		
+		Table geoRow = new Table();
+		geoRow.add(cityName);
+		geoRow.add(cityGroup);
+		geoRow.add(countryName);
+		geoRow.add(countryGroup);
+		geoRow.add(yearName);
+		geoRow.add(yearGroup);
+		geoRow.pack();
+		table.add(geoRow);
+		table.pack();
+		
+
+		
+		table.setPosition(20, ng.getWorkspace().getHeight()-table.getHeight()-20);
+		addActor(table);
+		
+		table.addListener(new MetricListener());
+
+		table.setName("passport");
+
+	}
 	
 	public  void populate(){
+		createPassport();
 		populateBackground();
 		
 		Actor zactor = new Actor();
 		zactor.setName("zactor");
 		addActor(zactor);
+		
+		createCellars();
 		
 		populateForeground();
 	}

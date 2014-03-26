@@ -8,6 +8,7 @@ import com.me.neta.Hero;
 import com.me.neta.NetaGame;
 import com.me.neta.TextureManager;
 import com.me.neta.Tiger;
+import com.me.neta.Util;
 import com.me.neta.World;
 
 public class TigerWorld extends World{
@@ -16,30 +17,22 @@ public class TigerWorld extends World{
 		super(ng,width, height);
 		setColor(new Color(255/255f, 250/255f, 156/255f, 1));
 	}
+	
+	public String getAuthors(){
+		return "Владимир Орлов";
+	}
+	
+	public String getPassportColor(){
+		return "tiger";
+	}
+	
+	
 	@Override
-	public Rectangle getAuthorBounds() {
-		return new Rectangle(122, 31, 100, FIELD_HEIGHT);
+	public Actor createTitle() {
+		return Util.multiColorLabel("тигр", "title", new String[]{"red", "orange", "yellow", "green"}, ng.getManager().getSkin());
 	}
 
-	@Override
-	public Rectangle getAgeBounds() {
-		return new Rectangle(260, 31, 21, FIELD_HEIGHT);
-	}
 
-	@Override
-	public Rectangle getCityBounds() {
-		return new Rectangle(86, 7, 72, FIELD_HEIGHT);
-	}
-
-	@Override
-	public Rectangle getStateBounds() {
-		return new Rectangle(200, 7, 262-198, FIELD_HEIGHT);
-	}
-
-	@Override
-	public Rectangle getYearBounds() {
-		return new Rectangle(285, 7, 324-285, FIELD_HEIGHT);
-	}
 
 	@Override
 	public String getTitle() {

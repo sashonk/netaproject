@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.StringBuilder;
 
 public class Util {
 
-	
+
 	
 	public static Actor multiColorLabel(String text, String baseStyle, String[] colorNames, Skin skin){
 		Table table = new Table();
