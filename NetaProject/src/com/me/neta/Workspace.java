@@ -47,6 +47,7 @@ import com.me.neta.figures.AbstractFigure;
 import com.me.neta.tools.AbstractTool;
 import com.me.neta.tools.BasketTool;
 import com.me.neta.tools.BrushTool;
+import com.me.neta.tools.FlowerTool;
 import com.me.neta.tools.ShopTool;
 import com.me.neta.tools.DesktopsTool;
 import com.me.neta.tools.FiguresTool;
@@ -105,7 +106,8 @@ public class Workspace extends Group{
 		bottom.setName(bottomActorName);
 		this.addActor(bottom);
 
-		Image img = new Image(ng.getManager().getBottomPanelTexture());
+		Image img = new Image(ng.getManager().getSkin().getPatch("panelNP"));
+		img.setWidth(getWidth());
 		toolbarTable = new Table();
 		
 		toolbarTable.debug();
@@ -161,7 +163,10 @@ public class Workspace extends Group{
 		figuresTool.setPanel(figPanel);
 		this.addActor(figPanel);
 		
-		
+		final FlowerTool flowerTool = new FlowerTool(ng);
+		flowerTool.setPanel(new Actor());
+		toolbarTable.add(flowerTool).padRight(pad).padLeft(pad);
+
 		
 		final ColorTool paletteTool = new ColorTool(ng);
 		toolbarTable.add(paletteTool).padRight(pad).padLeft(pad);
@@ -566,6 +571,7 @@ public class Workspace extends Group{
 		ptGroup.addTool(lyricsTool);
 		ptGroup.addTool(figuresTool);
 		ptGroup.addTool(paletteTool);
+		ptGroup.addTool(flowerTool);	
 		ptGroup.addTool(saveTool);
 		ptGroup.addTool(settingTool);
 		ptGroup.addTool(shopTool);
@@ -576,6 +582,7 @@ public class Workspace extends Group{
 		registerStateListener(linkTool);
 		registerStateListener(basketTool);
 		registerStateListener(fieldsTool);
+		registerStateListener(flowerTool);
 		registerStateListener(letterTool);
 		registerStateListener(lyricsTool);
 		registerStateListener(figuresTool);

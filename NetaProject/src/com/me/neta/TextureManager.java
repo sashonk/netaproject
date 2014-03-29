@@ -113,7 +113,6 @@ wondGenerator.dispose();
 		skin.add("calibri18", calibri18);
 
 
-		bottomPanelTexture = new Texture(Gdx.files.internal("data/panel.png"));
 		nickolLetter = new Texture(Gdx.files.internal("data/nikol.jpg"));
 		 nikolLetterRegion = new TextureRegion(nickolLetter, 0, 0, 925, 433);
 		 instructScreen = new Texture(Gdx.files.internal("data/instruct.jpg"));
@@ -184,6 +183,7 @@ wondGenerator.dispose();
          skin.add("default", labelStyle);
          
          
+         skin.add("panelNP", new NinePatch(atlas.findRegion("panel"), 52, 52 , 0,0));
          skin.add("system", new NinePatch(atlas.findRegion("npsystem"), 8, 8, 8, 8));
          skin.add("error", new NinePatch(atlas.findRegion("nperror"), 8, 8, 8, 8));
 
@@ -581,11 +581,7 @@ wondGenerator.dispose();
 		System.out.println(msg);
 	}
 	
-	
-	public Texture getBottomPanelTexture(){
-		return bottomPanelTexture;
-	}
-	
+
 	private List<Texture> fields = new ArrayList<Texture>(4); 
 	
 	private TextureAtlas atlas;
@@ -596,7 +592,6 @@ wondGenerator.dispose();
 	
 	
 	
-	private Texture bottomPanelTexture;
 	
 	private Skin skin;
 
@@ -624,7 +619,6 @@ wondGenerator.dispose();
 			iter.remove();
 		}
 
-		bottomPanelTexture.dispose();
 		skin.dispose();
 		nickolLetter.dispose();
 		instructScreen.dispose();

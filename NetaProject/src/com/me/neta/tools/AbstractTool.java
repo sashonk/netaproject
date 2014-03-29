@@ -31,7 +31,7 @@ public abstract class AbstractTool extends Actor implements ContextListener{
 	protected boolean blink;
 
 	public float getK(){
-		return .75f;
+		return .65f;
 	}
 	
 	public AbstractTool(NetaGame ng){
