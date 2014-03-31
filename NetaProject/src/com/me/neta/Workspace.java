@@ -105,8 +105,8 @@ public class Workspace extends Group{
 		bottom.setName(bottomActorName);
 		this.addActor(bottom);
 
-	//	Image img = new Image(ng.getManager().getSkin().getPatch("panelNP"));
-		//img.setWidth(getWidth());
+		Image img = new Image(ng.getManager().getSkin().getPatch("panelNP"));
+		img.setWidth(getWidth());
 		toolbarTable = new Table();
 		
 		toolbarTable.debug();
@@ -217,7 +217,7 @@ public class Workspace extends Group{
 		this.addActor(settingsPanel);
 				
 		addActor(toolbarTable);
-	///	addActor(img);
+		addActor(img);
 		toolbarTable.setZIndex(99);
 		
 		

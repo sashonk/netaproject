@@ -1,5 +1,9 @@
 package com.me.neta;
 
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.visible;
+
 import java.util.List;
 import java.util.Map;
 
@@ -40,7 +44,7 @@ public class LettersPanel extends Group{
 			@Override
 			public boolean handle(Event event) {
 				if(event instanceof LetterGroupEvent){
-					event.getListenerActor().setVisible(false);
+					event.getListenerActor().addAction(sequence(fadeOut(0.4f), visible(false)));	
 					return true;
 				}
 				return false;

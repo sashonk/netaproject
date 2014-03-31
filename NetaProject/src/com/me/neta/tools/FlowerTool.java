@@ -3,6 +3,7 @@ package com.me.neta.tools;
 import com.me.neta.Context;
 import com.me.neta.NetaGame;
 import com.me.neta.Size;
+import com.me.neta.Context.ContextProperty;
 
 public class FlowerTool extends PanelTool{
 
@@ -17,13 +18,13 @@ public class FlowerTool extends PanelTool{
 
 	@Override
 	public boolean accept(Context ctx) {
-		return true;
+		return ctx.getProperty(ContextProperty.WORKING);
 	}
 
 
 	@Override
 	public String getImagePath() {
-		return "letter";
+		return "ZVETOKOK_A";
 	}
 
 } 

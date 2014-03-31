@@ -183,7 +183,7 @@ wondGenerator.dispose();
          skin.add("default", labelStyle);
          
          
-        // skin.add("panelNP", new NinePatch(atlas.findRegion("panel"), 52, 52 , 0,0));
+         skin.add("panelNP", new NinePatch(atlas.findRegion("panel"), 52, 52 , 0,0));
          skin.add("system", new NinePatch(atlas.findRegion("npsystem"), 8, 8, 8, 8));
          skin.add("error", new NinePatch(atlas.findRegion("nperror"), 8, 8, 8, 8));
 
