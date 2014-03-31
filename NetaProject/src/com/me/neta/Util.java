@@ -31,4 +31,15 @@ public class Util {
 		return table;
 	}
 
+	public static void center(Actor actor){
+		Actor parent = actor.getParent();
+		if(parent==null){
+			return;
+		}
+		
+		float x = parent.getWidth()/2 - actor.getWidth()/2;
+		float y = parent.getHeight()/2 - actor.getHeight()/2;		
+		actor.setPosition(x, y);
+	}
+
 }

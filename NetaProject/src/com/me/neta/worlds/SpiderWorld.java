@@ -1,5 +1,10 @@
 package com.me.neta.worlds;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -71,6 +76,64 @@ public class SpiderWorld extends World{
 	@Override
 	public boolean showPassport(){
 		return false;
+	}
+
+	
+	@Override
+	public void populateLetters(){
+		Map<Integer, List<Character>> variant1 = new HashMap<Integer, List<Character>>();
+		List<Character> charGroup11 = new ArrayList<Character>(3);				
+		charGroup11.add(Character.valueOf('а'));
+		charGroup11.add(Character.valueOf('ч'));
+		charGroup11.add(Character.valueOf('и'));
+		variant1.put(Integer.valueOf(1),charGroup11);		
+		
+		List<Character> charGroup12 = new ArrayList<Character>(3);				
+		charGroup12.add(Character.valueOf('м'));
+		charGroup12.add(Character.valueOf('х'));
+		charGroup12.add(Character.valueOf('к'));
+		variant1.put(Integer.valueOf(2),charGroup12);	
+		
+		List<Character> charGroup13 = new ArrayList<Character>(3);				
+		charGroup13.add(Character.valueOf('г'));
+		charGroup13.add(Character.valueOf('р'));
+		charGroup13.add(Character.valueOf('л'));
+		variant1.put(Integer.valueOf(3),charGroup13);	
+		
+		List<Character> charGroup14 = new ArrayList<Character>(3);				
+		charGroup14.add(Character.valueOf('ж'));
+		charGroup14.add(Character.valueOf('т'));
+		charGroup14.add(Character.valueOf('й'));
+		variant1.put(Integer.valueOf(4),charGroup14);		
+		letters.put(Integer.valueOf(1), variant1);
+		
+		
+		Map<Integer, List<Character>> variant2 = new HashMap<Integer, List<Character>>();
+		List<Character> charGroup21 = new ArrayList<Character>(3);				
+		charGroup21.add(Character.valueOf('ё'));
+		charGroup21.add(Character.valueOf('б'));
+		charGroup21.add(Character.valueOf('а'));
+		variant2.put(Integer.valueOf(1),charGroup21);		
+		
+		List<Character> charGroup22 = new ArrayList<Character>(3);				
+		charGroup22.add(Character.valueOf('в'));
+		charGroup22.add(Character.valueOf('ё'));
+		charGroup22.add(Character.valueOf('о'));
+		variant2.put(Integer.valueOf(2),charGroup22);	
+		
+		List<Character> charGroup23 = new ArrayList<Character>(3);				
+		charGroup23.add(Character.valueOf('н'));
+		charGroup23.add(Character.valueOf('с'));
+		charGroup23.add(Character.valueOf('л'));
+		variant2.put(Integer.valueOf(3),charGroup23);	
+		
+		List<Character> charGroup24 = new ArrayList<Character>(3);				
+		charGroup24.add(Character.valueOf('п'));
+		charGroup24.add(Character.valueOf('у'));
+		charGroup24.add(Character.valueOf('т'));
+		variant2.put(Integer.valueOf(4),charGroup24);		
+		letters.put(Integer.valueOf(2), variant2);		
+
 	}
 
 }

@@ -1,6 +1,8 @@
 package com.me.neta;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -34,8 +36,7 @@ import com.me.neta.tools.RotateTool;
 import com.me.neta.tools.ZIndexTool;
 
 public abstract class World extends Group{
-	//Pixmap pm;
-	//Texture tx;
+
 	BrushTool btool;
 	boolean lyricsAdded = false;
 	private int id;
@@ -44,6 +45,8 @@ public abstract class World extends Group{
 	private AbstractFigure selectedActor;
 	protected NetaGame ng; 
 	protected static final float FIELD_HEIGHT= 20;
+	protected Map<Integer, Map<Integer, List<Character>>> letters = new HashMap<Integer, Map<Integer, List<Character>>>();
+
 	
 	public AbstractFigure getSelected(){
 		return selectedActor;
@@ -72,6 +75,13 @@ public abstract class World extends Group{
 	public boolean showPassport(){
 		return false;
 	}
+	
+	public  Map<Integer, Map<Integer, List<Character>>> getLetters(){
+		return letters;
+	}
+	
+	public abstract void populateLetters();
+	
 	
 	
 	public static Actor multiColorLabel(String text, String baseStyle, String[] colorNames, Skin skin){
@@ -146,7 +156,7 @@ public abstract class World extends Group{
 		});
 		
 
-
+		populateLetters();
 	}
 
 	protected void createCellars(){

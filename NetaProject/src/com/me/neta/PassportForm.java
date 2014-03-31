@@ -14,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldFilter;
 import com.me.neta.events.PassportEvent;
-import com.me.neta.util.WorkHelper;
 
 public class PassportForm extends Group{
 	

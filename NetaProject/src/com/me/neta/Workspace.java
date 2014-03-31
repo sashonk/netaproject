@@ -60,7 +60,6 @@ import com.me.neta.tools.RotateTool;
 import com.me.neta.tools.SaveTool;
 import com.me.neta.tools.SettingsTool;
 import com.me.neta.tools.ZIndexTool;
-import com.me.neta.util.WorkHelper;
 
 import com.me.neta.worlds.AntWorld;
 import com.me.neta.worlds.PitonWorld;
@@ -106,8 +105,8 @@ public class Workspace extends Group{
 		bottom.setName(bottomActorName);
 		this.addActor(bottom);
 
-		Image img = new Image(ng.getManager().getSkin().getPatch("panelNP"));
-		img.setWidth(getWidth());
+	//	Image img = new Image(ng.getManager().getSkin().getPatch("panelNP"));
+		//img.setWidth(getWidth());
 		toolbarTable = new Table();
 		
 		toolbarTable.debug();
@@ -164,8 +163,13 @@ public class Workspace extends Group{
 		this.addActor(figPanel);
 		
 		final FlowerTool flowerTool = new FlowerTool(ng);
-		flowerTool.setPanel(new Actor());
+		
+		LettersPanel lettersPanel = new LettersPanel(ng);
+		lettersPanel.setVisible(false);
+		flowerTool.setPanel(lettersPanel);
+		this.addActor(lettersPanel);
 		toolbarTable.add(flowerTool).padRight(pad).padLeft(pad);
+		Util.center(lettersPanel);
 
 		
 		final ColorTool paletteTool = new ColorTool(ng);
@@ -213,7 +217,7 @@ public class Workspace extends Group{
 		this.addActor(settingsPanel);
 				
 		addActor(toolbarTable);
-		addActor(img);
+	///	addActor(img);
 		toolbarTable.setZIndex(99);
 		
 		
@@ -316,11 +320,12 @@ public class Workspace extends Group{
 								
 							}
 						});*/
-						world.drawPassport(passport);				
+						world.drawPassport(passport);
+						ng.getContext().notifyListeners();
 					}
 					
 					ng.getContext().setProperty(ContextProperty.WORKING, true) ;
-	
+					
 				}
 				
 				
@@ -625,6 +630,10 @@ public class Workspace extends Group{
 			}
 		});
 		setSelectedColor(Color.WHITE);
+	}
+	
+	public World getWorld(){
+		return world;
 	}
 
 	void setSelectedColor(Color clr){

@@ -47,9 +47,7 @@ public class Context {
 				boolean oldVal = prop.getValue();
 				prop.setValue(value);
 				if(oldVal!=value){
-					for(ContextListener listener : listeners){
-						listener.contextChanged(this);
-					}
+					notifyListeners();
 				}
 				
 				return;
@@ -83,6 +81,12 @@ public class Context {
 
 	Collection<ContextProperty> properties;
 	List<ContextListener> listeners ;
+	
+	public void notifyListeners(){
+		for(ContextListener listener : listeners){
+			listener.contextChanged(this);
+		}
+	}
 	
 	public static class ContextProperty{
 		

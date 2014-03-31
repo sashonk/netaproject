@@ -22,7 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.me.neta.Context.ContextProperty;
 import com.me.neta.events.QuestionEvent;
-import com.me.neta.util.WorkHelper;
 
 public class MessageHelper {
 	
@@ -45,7 +44,7 @@ public class MessageHelper {
 		workspace.addActor(group);
 		group.setZIndex(110);
 		group.setName("message");
-		WorkHelper.center(tb);
+		Util.center(tb);
 		//tb.fire(new WorkspaceStateEvent(WorkspaceState.DISABLED));
 
 		ng.getContext().setProperty(ContextProperty.HALT, true);
@@ -76,7 +75,7 @@ public class MessageHelper {
 		group.setBounds(0, 0, workspace.getWidth(), workspace.getHeight());
 		group.addActor(curtain);
 		group.addActor(tb);
-		WorkHelper.center(tb);
+		Util.center(tb);
 		workspace.addActor(group);
 		group.setZIndex(110);
 		group.setName("message");
@@ -115,7 +114,7 @@ public class MessageHelper {
 		 Group workspace =	ng.getWorkspace();
 		 workspace.addActor(tb);
 		tb.setZIndex(110);
-		WorkHelper.center(tb);
+		Util.center(tb);
 		
 		tb.addAction(Actions.sequence(Actions.alpha(0, 5), Actions.removeActor()));
 	}
