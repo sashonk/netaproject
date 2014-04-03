@@ -9,8 +9,8 @@ public class Main {
 		cfg.title = "Was ist das?";
 		cfg.useGL20 = false;
 	//	cfg.fullscreen = true;
-		cfg.width = 300;
-		cfg.height = 200;
+		cfg.width = 1024;
+		cfg.height = 768;
 		
 		new LwjglApplication(new NetaGame(new WinNative()), cfg);
 	}
