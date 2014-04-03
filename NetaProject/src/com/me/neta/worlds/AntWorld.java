@@ -6,16 +6,32 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.sound.midi.Sequence;
+
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.me.neta.Ant;
+import com.me.neta.CellarGroup;
 import com.me.neta.Hero;
+import com.me.neta.MetricListener;
 import com.me.neta.NetaGame;
 import com.me.neta.TextureManager;
 import com.me.neta.Util;
 import com.me.neta.World;
+import com.me.neta.tools.StartButton;
+
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 public class AntWorld extends World{
 
@@ -41,9 +57,19 @@ public class AntWorld extends World{
 	@Override
 	protected
 	void createCellars(){
+		Actor zactor = findActor("zactor");
+		
+		
+		
 		Image cellar1 = new Image(ng.getManager().getAtlas().findRegion("DOM1"));
 		cellar1.setBounds(300, 300, 167, 137);
-		addActor(cellar1);
+		cellar1.addListener(new MetricListener(){});
+				
+		addActorBefore(zactor, cellar1);
+			
+		StartButton start = new StartButton(ng);
+		start.setPosition(100, 100);
+		addActor(start);
 	}
 
 	@Override
@@ -72,6 +98,9 @@ public class AntWorld extends World{
 		ant.setPosition(100, 250);
 		ant.setZIndex(10);
 		addActor(ant);		
+	
+		
+
 	}
 	
 	

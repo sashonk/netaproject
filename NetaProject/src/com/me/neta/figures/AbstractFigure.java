@@ -5,14 +5,17 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.forever;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.me.neta.DoubleClickListener;
 import com.me.neta.Moveable;
+import com.me.neta.Util;
 import com.me.neta.events.SelectFigureEvent;
 
 public abstract class AbstractFigure extends Moveable{
@@ -28,8 +31,20 @@ public abstract class AbstractFigure extends Moveable{
 				public void doubleClick() {
 					AbstractFigure.this.fire(new SelectFigureEvent());
 					
+/*					OrthographicCamera cam = (OrthographicCamera) AbstractFigure.this.getStage().getCamera();
+					float[] widths = new float[]{1f, .2f, .1f};
+					float[] heights = new float[]{1f, 0.2f, 0.1f};
+
+					if(cam.zoom==1){
+					AbstractFigure.this.addAction(Util.zoomTo(0.3f, 1, new Interpolation.BounceOut(widths, heights)));
+					}
+					else{
+						AbstractFigure.this.addAction(Util.zoomTo(1, 1,new Interpolation.BounceOut(widths, heights)));
+					}*/
 				}
 			});
+		 
+
 	}
 	
 	@Override

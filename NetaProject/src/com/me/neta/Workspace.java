@@ -274,7 +274,8 @@ public class Workspace extends Group{
 					
 					LyricsIconEvent lyricsEvent = (LyricsIconEvent)event;
 
-					world.addLyrics(lyricsEvent.getChoice());
+					//world.addLyrics(lyricsEvent.getChoice());
+					world.createCellars();
 					
 					lyricsPanel.addAction(sequence(fadeOut(0.4f), visible(false)));
 				}

@@ -160,7 +160,7 @@ public abstract class World extends Group{
 	}
 
 	protected void createCellars(){
-		
+
 	}
 
 	
@@ -341,10 +341,9 @@ public abstract class World extends Group{
 		zactor.setName("zactor");
 		addActor(zactor);
 		
-		createCellars();
+		//createCellars();
 		
 		populateForeground();
 	}
 	
-	private Passport pass;
 }

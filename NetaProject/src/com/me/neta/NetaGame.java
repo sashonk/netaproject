@@ -5,6 +5,8 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.me.neta.Context.ContextProperty;
 
@@ -51,6 +53,12 @@ public class NetaGame implements ApplicationListener {
 		context.setProperty(ContextProperty.HALT, true);
 		context.setProperty(ContextProperty.PREPARED, false);
 		context.setProperty(ContextProperty.WORKING, false);
+		context.setProperty(ContextProperty.INGAME, true);
+		context.setProperty(ContextProperty.LETTER_ON, false);
+		context.setProperty(ContextProperty.LETTERS, false);
+		context.setProperty(ContextProperty.GAME_END, false);
+		context.setProperty(ContextProperty.CELLARS, false);
+
 	}
 	
 	@Override
@@ -73,6 +81,16 @@ public class NetaGame implements ApplicationListener {
 		Gdx.input.setInputProcessor(stage);
 
 
+	}
+	
+	public void zoom(float value){
+		OrthographicCamera camera = (OrthographicCamera) stage.getCamera();
+		camera.zoom = value;	
+	}
+	
+	public void setCameraPosition(Vector2 position){
+		OrthographicCamera camera = (OrthographicCamera) stage.getCamera();
+		camera.position.set(position.x, position.y, 0);
 	}
 
 	@Override

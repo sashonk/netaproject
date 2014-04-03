@@ -16,9 +16,16 @@ public class Context {
 	
 	{
 
-		properties = Collections.unmodifiableCollection(Arrays.asList(new ContextProperty[]{new ContextProperty(ContextProperty.PREPARED, false),
+		properties = Collections.unmodifiableCollection(Arrays.asList(new ContextProperty[]{
+				new ContextProperty(ContextProperty.PREPARED, false),
 				new ContextProperty(ContextProperty.WORKING, false),
-				new ContextProperty(ContextProperty.HALT, false)
+				new ContextProperty(ContextProperty.HALT, false),
+				new ContextProperty(ContextProperty.GAME_END, false),
+				new ContextProperty(ContextProperty.INGAME, false),
+				new ContextProperty(ContextProperty.CELLARS, false),
+				new ContextProperty(ContextProperty.LETTERS, false),
+				new ContextProperty(ContextProperty.LETTER_ON, false)
+
 		
 		}));
 		
@@ -93,6 +100,13 @@ public class Context {
 		public static String PREPARED = "prepared";
 		public static String WORKING = "working";
 		public static String HALT = "halt";
+		public static String CELLARS = "cellars";		
+		public static String LETTERS = "letters";		
+		public static String INGAME = "ingame";		
+		public static String LETTER_ON = "letter_on";
+		public static String GAME_END ="game_end";
+
+		
 		
 		ContextProperty(String name, boolean value){
 			this.name= name;
