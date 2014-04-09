@@ -16,29 +16,7 @@ public class DummyContext implements Serializable{
 	 */
 	private static final long serialVersionUID = 6198089952455262502L;
 
-	public Size getOrigin() {
-		return origin;
-	}
 
-	public void setOrigin(Size origin) {
-		this.origin = origin;
-	}
-
-	public float getZoom() {
-		return zoom;
-	}
-
-	public void setZoom(float zoom) {
-		this.zoom = zoom;
-	}
-
-	public int getOrder() {
-		return order;
-	}
-
-	public void setOrder(int order) {
-		this.order = order;
-	}
 
 	public List<GroupInfo> getDummies() {
 		return dummies;
@@ -75,10 +53,32 @@ public class DummyContext implements Serializable{
 		public DummyInfo getHouse() {
 			return house;
 		}
+		public float getZoom() {
+			return zoom;
+		}
+		public void setZoom(float zoom) {
+			this.zoom = zoom;
+		}
+		public Size getOrigin() {
+			return origin;
+		}
+		public void setOrigin(Size origin) {
+			this.origin = origin;
+		}
 		public void setHouse(DummyInfo house) {
 			this.house = house;
 		}
+		public int getOrder() {
+			return order;
+		}
+		public void setOrder(int order) {
+			this.order = order;
+		}
 		private DummyInfo house;
+		private float zoom;
+		private Size origin;
+		private int order;
+
 	}
 	
 	public static class DummyInfo implements Serializable{
@@ -119,16 +119,20 @@ public class DummyContext implements Serializable{
 			this.y = y;
 		}
 		private float x ;
+		public String getType() {
+			return type;
+		}
+		public void setType(String type) {
+			this.type = type;
+		}
 		private float y;
 		private float width;
 		private float height;
+		private String type;
 	}
 	
 	private List<GroupInfo> dummies;
 	
-	private Size origin;
 	
-	private float zoom;
 	
-	private int order;
 }

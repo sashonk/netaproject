@@ -32,6 +32,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.me.neta.dummy.Dummy;
+import com.me.neta.dummy.DummyContext;
 import com.me.neta.dummy.DummyHelper;
 import com.me.neta.events.LyricsIconEvent;
 import com.me.neta.events.ZIndexEvent;
@@ -51,7 +52,7 @@ public abstract class World extends Group{
 	protected NetaGame ng; 
 	protected static final float FIELD_HEIGHT= 20;
 	protected Map<Integer, Map<Integer, List<Character>>> letters = new HashMap<Integer, Map<Integer, List<Character>>>();
-
+	DummyHelper dummyHelper;
 	
 	public AbstractFigure getSelected(){
 		return selectedActor;
@@ -143,7 +144,10 @@ public abstract class World extends Group{
 					return true;
 				}
 				
-				DummyHelper.handleInput(ng, World.this, x, y);
+				if(dummyHelper!=null){
+					dummyHelper.handleInput(x, y);
+				}
+				
 
 				return false;
 			}
@@ -166,6 +170,9 @@ public abstract class World extends Group{
 		
 
 		populateLetters();
+		
+		
+		dummyHelper = new DummyHelper(ng, this);
 	}
 
 	protected void createCellars(){

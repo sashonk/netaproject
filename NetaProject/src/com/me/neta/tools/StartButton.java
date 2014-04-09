@@ -21,12 +21,12 @@ public class StartButton extends AbstractTool{
 
 	@Override
 	public boolean accept(Context ctx) {
-		return ctx.getProperty(ContextProperty.LETTERS);
+		return ctx.getProperty(ContextProperty.LETTERS)!=null;
 	}
 
 	@Override
 	public void doAction() {
-		context.setProperty(ContextProperty.INGAME, true);
+		context.setProperty(ContextProperty.INGAME, Boolean.TRUE);
 		
 	}
 

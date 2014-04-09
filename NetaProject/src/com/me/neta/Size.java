@@ -1,6 +1,8 @@
 package com.me.neta;
 
-public class Size {
+import java.io.Serializable;
+
+public class Size implements Serializable{
 	public Size(float w, float h){
 		width = w;
 		height = h;

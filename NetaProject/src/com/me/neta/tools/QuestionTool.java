@@ -26,7 +26,7 @@ public class QuestionTool extends TopTool{
 	public void doAction() {
 		if(!panel.isVisible()){
 			panel.setVisible(true);
-			context.setProperty(ContextProperty.HALT, true) ;
+			context.setProperty(ContextProperty.HALT, Boolean.TRUE) ;
 			fire(new QuestionEvent());
 		}
 		else{
@@ -45,7 +45,7 @@ public class QuestionTool extends TopTool{
 
 	@Override
 	public boolean accept(Context ctx) {
-		return !ctx.getProperty(ContextProperty.HALT) ;
+		return ctx.getProperty(ContextProperty.HALT)==null;
 	}
 
 }

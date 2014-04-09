@@ -50,38 +50,38 @@ public class Util {
 			constrainPosition(camera, stage);
 			constrainZoom(camera);
 		}
-		
-		private static void constrainPosition(OrthographicCamera cam, Stage s){
-			
-			float vw = cam.viewportWidth*.5f*cam.zoom;
-			float vh = cam.viewportHeight*.5f*cam.zoom;
-			
-			if(cam.position.x - vw<0){
-				cam.position.x = vw;
-			}
-			if(cam.position.y - vh< 0){
-				cam.position.y = vh;
-			}
-			if(cam.position.x + vw > s.getWidth()){
-				cam.position.x = s.getWidth() - vw;
-			}
-			if(cam.position.y + vh > s.getHeight()){
-				cam.position.y = s.getHeight() - vh;
-			}
-		}
-		
-		private static float Zmin = 0.1f;
-		private static void constrainZoom(OrthographicCamera cam){
-			if(cam.zoom<Zmin){
-				cam.zoom = Zmin;
-			}
-			if(cam.zoom>1){
-				cam.zoom = 1;
-			}
-		}
+
 	}
 	
 	
+	public static void constrainPosition(OrthographicCamera cam, Stage s){
+		
+		float vw = cam.viewportWidth*.5f*cam.zoom;
+		float vh = cam.viewportHeight*.5f*cam.zoom;
+		
+		if(cam.position.x - vw<0){
+			cam.position.x = vw;
+		}
+		if(cam.position.y - vh< 0){
+			cam.position.y = vh;
+		}
+		if(cam.position.x + vw > s.getWidth()){
+			cam.position.x = s.getWidth() - vw;
+		}
+		if(cam.position.y + vh > s.getHeight()){
+			cam.position.y = s.getHeight() - vh;
+		}
+	}
+	
+	private static float Zmin = 0.1f;
+	public static void constrainZoom(OrthographicCamera cam){
+		if(cam.zoom<Zmin){
+			cam.zoom = Zmin;
+		}
+		if(cam.zoom>1){
+			cam.zoom = 1;
+		}
+	}
 	
 	public static Actor multiColorLabel(String text, String baseStyle, String[] colorNames, Skin skin){
 		Table table = new Table();

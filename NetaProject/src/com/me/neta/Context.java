@@ -17,14 +17,14 @@ public class Context {
 	{
 
 		properties = Collections.unmodifiableCollection(Arrays.asList(new ContextProperty[]{
-				new ContextProperty(ContextProperty.PREPARED, false),
-				new ContextProperty(ContextProperty.WORKING, false),
-				new ContextProperty(ContextProperty.HALT, false),
-				new ContextProperty(ContextProperty.GAME_END, false),
-				new ContextProperty(ContextProperty.INGAME, false),
-				new ContextProperty(ContextProperty.CELLARS, false),
-				new ContextProperty(ContextProperty.LETTERS, false),
-				new ContextProperty(ContextProperty.LETTER_ON, false)
+				new ContextProperty(ContextProperty.PREPARED, null),
+				new ContextProperty(ContextProperty.WORKING, null),
+				new ContextProperty(ContextProperty.HALT, null),
+				new ContextProperty(ContextProperty.GAME_END, null),
+				new ContextProperty(ContextProperty.INGAME, null),
+				new ContextProperty(ContextProperty.CELLARS, null),
+				new ContextProperty(ContextProperty.LETTERS, null),
+				new ContextProperty(ContextProperty.LETTER_ON, null)
 
 		
 		}));
@@ -42,7 +42,7 @@ public class Context {
 		listeners.remove(listener);
 	}
 
-	public void setProperty(String property, boolean value){
+	public void setProperty(String property, Object value){
 		if(property==null){
 			throw new NullPointerException();
 		}
@@ -51,9 +51,9 @@ public class Context {
 		while(iter.hasNext()){
 			ContextProperty prop = iter.next();
 			if(property.equals(prop.getName())){
-				boolean oldVal = prop.getValue();
+				Object oldVal = prop.getValue();
 				prop.setValue(value);
-				if(oldVal!=value){
+				if(!(oldVal==null && value==null) && !(oldVal!=null && oldVal.equals(value)) && !(value!=null && value.equals(oldVal)) ){
 					notifyListeners();
 				}
 				
@@ -65,7 +65,7 @@ public class Context {
 
 	}
 	
-	public boolean getProperty(String name){
+	public Object getProperty(String name){
 		if(name==null){
 			throw new NullPointerException();
 		}
@@ -108,7 +108,7 @@ public class Context {
 
 		
 		
-		ContextProperty(String name, boolean value){
+		ContextProperty(String name, Object value){
 			this.name= name;
 			this.value = value;
 		}
@@ -117,15 +117,15 @@ public class Context {
 			return name;
 		}
 		
-		boolean getValue(){
+		Object getValue(){
 			return value;
 		}
 		
-		void setValue(boolean value){
+		void setValue(Object value){
 			this.value = value;
 		}
 		
-		private boolean value;
+		private Object value;
 		private String name;
 	}
 }

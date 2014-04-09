@@ -47,7 +47,7 @@ public class MessageHelper {
 		Util.center(tb);
 		//tb.fire(new WorkspaceStateEvent(WorkspaceState.DISABLED));
 
-		ng.getContext().setProperty(ContextProperty.HALT, true);
+		ng.getContext().setProperty(ContextProperty.HALT, Boolean.TRUE);
 	}
 	
 	public static void error(NetaGame ng,String text, Throwable t, boolean critical){
@@ -92,7 +92,7 @@ public class MessageHelper {
 			});
 		}
 
-		ng.getContext().setProperty(ContextProperty.HALT, true);
+		ng.getContext().setProperty(ContextProperty.HALT, Boolean.TRUE);
 	
 	}
 
@@ -127,7 +127,7 @@ public class MessageHelper {
 			
 			//msgBtn.fire(new WorkspaceStateEvent(WorkspaceState.WORKING));
 			
-			ng.getContext().setProperty(ContextProperty.HALT, false);
+			ng.getContext().setProperty(ContextProperty.HALT, null);
 			msgBtn.remove();
 		}
 		

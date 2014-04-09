@@ -47,7 +47,7 @@ public class SettingsPanel extends Group{
 					}
 					else{
 						panel.setVisible(true);
-						ng.getContext().setProperty(ContextProperty.HALT, true);
+						ng.getContext().setProperty(ContextProperty.HALT, Boolean.TRUE);
 
 					}
 					

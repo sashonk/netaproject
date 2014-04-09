@@ -29,7 +29,7 @@ public class BrushTool extends TopTool{
 
 	@Override
 	public boolean accept(Context ctx) {
-		return !ctx.getProperty(ContextProperty.HALT) &&ctx.getProperty(ContextProperty.WORKING);
+		return ctx.getProperty(ContextProperty.HALT)==null &&ctx.getProperty(ContextProperty.WORKING)!=null;
 	}
 
 	@Override

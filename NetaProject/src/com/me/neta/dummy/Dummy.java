@@ -1,6 +1,8 @@
 package com.me.neta.dummy;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -11,8 +13,47 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.me.neta.Moveable;
 import com.me.neta.NetaGame;
+import com.me.neta.Size;
 
 public class Dummy extends Moveable{
+	
+	public enum DummyType{
+		HOUSE,
+		BARRIER,
+		FLOWER;
+	}
+	
+	private DummyType type;
+	
+	public Size getGroupOrigin() {
+		return groupOrigin;
+	}
+
+	public void setGroupOrigin(Size groupOrigin) {
+		this.groupOrigin = groupOrigin;
+	}
+
+	public float getZoom() {
+		return zoom;
+	}
+
+	public void setZoom(float zoom) {
+		this.zoom = zoom;
+	}
+
+	private Size groupOrigin;
+	
+	private float zoom;
+	
+	public void setType(DummyType type){
+		this.type = type;
+	}
+	
+	public DummyType getType(){
+		return type;
+			
+	}
+	
 	TextureRegion reg;
 	int group;
 	public int getGroup() {
@@ -23,19 +64,26 @@ public class Dummy extends Moveable{
 		this.group = group;
 	}
 
-	public Dummy(final NetaGame ng, TextureRegion tr){
+	public Dummy(final NetaGame ng, TextureRegion tr, final DummyHelper helper){
 		reg = tr;
+	
 		
 		this.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				
-				if(button  == Buttons.RIGHT){
-					event.getListenerActor().remove();
+				if(button  == Buttons.RIGHT ){
+					if(Gdx.input.isKeyPressed(Keys.SHIFT_RIGHT)){
+						event.getListenerActor().remove();
+					}
+					else{
+						DummyForm form = helper.getForm();
+						form.show(Dummy.this);
+					}
 				}
 				else{
 					OrthographicCamera c = ((OrthographicCamera)event.getListenerActor().getStage().getCamera());
 					
-					System.out.println(event.getListenerActor()+String.format(" [zoom=%f; x=%f; y=%f]", c.zoom, c.position.x, c.position.y));
+					System.out.println(event.getListenerActor()+String.format("(x=%f; y=%f) [zoom=%f; x=%f; y=%f]", x,y,c.zoom, c.position.x, c.position.y));
 				}
 				return false;
 			}

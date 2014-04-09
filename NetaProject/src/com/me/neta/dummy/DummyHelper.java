@@ -1,20 +1,26 @@
 package com.me.neta.dummy;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import sun.awt.image.ByteArrayImageSource;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -22,28 +28,67 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.me.neta.NetaGame;
 import com.me.neta.Size;
+import com.me.neta.World;
+import com.me.neta.dummy.Dummy.DummyType;
 import com.me.neta.dummy.DummyContext.DummyInfo;
 import com.me.neta.dummy.DummyContext.GroupInfo;
 
 public class DummyHelper {
-	public static void handleInput(NetaGame ng, Group world, float x, float y) {
-		DummyContext context = new DummyContext();
-		context.setOrigin(new Size(x, y));
-		context.setZoom(((OrthographicCamera)ng.getWorkspace().getStage().getCamera()).zoom);
-		
-		Map<Integer, String> mm = new HashMap<Integer, String>();
-		mm.put(Keys.NUM_1, "DOM1.");
-		mm.put(Keys.NUM_2, "DOM2.");
-		mm.put(Keys.NUM_3, "DOM3");
-		mm.put(Keys.NUM_4, "DOM4");
-		mm.put(Keys.Q, "ZV1");
-		mm.put(Keys.W, "ZV2");
-		mm.put(Keys.E, "ZV3");
-		
+	
+	 DummyContext dummyContext;
+	 DummyForm form;
+	 NetaGame ng;
+	 World world;
+	 
+	 public DummyContext getContext(){
+		 return dummyContext;
+	 }
+	 
+	 public DummyForm getForm(){
+		 return form;
+	 }
+	 
+	 Map<Integer, String> mm;
+	 Map<Integer, DummyType> typeMap;
+
+	 
+	 public DummyHelper(NetaGame ng, World wor){
+		 this.ng = ng;
+		 this.world = wor;
+		 form = new DummyForm(ng);
+		 form.setVisible(false);
+		 world.addActor(form);
+		 dummyContext = new DummyContext();
+		 
+			
+			mm = new HashMap<Integer, String>();
+			mm.put(Keys.NUM_1, "DOM1");
+			mm.put(Keys.NUM_2, "DOM2");
+			mm.put(Keys.NUM_3, "DOM3");
+			mm.put(Keys.NUM_4, "DOM4");
+			mm.put(Keys.Q, "FLOWER1");
+			mm.put(Keys.W, "FLOWER2");
+			mm.put(Keys.E, "FLOWER3");
+			mm.put(Keys.T, "barrier");
+			
+			typeMap = new HashMap<Integer, DummyType>();
+			typeMap.put(Keys.NUM_1, DummyType.HOUSE);
+			typeMap.put(Keys.NUM_2, DummyType.HOUSE);
+			typeMap.put(Keys.NUM_3, DummyType.HOUSE);
+			typeMap.put(Keys.NUM_4, DummyType.HOUSE);
+			typeMap.put(Keys.Q, DummyType.FLOWER);
+			typeMap.put(Keys.W, DummyType.FLOWER);
+			typeMap.put(Keys.E, DummyType.FLOWER);
+			typeMap.put(Keys.T, DummyType.BARRIER);
+	 }
+
+	
+	public  void handleInput(float x, float y) {		
 		for(Integer key : mm.keySet()){
 			if(Gdx.input.isKeyPressed(key)){
 				TextureRegion reg = ng.getManager().getAtlas().findRegion(mm.get(key));
-				Dummy dummy = new  Dummy(ng, reg);
+				Dummy dummy = new  Dummy(ng, reg, this);
+				dummy.setType(typeMap.get(key));
 				dummy.setSize(reg.getRegionWidth(), reg.getRegionHeight());
 				dummy.setPosition(x, y);
 				world.addActor(dummy);
@@ -58,6 +103,15 @@ public class DummyHelper {
 			constrainPosition(camera, world.getStage() );
 			constrainZoom(camera);
 		}
+		
+		if(Gdx.input.isKeyPressed(Keys.U)){
+			OrthographicCamera camera  = (OrthographicCamera) world.getStage().getCamera();
+			camera.zoom=1;
+			camera.position.set(x, y, 0);
+			constrainPosition(camera, world.getStage() );
+			constrainZoom(camera);
+		}
+		
 		
 		if(Gdx.input.isKeyPressed(Keys.O)){
 			OrthographicCamera camera  = (OrthographicCamera) world.getStage().getCamera();
@@ -82,20 +136,38 @@ public class DummyHelper {
 			constrainPosition(camera, world.getStage() );
 			constrainZoom(camera);
 		}
+		
+		
 
 		if(Gdx.input.isKeyPressed(Keys.S)){
 
 			List<GroupInfo> groups = new LinkedList<DummyContext.GroupInfo>();
-			context.setDummies(groups);
-			GroupInfo group = new GroupInfo();		
-			groups.add(group);
-			List<DummyInfo> flowers = new LinkedList<DummyContext.DummyInfo>();
-			group.setFlowers(flowers);
+			dummyContext.setDummies(groups);
+			
+			Map<Integer, GroupInfo> groupsMap = new HashMap<Integer, DummyContext.GroupInfo>();
 			
 			for(Actor dummy : world.getChildren()){
 				if(!(dummy instanceof Dummy)){
 					continue;
 				}
+				Dummy dm = (Dummy)dummy;
+				
+				if(dm.getType()==DummyType.HOUSE){
+					GroupInfo gInfo = new GroupInfo();
+					groupsMap.put(Integer.valueOf(dm.getGroup()), gInfo);		
+					gInfo.setOrder(dm.getGroup());
+					gInfo.setZoom(dm.getZoom());
+					gInfo.setOrigin(dm.getGroupOrigin());
+					groups.add(gInfo);
+				}				
+			}
+			
+			
+			for(Actor dummy : world.getChildren()){
+				if(!(dummy instanceof Dummy)){
+					continue;
+				}
+				Dummy dm = (Dummy)dummy;
 				
 				DummyInfo info = new DummyInfo();
 				info.setName(dummy.getName());
@@ -103,8 +175,24 @@ public class DummyHelper {
 				info.setY(dummy.getY());
 				info.setWidth(dummy.getWidth());
 				info.setHeight(dummy.getHeight());
+				info.setType(dm.getType().name());
 				
-				flowers.add(info);
+				GroupInfo gInfo = groupsMap.get(dm.getGroup());
+				List<DummyInfo> flowers = gInfo.getFlowers();
+				if(flowers==null){
+					flowers = new LinkedList<DummyContext.DummyInfo>();
+					gInfo.setFlowers(flowers);
+				}
+				if(dm.getType()==DummyType.HOUSE){
+					gInfo.setHouse(info);
+				}
+				else if(dm.getType()==DummyType.BARRIER){
+					gInfo.setBarrier(info);
+				}
+				else if(dm.getType()==DummyType.FLOWER){
+					flowers.add(info);
+				}
+				
 			}
 			
 			ObjectOutputStream oos = null;
@@ -116,7 +204,7 @@ public class DummyHelper {
 				}
 				dummyFile.delete();
 				oos = new ObjectOutputStream(new FileOutputStream(dummyFile));
-				oos.writeObject(context);
+				oos.writeObject(dummyContext);
 			}
 			catch(Exception ex){
 				System.err.println(ex);
@@ -137,22 +225,64 @@ public class DummyHelper {
 		if(Gdx.input.isKeyPressed(Keys.R)){
 			ObjectInputStream ois = null;
 			try{
-				File dummyFile = new File("D:\\dummy.txt");
-				ois = new ObjectInputStream(new FileInputStream(dummyFile));
-				 context = (DummyContext) ois.readObject();
 				
-				GroupInfo g = context.getGroups().get(0);
-				List<DummyInfo> flowers = g.getFlowers();
-				for(DummyInfo info : flowers){
-					Dummy dummy = new  Dummy(ng, ng.getManager().getAtlas().findRegion(info.getName()));
+				
+				FileHandle dummyFile =Gdx.files.internal("data/dummy/dummy-"+world.getTitle()+".ser");				
+				ois = new ObjectInputStream(new ByteArrayInputStream(dummyFile.readBytes()));
+				dummyContext = (DummyContext) ois.readObject();
+				
+				List<Actor> rm = new ArrayList<Actor>( world.getChildren().size);
+				Iterator<Actor> iter = world.getChildren().iterator();
+				while(iter.hasNext()){
+					Actor a = iter.next();
+					if(a instanceof Dummy){
+						rm.add(a);
+					}
+				}
+				for(Actor a: rm){
+					a.remove();
+				}
+				
+				for(GroupInfo gInfo : dummyContext.getGroups()){
+
+					{
+					DummyInfo info = gInfo.getHouse();
+					Dummy dummy = new  Dummy(ng, ng.getManager().getAtlas().findRegion(info.getName()), this);
 					dummy.setSize(info.getWidth(), info.getHeight());
 					dummy.setPosition(info.getX(), info.getY());
 					dummy.setName(info.getName());
-					world.addActor(dummy);
+					dummy.setGroup(gInfo.getOrder());
+					dummy.setType(DummyType.HOUSE);
+					dummy.setZoom(gInfo.getZoom());
+					dummy.setGroupOrigin(gInfo.getOrigin());
+					world.addActor(dummy);	
+					
+					 info = gInfo.getBarrier();
+					 dummy = new  Dummy(ng, ng.getManager().getAtlas().findRegion(info.getName()), this);
+					dummy.setSize(info.getWidth(), info.getHeight());
+					dummy.setPosition(info.getX(), info.getY());
+					dummy.setName(info.getName());
+					dummy.setGroup(gInfo.getOrder());
+					dummy.setType(DummyType.BARRIER);
+					world.addActor(dummy);	
+					}
+					
+					for(DummyInfo info : gInfo.getFlowers()){
+						Dummy dummy = new  Dummy(ng, ng.getManager().getAtlas().findRegion(info.getName()), this);
+						dummy.setSize(info.getWidth(), info.getHeight());
+						dummy.setPosition(info.getX(), info.getY());
+						dummy.setName(info.getName());
+						dummy.setGroup(gInfo.getOrder());
+						dummy.setType(DummyType.FLOWER);
+						world.addActor(dummy);		
+					}
+				
 				}
+				
+
 			}
 			catch(Exception ex){
-				
+				System.err.println(ex);
 			}
 			finally{
 				if(ois!=null)

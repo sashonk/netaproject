@@ -184,7 +184,7 @@ wondGenerator.dispose();
          skin.add("default", labelStyle);
          
          
-        // skin.add("panelNP", new NinePatch(atlas.findRegion("panel"), 52, 52 , 0,0));
+         skin.add("panelNP", new NinePatch(atlas.findRegion("panel"), 52, 52 , 0,0));
          skin.add("system", new NinePatch(atlas.findRegion("npsystem"), 8, 8, 8, 8));
          skin.add("error", new NinePatch(atlas.findRegion("nperror"), 8, 8, 8, 8));
 
@@ -203,12 +203,14 @@ wondGenerator.dispose();
         tbStyleSystem.fontColor = Color.BLACK;
         tbStyleSystem.up = npd;
         skin.add("system", tbStyleSystem);
+
         
         TextButtonStyle tbStyleError = new TextButtonStyle();
         tbStyleError.font = calibri12;
         tbStyleError.fontColor = Color.BLACK;
         tbStyleError.up = npdError;
         skin.add("error", tbStyleError);
+        
  		
  		LabelStyle lStyleSystem = new LabelStyle();
  		lStyleSystem.font = calibri12;
@@ -236,7 +238,9 @@ wondGenerator.dispose();
         tfStyleSystem2.cursor = skin.getDrawable("black");	 	
         tfStyleSystem2.messageFont = calibri14;
         tfStyleSystem2.messageFontColor = Color.GRAY;
-        skin.add("system2", tfStyleSystem2);                
+        skin.add("system2", tfStyleSystem2);      
+        skin.add("default", tfStyleSystem2);      
+
  		
         LabelStyle lStyleSystem2 = new LabelStyle();
         lStyleSystem2.font = calibri14;
@@ -474,9 +478,15 @@ wondGenerator.dispose();
  		
  		WindowStyle wStyle = new WindowStyle();
  		wStyle.background = skin.getDrawable("frame");
+ 		wStyle.titleFont = skin.getFont("default");
  		skin.add("default", wStyle);
 
 
+        TextButtonStyle tbStyleSystem2 = new TextButtonStyle();
+        tbStyleSystem2.font = skin.getFont("default");
+        tbStyleSystem2.fontColor = Color.BLACK;
+        tbStyleSystem2.up = skin.getDrawable("vknob");
+        skin.add("default", tbStyleSystem2);
 	}
 	
 

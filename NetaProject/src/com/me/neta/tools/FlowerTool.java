@@ -18,13 +18,13 @@ public class FlowerTool extends PanelTool{
 
 	@Override
 	public boolean accept(Context ctx) {
-		return ctx.getProperty(ContextProperty.WORKING);
+		return ctx.getProperty(ContextProperty.HALT)==null &&ctx.getProperty(ContextProperty.WORKING)!=null;
 	}
 
 
 	@Override
 	public String getImagePath() {
-		return "letter";
+		return "ZVETOKOK_A";
 	}
 
 } 

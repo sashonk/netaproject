@@ -29,6 +29,6 @@ public class SettingsTool extends PanelTool{
 
 	@Override
 	public boolean accept(Context ctx) {
-		return !ctx.getProperty(ContextProperty.HALT) &&ctx.getProperty(ContextProperty.PREPARED);
+		return ctx.getProperty(ContextProperty.HALT)==null &&ctx.getProperty(ContextProperty.PREPARED)!=null;
 	}
 }

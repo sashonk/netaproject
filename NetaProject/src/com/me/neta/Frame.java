@@ -35,8 +35,8 @@ public  class Frame extends Group{
 				public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 					event.getTarget().getParent().setVisible(false);
 									
-					ng.getContext().setProperty(ContextProperty.PREPARED, true) ;
-					ng.getContext().setProperty(ContextProperty.HALT, false) ;
+					ng.getContext().setProperty(ContextProperty.PREPARED, Boolean.TRUE) ;
+					ng.getContext().setProperty(ContextProperty.HALT, null) ;
 				
 				return false;
 				}

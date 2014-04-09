@@ -105,8 +105,8 @@ public class Workspace extends Group{
 		bottom.setName(bottomActorName);
 		this.addActor(bottom);
 
-		//Image img = new Image(ng.getManager().getSkin().getPatch("panelNP"));
-		//img.setWidth(getWidth());
+		Image img = new Image(ng.getManager().getSkin().getPatch("panelNP"));
+		img.setWidth(getWidth());
 		toolbarTable = new Table();
 		
 		toolbarTable.debug();
@@ -217,7 +217,7 @@ public class Workspace extends Group{
 		this.addActor(settingsPanel);
 				
 		addActor(toolbarTable);
-		//addActor(img);
+		addActor(img);
 		toolbarTable.setZIndex(99);
 		
 		
@@ -325,7 +325,7 @@ public class Workspace extends Group{
 						ng.getContext().notifyListeners();
 					}
 					
-					ng.getContext().setProperty(ContextProperty.WORKING, true) ;
+					ng.getContext().setProperty(ContextProperty.WORKING, Boolean.TRUE) ;
 					
 				}
 				
@@ -559,8 +559,8 @@ public class Workspace extends Group{
 				event.getTarget().setVisible(false);
 				
 				
-				ng.getContext().setProperty(ContextProperty.PREPARED, true) ;
-				ng.getContext().setProperty(ContextProperty.HALT, false) ;
+				ng.getContext().setProperty(ContextProperty.PREPARED, Boolean.TRUE) ;
+				ng.getContext().setProperty(ContextProperty.HALT, null) ;
 			}
 			return false;
 			}

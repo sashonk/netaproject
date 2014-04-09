@@ -57,7 +57,7 @@ public class ZIndexTool extends TopTool{
 
 	@Override
 	public boolean accept(Context ctx) {
-		return !ctx.getProperty(ContextProperty.HALT) &&ctx.getProperty(ContextProperty.WORKING);
+		return ctx.getProperty(ContextProperty.HALT)==null &&ctx.getProperty(ContextProperty.WORKING)!=null;
 	}
 
 	private Color tint = new Color(.4f,1f,.4f, 1);
