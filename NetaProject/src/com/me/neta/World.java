@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Pixmap.Format;
@@ -19,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -28,6 +31,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldFilter;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.StringBuilder;
+import com.me.neta.dummy.Dummy;
+import com.me.neta.dummy.DummyHelper;
 import com.me.neta.events.LyricsIconEvent;
 import com.me.neta.events.ZIndexEvent;
 import com.me.neta.figures.AbstractFigure;
@@ -104,7 +109,7 @@ public abstract class World extends Group{
 		return table;
 	}
 
-	public World(NetaGame ng, float width, float height){
+	public World(final NetaGame ng, float width, float height){
 		this.ng = ng;
 		setName(getTitle());
 		
@@ -124,7 +129,7 @@ public abstract class World extends Group{
 			
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				Actor actor = hit(x, y, false);
-				if(actor instanceof Moveable ){
+				if(actor instanceof Moveable && Gdx.input.isKeyPressed(Keys.M)){
 					if(actor instanceof AbstractFigure){
 						if(selectedActor!=actor){
 							return false;
@@ -137,6 +142,8 @@ public abstract class World extends Group{
 					 this.actor = actor;
 					return true;
 				}
+				
+				DummyHelper.handleInput(ng, World.this, x, y);
 
 				return false;
 			}
@@ -153,6 +160,8 @@ public abstract class World extends Group{
 						actor = null;
 					}
 				}
+				
+	
 		});
 		
 
@@ -162,6 +171,7 @@ public abstract class World extends Group{
 	protected void createCellars(){
 
 	}
+
 
 	
 	@Override

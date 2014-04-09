@@ -24,7 +24,7 @@ public class FlowerTool extends PanelTool{
 
 	@Override
 	public String getImagePath() {
-		return "ZVETOKOK_A";
+		return "letter";
 	}
 
 } 

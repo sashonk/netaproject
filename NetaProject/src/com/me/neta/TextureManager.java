@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 
@@ -183,7 +184,7 @@ wondGenerator.dispose();
          skin.add("default", labelStyle);
          
          
-         skin.add("panelNP", new NinePatch(atlas.findRegion("panel"), 52, 52 , 0,0));
+        // skin.add("panelNP", new NinePatch(atlas.findRegion("panel"), 52, 52 , 0,0));
          skin.add("system", new NinePatch(atlas.findRegion("npsystem"), 8, 8, 8, 8));
          skin.add("error", new NinePatch(atlas.findRegion("nperror"), 8, 8, 8, 8));
 
@@ -469,6 +470,12 @@ wondGenerator.dispose();
  		//listStyle.
  		skin.add("default", listStyle);
  		
+ 		
+ 		
+ 		WindowStyle wStyle = new WindowStyle();
+ 		wStyle.background = skin.getDrawable("frame");
+ 		skin.add("default", wStyle);
+
 
 	}
 	
