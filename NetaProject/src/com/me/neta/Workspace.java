@@ -164,7 +164,7 @@ public class Workspace extends Group{
 		
 		final FlowerTool flowerTool = new FlowerTool(ng);
 		
-		LettersPanel lettersPanel = new LettersPanel(ng);
+		VariantPanel lettersPanel = new VariantPanel(ng);
 		lettersPanel.setVisible(false);
 		flowerTool.setPanel(lettersPanel);
 		this.addActor(lettersPanel);
@@ -271,13 +271,18 @@ public class Workspace extends Group{
 				if(event instanceof LyricsIconEvent){
 					event.setBubbles(false);
 
-					
-					LyricsIconEvent lyricsEvent = (LyricsIconEvent)event;
-
-					//world.addLyrics(lyricsEvent.getChoice());
 					world.createCellars();
+					//world.addLyrics(lyricsEvent.getChoice());
+					
 					
 					lyricsPanel.addAction(sequence(fadeOut(0.4f), visible(false)));
+				}
+				
+				if(event instanceof LetterGroupEvent){
+					event.setBubbles(false);
+
+					//world.start();
+					world.letters(((LetterGroupEvent)event).getLetterGroupID());
 				}
 				
 				if(event instanceof DesktopIconEvent){

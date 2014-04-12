@@ -16,6 +16,16 @@ import com.sun.org.apache.bcel.internal.generic.GETFIELD;
 
 public class Util {
 
+
+	public static TemporalAction zoomTo(float value, float duration, float x, float y, Interpolation interpolation){
+		ZoomToAction zoomTo = new ZoomToAction(value, x ,y);
+		zoomTo.setDuration(duration);
+		if(interpolation!=null){
+			zoomTo.setInterpolation(interpolation);
+		}
+		return zoomTo;
+	}
+
 	public static TemporalAction zoomTo(float value, float duration, Interpolation interpolation){
 		ZoomToAction zoomTo = new ZoomToAction(value);
 		zoomTo.setDuration(duration);
@@ -24,14 +34,69 @@ public class Util {
 		}
 		return zoomTo;
 	}
+
+
+	public static TemporalAction moveCameraTo(float tx, float ty, float duration, Interpolation interpolation){
+		MoveCameraToAction zoomTo = new MoveCameraToAction(tx, ty,  duration, interpolation);
+		zoomTo.setDuration(duration);
+		if(interpolation!=null){
+			zoomTo.setInterpolation(interpolation);
+		}
+		return zoomTo;
+	}
+	
+	public static class MoveCameraToAction extends TemporalAction{
+		float tx;
+		float ty;
+		float ox;
+		float oy;
+		boolean inited;
+		public MoveCameraToAction(float targetX, float targetY, float duration, Interpolation interpolation ){
+
+			tx = targetX;
+			ty = targetY;
+			setDuration(duration);
+			setInterpolation(interpolation);
+		}
+		@Override
+		protected void update(float percent) {
+			Actor actor = getActor();
+			Stage stage =  actor.getStage();
+			OrthographicCamera camera = (OrthographicCamera) stage.getCamera();
+
+			if(!inited){
+				ox = camera.position.x;
+				oy = camera.position.y;
+				inited = true;
+			}
+			
+			float x = ox*(1-percent) + tx*percent;
+			float y = oy*(1-percent) + ty*percent;
+			camera.position.set(x, y, 0);
+			constrainPosition(camera, stage);
+			constrainZoom(camera);
+		}
+	}
 	
 	public static class ZoomToAction extends TemporalAction{
+		float ox;
+		float oy;
 		float targetZoom;
 		float initialZoom;
 		boolean inited;
+		boolean orig;
+		public ZoomToAction(float value, float x, float y){
+			ox = x;
+			oy = y;
+			targetZoom = value;
+			inited= false;
+			orig = false;
+		}
+		
 		public ZoomToAction(float value){
 			targetZoom = value;
 			inited= false;
+			orig = true;
 		}
 		@Override
 		protected void update(float percent) {
@@ -42,9 +107,15 @@ public class Util {
 			if(!inited){
 				initialZoom = camera.zoom;						
 				inited = true;
+
 			}		
+			if(orig){
+				ox = actor.getOriginX();
+				oy = actor.getOriginY();				
+				orig = false;
+			}
 			
-			Vector2 originGlobal = actor.localToStageCoordinates(new Vector2(actor.getOriginX(), actor.getOriginY()));
+			Vector2 originGlobal = actor.localToStageCoordinates(new Vector2(ox, oy));
 			camera.position.set(originGlobal.x, originGlobal.y, 0);		
 			camera.zoom = targetZoom*percent + initialZoom*(1-percent);
 			constrainPosition(camera, stage);

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.me.neta.NetaGame;
 import com.me.neta.Size;
+//import com.me.neta.dummy.Dummy.DummyType;
 
 public class DummyContext implements Serializable{
 	
@@ -36,23 +37,15 @@ public class DummyContext implements Serializable{
 		 * 
 		 */
 		private static final long serialVersionUID = -7978173217545219296L;
-		private DummyInfo barrier;
 		private List<DummyInfo> flowers ;
-		public DummyInfo getBarrier() {
-			return barrier;
-		}
-		public void setBarrier(DummyInfo barrier) {
-			this.barrier = barrier;
-		}
+
 		public List<DummyInfo> getFlowers() {
 			return flowers;
 		}
 		public void setFlowers(List<DummyInfo> flowers) {
 			this.flowers = flowers;
 		}
-		public DummyInfo getHouse() {
-			return house;
-		}
+
 		public float getZoom() {
 			return zoom;
 		}
@@ -65,16 +58,13 @@ public class DummyContext implements Serializable{
 		public void setOrigin(Size origin) {
 			this.origin = origin;
 		}
-		public void setHouse(DummyInfo house) {
-			this.house = house;
-		}
+
 		public int getOrder() {
 			return order;
 		}
 		public void setOrder(int order) {
 			this.order = order;
 		}
-		private DummyInfo house;
 		private float zoom;
 		private Size origin;
 		private int order;

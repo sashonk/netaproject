@@ -1,11 +1,21 @@
 package com.me.neta;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -15,6 +25,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
@@ -31,15 +42,23 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldFilter;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.StringBuilder;
+import com.me.neta.Context.ContextProperty;
 import com.me.neta.dummy.Dummy;
 import com.me.neta.dummy.DummyContext;
 import com.me.neta.dummy.DummyHelper;
+//import com.me.neta.dummy.Dummy.DummyType;
+import com.me.neta.dummy.DummyContext.DummyInfo;
+import com.me.neta.dummy.DummyContext.GroupInfo;
 import com.me.neta.events.LyricsIconEvent;
 import com.me.neta.events.ZIndexEvent;
+import com.me.neta.factories.LetterFactory;
 import com.me.neta.figures.AbstractFigure;
+import com.me.neta.figures.Letter;
 import com.me.neta.tools.BrushTool;
 import com.me.neta.tools.RotateTool;
+import com.me.neta.tools.StartButton;
 import com.me.neta.tools.ZIndexTool;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 public abstract class World extends Group{
 
@@ -53,6 +72,7 @@ public abstract class World extends Group{
 	protected static final float FIELD_HEIGHT= 20;
 	protected Map<Integer, Map<Integer, List<Character>>> letters = new HashMap<Integer, Map<Integer, List<Character>>>();
 	DummyHelper dummyHelper;
+	DummyContext baseDummyContext;
 	
 	public AbstractFigure getSelected(){
 		return selectedActor;
@@ -173,13 +193,187 @@ public abstract class World extends Group{
 		
 		
 		dummyHelper = new DummyHelper(ng, this);
+		
+
+		ObjectInputStream ois = null;
+		try{
+		FileHandle dummyFile = Gdx.files.absolute("D:\\dummy.txt");// Gdx.files.internal("data/dummy/dummy-"+getTitle()+".ser");				
+		ois = new ObjectInputStream(new ByteArrayInputStream(dummyFile.readBytes()));
+		 baseDummyContext = (DummyContext) ois.readObject();
+		}
+		catch(Exception ex){
+			System.err.println(ex);
+		}
+		finally{
+			if(ois!=null)
+			{
+				try {
+					ois.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	 
+	 Action moveToSequence(int domId, float prevX, float prevY){
+		Dummy dom =  (Dummy) findActor("dom"+domId);
+		
+		if(dom!=null){
+			Size go = dom.getGroupOrigin();
+			float zoom = dom.getZoom();	
+			 
+			List<Action> actions = new LinkedList<Action>();
+			if(domId!=1){
+				actions.add(Util.zoomTo(.6f, 1f, prevX, prevY, null));
+				actions.add(delay(2));
+				actions.add(Util.moveCameraTo(go.width, go.height, 1, null));
+			}
+			actions.addAll(Arrays.asList( Util.zoomTo(zoom, 1, go.width, go.height, null), delay(2), moveToSequence(domId+1, go.width, go.height)));
+			return sequence(actions.toArray(new Action[]{}));
+		}
+		
+		return Util.zoomTo(1, 0.5f, getWidth()/2, getHeight()/2, null);
+		
+		
+	}
+	 
+	 public Color letterColor(){
+		 return Color.GREEN;
+	 }
+	
+	public  void start(){
+		
+		this.addAction(moveToSequence(1, 0, 0));
+		
+	}
+	
+	protected void letters(int variant){
+		 Map<Integer, Map<Integer, List<Character>>> letters=  getLetters();
+		 Map<Integer, List<Character>> variantLetters = letters.get(Integer.valueOf(variant));
+		 
+		 for(Integer groupId : variantLetters.keySet()){
+			 	List<Character> chars = variantLetters.get(Integer.valueOf(groupId));			 	
+			 	List<CellarGroup.LogicFlower> flowers = new LinkedList<CellarGroup.LogicFlower>();
+			 	CellarGroup cg = (CellarGroup)findActor("cg"+groupId.intValue());
+				for(Actor actor : cg.getChildren()){
+					if(actor instanceof CellarGroup.LogicFlower ){						
+						CellarGroup.LogicFlower  dummy  = (CellarGroup.LogicFlower)actor;
+						flowers.add(dummy);
+					}
+				}		
+				
+				for(int i = 0; i<chars.size(); i++){
+					Character ch = chars.get(i);
+					CellarGroup.LogicFlower dummy = flowers.get(i);
+					dummy.addListener(new MetricListener());
+					
+					Integer letterID = Letter.getCharId(ch);
+					Letter letter = new Letter(ng, letterID.intValue());
+					letter.setName("letter");
+					letter.setPosition(20, 20);
+					letter.setColor(letterColor());
+					dummy.addActor(letter);
+				}
+				
+				
+		 }
+
+		
+		ng.getContext().setProperty(ContextProperty.LETTERS, new Object());
 	}
 
 	protected void createCellars(){
 
+		ObjectInputStream ois = null;
+		DummyContext dummyContext;
+		try{
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ObjectOutputStream oos  = new ObjectOutputStream(baos);
+			oos.writeObject(baseDummyContext);
+			ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+			ois = new ObjectInputStream(bais);			
+			dummyContext = (DummyContext) ois.readObject();
+			
+			List<Actor> rm = new ArrayList<Actor>(getChildren().size);
+			Iterator<Actor> iter = getChildren().iterator();
+			while(iter.hasNext()){
+				Actor a = iter.next();
+				if(a instanceof CellarGroup){
+					rm.add(a);
+				}
+			}
+			for(Actor a: rm){
+				a.remove();
+			}
+			
+			for(GroupInfo gInfo : dummyContext.getGroups()){
+				CellarGroup cg = new CellarGroup(ng, gInfo.getOrder());
+				cg.setName("cg"+gInfo.getOrder());
+				addActor(cg);
+				
+				
+				for(DummyInfo info : gInfo.getFlowers()){
+					
+					if("start".equals(info.getType())){
+						StartButton btn = new StartButton(ng, this);
+						ng.getContext().registerListener(btn);
+						btn.setPosition(info.getX(), info.getY());
+						
+						cg.addActor(btn);
+					}
+					else if("barrier".equals(info.getType())){
+						Barrier barrier = new Barrier(ng);
+						barrier.setPosition(info.getX(), info.getY());
+						cg.addActor(barrier);
+					}
+					else if(info.getType().contains("FLOWER")){
+						CellarGroup.LogicFlower flower = new CellarGroup.LogicFlower(ng, info.getType());						
+						flower.setPosition(info.getX(), info.getY());
+						cg.addActor(flower);
+					}
+					else{
+						
+						Dummy dummy = new  Dummy(ng, ng.getManager().getAtlas().findRegion(info.getType()));
+						if(info.getType().contains("DOM")){
+							dummy.setGroupOrigin(gInfo.getOrigin());
+							dummy.setZoom(gInfo.getZoom());
+							dummy.addListener(new MetricListener());
+						}
+						dummy.setSize(info.getWidth(), info.getHeight());
+						dummy.setPosition(info.getX(), info.getY());
+						dummy.setName(info.getName());
+						dummy.setGroup(gInfo.getOrder());
+						dummy.setType(info.getType());
+						
+						cg.addActor(dummy);		
+					}
+				}
+			
+			}
+			
+
+		}
+		catch(Exception ex){
+			System.err.println(ex);
+		}
+		finally{
+			if(ois!=null)
+			{
+				try {
+					ois.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	
+		lyrics();
 	}
 
-
+	public abstract void lyrics();
 	
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha){

@@ -31,6 +31,9 @@ public class TigerWorld extends World{
 		return "tiger";
 	}
 	
+	public void lyrics(){
+		
+	}
 	
 	@Override
 	public Actor createTitle() {

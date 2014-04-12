@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.me.neta.Ant;
 import com.me.neta.CellarGroup;
 import com.me.neta.CellarGroup.LogicFlower;
@@ -59,124 +60,6 @@ public class AntWorld extends World{
 		return Util.multiColorLabel("муравей", "title", new String[]{"red", "orange", "yellow", "green", "blue", "green", "orange"}, ng.getManager().getSkin());
 	}
 
-	@Override
-	protected
-	void createCellars(){
-		Actor zactor = findActor("zactor");
-		
-		
-		/////////// G1////////////
-		final CellarGroup group1 = new CellarGroup(ng);
-		group1.setOrigin(100, -25);
-		group1.setPosition(190, 303);
-		
-		group1.addListener(new InputListener(){
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				group1.addAction(Util.zoomTo(0.25f, 0, null));
-				return false;
-			}
-		});
-		
-		Table textTable = new Table();
-		LogicLabel label11 = new LogicLabel(ng, "Жил");
-		LogicLabel label12 = new LogicLabel(ng, "на");
-		LogicLabel label13 = new LogicLabel(ng, "свете");
-		LogicLabel label14 = new LogicLabel(ng, "муравей");
-		LogicLabel label15 = new LogicLabel(ng, "Без");
-		LogicLabel label16 = new LogicLabel(ng, "ресниц");
-		LogicLabel label17 = new LogicLabel(ng, "и");
-		LogicLabel label18 = new LogicLabel(ng, "без");
-		LogicLabel label19 = new LogicLabel(ng, "бровей");
-		
-		LogicFlower flower11 = new LogicFlower(ng);
-		flower11.setPosition(3, -60);
-		group1.addFlower(flower11);
-		
-		LogicFlower flower12 = new LogicFlower(ng);
-		flower12.setPosition(70, -60);
-		group1.addFlower(flower12);
-		
-		LogicFlower flower13 = new LogicFlower(ng);
-		flower13.setPosition(35, -115);
-		group1.addFlower(flower13);
-				
-		final Barrier barrier1 = new Barrier(ng);
-		barrier1.addListener(new CoorListener());
-		group1.addActor(barrier1);
-		barrier1.setPosition(167, -10);		
-		addActorBefore(zactor, group1);
-		
-		
-		/////////// G2////////////
-		CellarGroup group2 = new CellarGroup(ng);
-		group2.setPosition(440, 502);
-		
-		LogicFlower flower21 = new LogicFlower(ng);
-		flower21.setPosition(-40, -20);
-		group2.addFlower(flower21);
-		
-		LogicFlower flower22 = new LogicFlower(ng);
-		flower22.setPosition(-60, -85);
-		group2.addFlower(flower22);
-		
-		LogicFlower flower23 = new LogicFlower(ng);
-		flower23.setPosition(0, -70);
-		group2.addFlower(flower23);
-				
-		final Barrier barrier2 = new Barrier(ng);
-		barrier2.addListener(new CoorListener());
-		group2.addActor(barrier2);
-		barrier2.setPosition(167, -10);		
-		addActorBefore(zactor, group2);
-		
-		
-		/////////// G3////////////
-		CellarGroup group3 = new CellarGroup(ng);
-		group3.setPosition(736, 543);
-		
-		LogicFlower flower31 = new LogicFlower(ng);
-		flower31.setPosition(3, -60);
-		group3.addFlower(flower31);
-		
-		LogicFlower flower32 = new LogicFlower(ng);
-		flower32.setPosition(70, -60);
-		group3.addFlower(flower32);
-		
-		LogicFlower flower33 = new LogicFlower(ng);
-		flower33.setPosition(35, -115);
-		group3.addFlower(flower33);
-				
-		final Barrier barrier3 = new Barrier(ng);
-		barrier3.addListener(new CoorListener());
-		group3.addActor(barrier3);
-		barrier3.setPosition(167, -10);		
-		addActorBefore(zactor, group3);
-		
-		
-		/////////// G4////////////
-		CellarGroup group4 = new CellarGroup(ng);
-		group4.setPosition(623, 260);
-		
-		LogicFlower flower41 = new LogicFlower(ng);
-		flower41.setPosition(3, -60);
-		group4.addFlower(flower41);
-		
-		LogicFlower flower42 = new LogicFlower(ng);
-		flower42.setPosition(70, -60);
-		group4.addFlower(flower42);
-		
-		LogicFlower flower43 = new LogicFlower(ng);
-		flower43.setPosition(35, -115);
-		group4.addFlower(flower43);
-				
-		final Barrier barrier4 = new Barrier(ng);
-		barrier4.addListener(new CoorListener());
-		group4.addActor(barrier4);
-		barrier4.setPosition(167, -10);		
-		addActorBefore(zactor, group4);
-
-
-	}
 
 	@Override
 	public String getTitle() {
@@ -206,18 +89,63 @@ public class AntWorld extends World{
 		addActor(ant);		
 	
 
-		
-		/*		ImageModel model2 = new ImageModel(ng, ng.getManager().getAtlas().findRegion("DOM1"));
-		model2.setPosition(350,300);
-		addActor(model2);
-		ImageModel model3 = new ImageModel(ng, ng.getManager().getAtlas().findRegion("DOM1"));
-		model3.setPosition(400,300);
-		addActor(model3);
-		ImageModel model4 = new ImageModel(ng, ng.getManager().getAtlas().findRegion("DOM1"));
-		model4.setPosition(450,300);
-		addActor(model4);*/
 	}
 	
+	LogicLabel label(String txt){
+		LogicLabel l1 = new LogicLabel(ng, txt, getTitle());
+		return l1;
+	}
+	
+	Table line(){
+		Table table = new Table();
+		table.defaults().padRight(16);
+		return table;
+	}
+	
+	public void lyrics(){
+		Table table = new Table();
+		float pad = 2;
+		
+		table.defaults().align(Align.left).padRight(pad);
+		
+		Table line1 = line();
+		line1.add(label("Жил"));
+		line1.add(label("на"));
+		line1.add(label("свете"));
+		
+		Table line2 = line();
+		line2.add(label("муравей"));
+		
+		Table line3 = line();		
+		line3.add(label("Без"));
+		line3.add(label("ресниц"));
+		
+		Table line4 =line();			
+		line4.add(label("и"));
+		line4.add(label("без"));
+		line4.add(label("бровей."));
+		
+		table.add(line1).row();
+		table.add(line2).row();
+		table.add(line3).row();
+		table.add(line4).row();
+
+		table.pack();
+		table.setScale(0.16f);	
+		
+		Group wrap = new Group();
+		wrap.addActor(table);
+		wrap.setScale(0.16f);
+		
+		
+		
+		
+		Group cg1 = (Group) findActor("cg1");
+		Actor dom1 = cg1.findActor("dom1");
+		wrap.setPosition(dom1.getX()+55, dom1.getY()+22);
+		
+		addActor(wrap);
+	}
 	
 	@Override
 	public void populateLetters(){

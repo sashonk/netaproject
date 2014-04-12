@@ -1,5 +1,7 @@
 package com.me.neta.dummy;
 
+import java.io.Serializable;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
@@ -17,13 +19,14 @@ import com.me.neta.Size;
 
 public class Dummy extends Moveable{
 	
-	public enum DummyType{
+/*	public enum DummyType implements Serializable{
 		HOUSE,
 		BARRIER,
-		FLOWER;
-	}
+		FLOWER,
+		START;
+	}*/
 	
-	private DummyType type;
+	private String type;
 	
 	public Size getGroupOrigin() {
 		return groupOrigin;
@@ -45,11 +48,11 @@ public class Dummy extends Moveable{
 	
 	private float zoom;
 	
-	public void setType(DummyType type){
+	public void setType(String type){
 		this.type = type;
 	}
 	
-	public DummyType getType(){
+	public String getType(){
 		return type;
 			
 	}
@@ -62,6 +65,10 @@ public class Dummy extends Moveable{
 
 	public void setGroup(int group) {
 		this.group = group;
+	}
+	
+	public Dummy(final NetaGame ng, TextureRegion tr){
+		reg = tr;
 	}
 
 	public Dummy(final NetaGame ng, TextureRegion tr, final DummyHelper helper){

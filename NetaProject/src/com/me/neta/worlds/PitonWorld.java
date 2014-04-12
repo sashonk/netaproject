@@ -64,6 +64,9 @@ public class PitonWorld extends World{
 		addActor(bird);		
 	}
 
+	public void lyrics(){
+		
+	}
 	
 	@Override
 	public void populateLetters(){

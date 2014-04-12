@@ -41,6 +41,10 @@ public class SpiderWorld extends World{
 		return "spider";
 	}
 	
+	public void lyrics(){
+		
+	}
+	
 	@Override
 	public Actor createTitle() {
 		return Util.multiColorLabel("паучок", "title", new String[]{"red", "orange", "yellow", "green", "blue", "green"}, ng.getManager().getSkin());

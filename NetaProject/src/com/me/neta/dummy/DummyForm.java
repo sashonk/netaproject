@@ -1,6 +1,7 @@
 package com.me.neta.dummy;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -14,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.me.neta.NetaGame;
 import com.me.neta.Size;
 import com.me.neta.Util;
-import com.me.neta.dummy.Dummy.DummyType;
+//import com.me.neta.dummy.Dummy.DummyType;
 
 public class DummyForm extends Window{
 
@@ -27,6 +28,8 @@ public class DummyForm extends Window{
 	TextField originX;
 	TextField originY;
 	TextField zoom;
+	TextField name;
+	
 
 	Dummy dummy;
 	
@@ -58,6 +61,9 @@ public class DummyForm extends Window{
 		
 		Label l6 = new Label("Z:", s);
 		zoom = new TextField("", s);		
+		
+		Label l7 = new Label("Name:", s);
+		name = new TextField("", s);	
 		
 		TextButton ok = new TextButton("  OK  ", s);	
 		ok.addListener(new InputListener(){
@@ -108,6 +114,8 @@ public class DummyForm extends Window{
 		add(originY).row();
 		add(l6);
 		add(zoom).row();
+		add(l7);
+		add(name).row();
 		add(zoomBtn).row();
 		
 		add(cancel);		
@@ -120,11 +128,12 @@ public class DummyForm extends Window{
 	}
 	
 	public void show(Dummy dummy){
+		
 	
 		this.dummy = dummy;
 		label.setText(dummy.getName());
 		group.setText(Integer.toString(dummy.getGroup()));
-		type.setText(dummy.getType()!=null ? dummy.getType().name() : "");
+		type.setText(dummy.getType()!=null ? dummy.getType() : "");
 		zoom.setText(Float.toString(dummy.getZoom()));
 		if(dummy.getGroupOrigin()!=null){
 		originX.setText(Float.toString(dummy.getGroupOrigin().width));
@@ -132,8 +141,10 @@ public class DummyForm extends Window{
 		}
 		size.setText(String.format("[w=%.1f; h=%.1f]", dummy.getWidth(), dummy.getHeight()));
 		position.setText(String.format("[x=%.1f; y=%.1f]", dummy.getX(), dummy.getY()));
+		name.setText(dummy.getName());
 
 		this.pack();
+		this.toFront();
 		this.setPosition(0,768-this.getHeight());
 		this.setVisible(true);
 	}
@@ -143,7 +154,7 @@ public class DummyForm extends Window{
 			dummy.setGroup(Integer.parseInt(group.getText()));
 			
 			if(type.getText().length()>0){
-			dummy.setType(DummyType.valueOf(type.getText().toUpperCase()));
+				dummy.setType(type.getText());
 			}
 			
 			if(originX.getText().length()>0 && originY.getText().length()>0){
@@ -152,6 +163,7 @@ public class DummyForm extends Window{
 			if(zoom.getText().length()>0){
 				dummy.setZoom(Float.parseFloat(zoom.getText()));
 			}
+			dummy.setName(name.getText());
 		}
 	}
 

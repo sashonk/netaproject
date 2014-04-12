@@ -18,9 +18,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.me.neta.events.LetterGroupEvent;
 
-public class LettersPanel extends Group{
+public class VariantPanel extends Group{
 	
-	public LettersPanel(NetaGame ng){
+	public VariantPanel(NetaGame ng){
 	
 		Table table = new Table();		
 		Label variant1 = variantLabel("Вариант 1", 1,  ng);				

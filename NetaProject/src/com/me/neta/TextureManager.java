@@ -101,17 +101,22 @@ wondGenerator.dispose();
 ///////////	 CALIBRI 	/////////////
 //////////////////////////////////////////////	
         FreeTypeFontGenerator generatorCalibri = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/arialbd.ttf"));
+		BitmapFont calibri6 = generatorCalibri.generateFont(6,DEFAULT_CHARS, false);
 		BitmapFont calibri12 = generatorCalibri.generateFont(12,DEFAULT_CHARS, false);
 		BitmapFont calibri14 = generatorCalibri.generateFont(14,DEFAULT_CHARS, false);
 		BitmapFont calibri16 = generatorCalibri.generateFont(16,DEFAULT_CHARS, false);
 		BitmapFont calibri18 = generatorCalibri.generateFont(18,DEFAULT_CHARS, false);
+		BitmapFont calibri36 = generatorCalibri.generateFont(36,DEFAULT_CHARS, false);
+
 		generatorCalibri.dispose();
 		
+		skin.add("small", calibri6);
 		skin.add("calibri12", calibri12);
 		skin.add("calibri14", calibri14);
 		skin.add("default", calibri14);
 		skin.add("calibri16", calibri16);
 		skin.add("calibri18", calibri18);
+		skin.add("36", calibri36);
 
 
 		nickolLetter = new Texture(Gdx.files.internal("data/nikol.jpg"));
@@ -487,6 +492,31 @@ wondGenerator.dispose();
         tbStyleSystem2.fontColor = Color.BLACK;
         tbStyleSystem2.up = skin.getDrawable("vknob");
         skin.add("default", tbStyleSystem2);
+        
+        
+        
+		LabelStyle lStyleSmallAnt = new LabelStyle();
+		lStyleSmallAnt.font = skin.getFont("36");
+		lStyleSmallAnt.fontColor = Color.BLUE;
+		skin.add("small-ant", lStyleSmallAnt);	
+		
+		
+		LabelStyle lStyleSmallSpider = new LabelStyle();
+		lStyleSmallSpider.font = skin.getFont("36");
+		lStyleSmallSpider.fontColor = Color.ORANGE;
+		skin.add("small-spider", lStyleSmallSpider);	
+		
+		
+		LabelStyle lStyleSmallPiton = new LabelStyle();
+		lStyleSmallPiton.font = skin.getFont("36");
+		lStyleSmallPiton.fontColor = Color.GREEN;
+		skin.add("small-piton", lStyleSmallPiton);	
+		
+		
+		LabelStyle lStyleSmallTiger = new LabelStyle();
+		lStyleSmallTiger.font = skin.getFont("36");
+		lStyleSmallTiger.fontColor = Color.RED;
+		skin.add("small-tiger", lStyleSmallTiger);	
 	}
 	
 

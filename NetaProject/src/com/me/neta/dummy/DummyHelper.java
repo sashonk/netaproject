@@ -29,7 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.me.neta.NetaGame;
 import com.me.neta.Size;
 import com.me.neta.World;
-import com.me.neta.dummy.Dummy.DummyType;
+//import com.me.neta.dummy.Dummy.DummyType;
 import com.me.neta.dummy.DummyContext.DummyInfo;
 import com.me.neta.dummy.DummyContext.GroupInfo;
 
@@ -49,7 +49,7 @@ public class DummyHelper {
 	 }
 	 
 	 Map<Integer, String> mm;
-	 Map<Integer, DummyType> typeMap;
+	// Map<String, DummyType> typeMap;
 
 	 
 	 public DummyHelper(NetaGame ng, World wor){
@@ -70,29 +70,34 @@ public class DummyHelper {
 			mm.put(Keys.W, "FLOWER2");
 			mm.put(Keys.E, "FLOWER3");
 			mm.put(Keys.T, "barrier");
+			mm.put(Keys.G, "start");
+/*
 			
-			typeMap = new HashMap<Integer, DummyType>();
-			typeMap.put(Keys.NUM_1, DummyType.HOUSE);
-			typeMap.put(Keys.NUM_2, DummyType.HOUSE);
-			typeMap.put(Keys.NUM_3, DummyType.HOUSE);
-			typeMap.put(Keys.NUM_4, DummyType.HOUSE);
-			typeMap.put(Keys.Q, DummyType.FLOWER);
-			typeMap.put(Keys.W, DummyType.FLOWER);
-			typeMap.put(Keys.E, DummyType.FLOWER);
-			typeMap.put(Keys.T, DummyType.BARRIER);
+			typeMap = new HashMap<String, DummyType>();
+			typeMap.put("DOM1", DummyType.HOUSE);
+			typeMap.put("DOM2", DummyType.HOUSE);
+			typeMap.put("DOM3", DummyType.HOUSE);
+			typeMap.put("DOM4", DummyType.HOUSE);
+
+			typeMap.put( "FLOWER1", DummyType.FLOWER);sssss
+			typeMap.put( "FLOWER2", DummyType.FLOWER);
+			typeMap.put( "FLOWER3", DummyType.FLOWER);
+			typeMap.put("barrier", DummyType.BARRIER);
+			typeMap.put("start", DummyType.START);*/
 	 }
 
 	
 	public  void handleInput(float x, float y) {		
 		for(Integer key : mm.keySet()){
 			if(Gdx.input.isKeyPressed(key)){
-				TextureRegion reg = ng.getManager().getAtlas().findRegion(mm.get(key));
+				String regionName = mm.get(key);
+				TextureRegion reg = ng.getManager().getAtlas().findRegion(regionName);
 				Dummy dummy = new  Dummy(ng, reg, this);
-				dummy.setType(typeMap.get(key));
+				dummy.setType(regionName);
 				dummy.setSize(reg.getRegionWidth(), reg.getRegionHeight());
 				dummy.setPosition(x, y);
 				world.addActor(dummy);
-				dummy.setName(mm.get(key));
+				dummy.setName("");
 			}			
 		}
 		
@@ -152,7 +157,7 @@ public class DummyHelper {
 				}
 				Dummy dm = (Dummy)dummy;
 				
-				if(dm.getType()==DummyType.HOUSE){
+				if(dm.getType().contains("DOM")){
 					GroupInfo gInfo = new GroupInfo();
 					groupsMap.put(Integer.valueOf(dm.getGroup()), gInfo);		
 					gInfo.setOrder(dm.getGroup());
@@ -175,7 +180,7 @@ public class DummyHelper {
 				info.setY(dummy.getY());
 				info.setWidth(dummy.getWidth());
 				info.setHeight(dummy.getHeight());
-				info.setType(dm.getType().name());
+				info.setType(dm.getType());
 				
 				GroupInfo gInfo = groupsMap.get(dm.getGroup());
 				List<DummyInfo> flowers = gInfo.getFlowers();
@@ -183,15 +188,8 @@ public class DummyHelper {
 					flowers = new LinkedList<DummyContext.DummyInfo>();
 					gInfo.setFlowers(flowers);
 				}
-				if(dm.getType()==DummyType.HOUSE){
-					gInfo.setHouse(info);
-				}
-				else if(dm.getType()==DummyType.BARRIER){
-					gInfo.setBarrier(info);
-				}
-				else if(dm.getType()==DummyType.FLOWER){
-					flowers.add(info);
-				}
+				flowers.add(info);
+
 				
 			}
 			
@@ -227,7 +225,7 @@ public class DummyHelper {
 			try{
 				
 				
-				FileHandle dummyFile =Gdx.files.internal("data/dummy/dummy-"+world.getTitle()+".ser");				
+				FileHandle dummyFile = Gdx.files.absolute("D:\\dummy.txt");//Gdx.files.internal("data/dummy/dummy-"+world.getTitle()+".ser");				
 				ois = new ObjectInputStream(new ByteArrayInputStream(dummyFile.readBytes()));
 				dummyContext = (DummyContext) ois.readObject();
 				
@@ -244,36 +242,19 @@ public class DummyHelper {
 				}
 				
 				for(GroupInfo gInfo : dummyContext.getGroups()){
-
-					{
-					DummyInfo info = gInfo.getHouse();
-					Dummy dummy = new  Dummy(ng, ng.getManager().getAtlas().findRegion(info.getName()), this);
-					dummy.setSize(info.getWidth(), info.getHeight());
-					dummy.setPosition(info.getX(), info.getY());
-					dummy.setName(info.getName());
-					dummy.setGroup(gInfo.getOrder());
-					dummy.setType(DummyType.HOUSE);
-					dummy.setZoom(gInfo.getZoom());
-					dummy.setGroupOrigin(gInfo.getOrigin());
-					world.addActor(dummy);	
-					
-					 info = gInfo.getBarrier();
-					 dummy = new  Dummy(ng, ng.getManager().getAtlas().findRegion(info.getName()), this);
-					dummy.setSize(info.getWidth(), info.getHeight());
-					dummy.setPosition(info.getX(), info.getY());
-					dummy.setName(info.getName());
-					dummy.setGroup(gInfo.getOrder());
-					dummy.setType(DummyType.BARRIER);
-					world.addActor(dummy);	
-					}
 					
 					for(DummyInfo info : gInfo.getFlowers()){
-						Dummy dummy = new  Dummy(ng, ng.getManager().getAtlas().findRegion(info.getName()), this);
+						Dummy dummy = new  Dummy(ng, ng.getManager().getAtlas().findRegion(info.getType()), this);
 						dummy.setSize(info.getWidth(), info.getHeight());
 						dummy.setPosition(info.getX(), info.getY());
 						dummy.setName(info.getName());
 						dummy.setGroup(gInfo.getOrder());
-						dummy.setType(DummyType.FLOWER);
+						dummy.setType(info.getType());
+						if(info.getType().contains("DOM")){
+							dummy.setGroupOrigin(gInfo.getOrigin());
+							dummy.setZoom(gInfo.getZoom());
+						}
+						
 						world.addActor(dummy);		
 					}
 				
