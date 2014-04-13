@@ -268,28 +268,28 @@ public class Workspace extends Group{
 
 				}
 				
-				if(event instanceof LyricsIconEvent){
+				if(event instanceof CreateCellarsEvent){
 					event.setBubbles(false);
 
 					world.createCellars();
 					//world.addLyrics(lyricsEvent.getChoice());
 					
-					
+					//ng.getContext().setProperty(ContextProperty.LETTERS, new Object());
+					ng.getContext().setProperty(ContextProperty.CELLARS, Boolean.TRUE);
 					lyricsPanel.addAction(sequence(fadeOut(0.4f), visible(false)));
 				}
 				
-				if(event instanceof LetterGroupEvent){
+				if(event instanceof LetterVariantEvent){
 					event.setBubbles(false);
 
 					//world.start();
-					world.letters(((LetterGroupEvent)event).getLetterGroupID());
+					world.letters(((LetterVariantEvent)event).getLetterGroupID());
 				}
 				
-				if(event instanceof DesktopIconEvent){
+				if(event instanceof WorldSelectionEvent){
 					event.setBubbles(false);
 
-					System.out.println("DesktopChoseEvent::handle="+((DesktopIconEvent)event).getId());
-					DesktopIconEvent desktopEvent = (DesktopIconEvent) event;
+					WorldSelectionEvent desktopEvent = (WorldSelectionEvent) event;
 					
 					int deskId = desktopEvent.getId();
 					
@@ -300,6 +300,7 @@ public class Workspace extends Group{
 							 //abandoningWorld.setOrigin(abandoningWorld.getWidth()/2, abandoningWorld.getHeight()/2);
 							abandoningWorld.addAction(abandonWorldAction(abandoningWorld));
 						}
+						
 						
 						world = worldFactories.get(desktopEvent.getId()).create();
 						world.populate();
@@ -327,11 +328,11 @@ public class Workspace extends Group{
 							}
 						});*/
 						world.drawPassport(passport);
-						ng.getContext().notifyListeners();
 					}
 					
 					ng.getContext().setProperty(ContextProperty.WORKING, Boolean.TRUE) ;
-					
+					ng.getContext().setProperty(ContextProperty.LETTERS, null);
+
 				}
 				
 				
@@ -342,7 +343,6 @@ public class Workspace extends Group{
 
 				
 					
-					System.out.println("LetterDropEvent::handle");
 					LetterDropEvent dropEvent = (LetterDropEvent) event;
 					Actor letter= dropEvent.getActor();		
 					
@@ -361,7 +361,23 @@ public class Workspace extends Group{
 					event.setBubbles(false);
 
 				}
-				
+				if(event instanceof LogicLabelClickEvent){
+					event.setBubbles(false);
+					
+					LogicLabelClickEvent lEvent = (LogicLabelClickEvent) event;
+					char c = Character.toLowerCase(lEvent.getChar());
+					
+					Character activeLetter = (Character) ng.getContext().getProperty(ContextProperty.ACTIVE_LETTER);
+					System.out.println("LT="+activeLetter+"; CUR="+c);
+					
+					
+					if(activeLetter.charValue()==c){
+						world.step();
+					}
+					else{
+						System.out.println("WRONG!");
+					}
+				}		
 				
 				if(event instanceof SelectColorEvent){
 					SelectColorEvent colorEvent = (SelectColorEvent) event;

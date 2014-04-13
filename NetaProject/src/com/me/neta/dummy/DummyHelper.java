@@ -142,7 +142,7 @@ public class DummyHelper {
 			constrainZoom(camera);
 		}
 		
-		
+
 
 		if(Gdx.input.isKeyPressed(Keys.S)){
 
@@ -217,6 +217,8 @@ public class DummyHelper {
 					}
 				}
 			}
+			
+			System.out.println("SAVED");
 		}
 
 
@@ -276,6 +278,8 @@ public class DummyHelper {
 					}
 				}
 			}
+			
+			System.out.println("READ");
 		}
 		
 		

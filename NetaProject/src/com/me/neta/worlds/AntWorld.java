@@ -102,49 +102,152 @@ public class AntWorld extends World{
 		return table;
 	}
 	
-	public void lyrics(){
-		Table table = new Table();
+	Table block(){
+		Table block1 = new Table();
 		float pad = 2;
+		block1.defaults().align(Align.left).padRight(pad);
+		return block1;
+	}
+	
+	public void lyrics(){
 		
-		table.defaults().align(Align.left).padRight(pad);
+		{
+			Table block1 = block();			
+			
+			Table line1 = line();
+			line1.add(label("Жил"));
+			line1.add(label("на"));
+			line1.add(label("свете"));
+			
+			Table line2 = line();
+			line2.add(label("муравей"));
+			
+			Table line3 = line();		
+			line3.add(label("Без"));
+			line3.add(label("ресниц"));
+			
+			Table line4 =line();			
+			line4.add(label("и"));
+			line4.add(label("без"));
+			line4.add(label("бровей."));
+			
+			block1.add(line1).row();
+			block1.add(line2).row();
+			block1.add(line3).row();
+			block1.add(line4).row();
+			block1.pack();
+			
+			Group wrap = new Group();
+			wrap.addActor(block1);
+			wrap.setScale(0.16f);
+			Group cg1 = (Group) findActor("cg1");
+			Actor dom1 = cg1.findActor("dom1");
+			wrap.setPosition(dom1.getX()+55, dom1.getY()+22);		
+			cg1.addActor(wrap);
+		}
 		
-		Table line1 = line();
-		line1.add(label("Жил"));
-		line1.add(label("на"));
-		line1.add(label("свете"));
+		{
+			Table block1 = block();			
+			
+			Table line1 = line();
+			line1.add(label("Он"));
+			line1.add(label("терпеть"));
+			
+			Table line2 = line();
+			line2.add(label("не"));
+			line2.add(label("мог"));
+			line2.add(label("девиц -"));
+			
+			Table line3 = line();		
+			line3.add(label("Без"));
+			line3.add(label("бровей"));
+			
+			Table line4 =line();			
+			line4.add(label("и"));
+			line4.add(label("без"));
+			line4.add(label("ресниц."));
+			
+			block1.add(line1).row();
+			block1.add(line2).row();
+			block1.add(line3).row();
+			block1.add(line4).row();
+			block1.pack();
+			
+			Group wrap = new Group();
+			wrap.addActor(block1);
+			wrap.setScale(0.16f);
+			Group cg1 = (Group) findActor("cg2");
+			Actor dom1 = cg1.findActor("dom2");
+			wrap.setPosition(dom1.getX()+55, dom1.getY()+22);		
+			cg1.addActor(wrap);
+		}
 		
-		Table line2 = line();
-		line2.add(label("муравей"));
+		{
+			Table block1 = block();			
+			
+			Table line1 = line();
+			line1.add(label("Потому"));
+			line1.add(label("у"));
+			
+			Table line2 = line();
+			line2.add(label("муравья"));
+			
+			Table line3 = line();		
+			line3.add(label("Были"));
+			line3.add(label("только"));
+			
+			Table line4 =line();			
+			line4.add(label("сыновья:"));
+			
+			block1.add(line1).row();
+			block1.add(line2).row();
+			block1.add(line3).row();
+			block1.add(line4).row();
+			block1.pack();
+			
+			Group wrap = new Group();
+			wrap.addActor(block1);
+			wrap.setScale(0.16f);
+			Group cg1 = (Group) findActor("cg3");
+			Actor dom1 = cg1.findActor("dom3");
+			wrap.setPosition(dom1.getX()+55, dom1.getY()+22);		
+			cg1.addActor(wrap);
+		}
 		
-		Table line3 = line();		
-		line3.add(label("Без"));
-		line3.add(label("ресниц"));
 		
-		Table line4 =line();			
-		line4.add(label("и"));
-		line4.add(label("без"));
-		line4.add(label("бровей."));
-		
-		table.add(line1).row();
-		table.add(line2).row();
-		table.add(line3).row();
-		table.add(line4).row();
-
-		table.pack();
-		table.setScale(0.16f);	
-		
-		Group wrap = new Group();
-		wrap.addActor(table);
-		wrap.setScale(0.16f);
-		
-		
-		
-		
-		Group cg1 = (Group) findActor("cg1");
-		Actor dom1 = cg1.findActor("dom1");
-		wrap.setPosition(dom1.getX()+55, dom1.getY()+22);
-		
-		addActor(wrap);
+		{
+			Table block1 = block();			
+			
+			Table line1 = line();
+			line1.add(label("Сорок"));
+			line1.add(label("восемь"));
+			
+			Table line2 = line();
+			line2.add(label("сыновей -"));
+			
+			Table line3 = line();		
+			line3.add(label("Без"));
+			line3.add(label("ресниц"));
+			
+			Table line4 =line();			
+			line4.add(label("и"));
+			line4.add(label("без"));
+			line4.add(label("бровей."));
+			
+			block1.add(line1).row();
+			block1.add(line2).row();
+			block1.add(line3).row();
+			block1.add(line4).row();
+			block1.pack();
+			
+			Group wrap = new Group();
+			wrap.addActor(block1);
+			wrap.setScale(0.16f);
+			Group cg1 = (Group) findActor("cg4");
+			Actor dom1 = cg1.findActor("dom4");
+			wrap.setPosition(dom1.getX()+55, dom1.getY()+22);		
+			cg1.addActor(wrap);
+		}
 	}
 	
 	@Override

@@ -3,6 +3,7 @@ package com.me.neta;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
@@ -12,6 +13,8 @@ import com.me.neta.events.DragEvent;
 import com.me.neta.events.DragStartEvent;
 import com.me.neta.events.DragStopEvent;
 import com.me.neta.events.LetterDropEvent;
+import com.me.neta.events.SelectFigureEvent;
+import com.me.neta.figures.AbstractFigure;
 
 public abstract class Factory extends Actor{
 	protected NetaGame ng;
@@ -59,6 +62,20 @@ public abstract class Factory extends Actor{
 				
 				
 				Actor letter = createActor();
+/*				letter.addListener(new DoubleClickListener(.8f) {
+						
+						@Override
+						public void doubleClick() {
+							getActor().fire(new SelectFigureEvent());
+
+						}
+					});*/
+				letter.addListener(new InputListener(){
+					public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+						event.getListenerActor().fire(new SelectFigureEvent());
+						return false;
+					}
+				});
 				letter.setPosition(getActor().getX()+x-ox, getActor().getY()+y-oy);
 				
 				Factory.this.fire(new LetterDropEvent(letter));

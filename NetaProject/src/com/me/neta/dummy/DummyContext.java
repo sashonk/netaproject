@@ -3,8 +3,8 @@ package com.me.neta.dummy;
 import java.io.Serializable;
 import java.util.List;
 
-import com.me.neta.NetaGame;
-import com.me.neta.Size;
+import com.badlogic.gdx.math.Vector2;
+
 //import com.me.neta.dummy.Dummy.DummyType;
 
 public class DummyContext implements Serializable{
@@ -52,10 +52,10 @@ public class DummyContext implements Serializable{
 		public void setZoom(float zoom) {
 			this.zoom = zoom;
 		}
-		public Size getOrigin() {
+		public Vector2 getOrigin() {
 			return origin;
 		}
-		public void setOrigin(Size origin) {
+		public void setOrigin(Vector2 origin) {
 			this.origin = origin;
 		}
 
@@ -66,7 +66,7 @@ public class DummyContext implements Serializable{
 			this.order = order;
 		}
 		private float zoom;
-		private Size origin;
+		private Vector2 origin;
 		private int order;
 
 	}

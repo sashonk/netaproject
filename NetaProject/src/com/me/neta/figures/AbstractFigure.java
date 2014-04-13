@@ -25,25 +25,7 @@ public abstract class AbstractFigure extends Moveable{
 		
 		filled= false;
 		
-		 this.addListener(new DoubleClickListener(.8f) {
-				
-				@Override
-				public void doubleClick() {
-					AbstractFigure.this.fire(new SelectFigureEvent());
-					
-/*					OrthographicCamera cam = (OrthographicCamera) AbstractFigure.this.getStage().getCamera();
-					float[] widths = new float[]{1f, .2f, .1f};
-					float[] heights = new float[]{1f, 0.2f, 0.1f};
 
-					if(cam.zoom==1){
-					AbstractFigure.this.addAction(Util.zoomTo(0.3f, 1, new Interpolation.BounceOut(widths, heights)));
-					}
-					else{
-						AbstractFigure.this.addAction(Util.zoomTo(1, 1,new Interpolation.BounceOut(widths, heights)));
-					}*/
-				}
-			});
-		 
 
 	}
 	

@@ -3,6 +3,8 @@ package com.me.neta.figures;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,7 +17,7 @@ import com.me.neta.util.ColorHelper;
 
 public class Letter extends AbstractFigure{
 	
-	static final Map<Character, Integer> characterToIdMap = new HashMap<Character, Integer>();
+	public static final Map<Character, Integer> characterToIdMap = new HashMap<Character, Integer>();
 	static {
 		characterToIdMap.put(Character.valueOf('а'), Integer.valueOf(25));
 		characterToIdMap.put(Character.valueOf('б'), Integer.valueOf(9));
@@ -54,6 +56,8 @@ public class Letter extends AbstractFigure{
 
 	}
 	
+
+	
 	public static Integer getCharId(Character ch){
 		return characterToIdMap.get(ch);
 	}
@@ -62,6 +66,22 @@ public class Letter extends AbstractFigure{
 	TextureRegion circle;
 	TextureRegion char1;
 	TextureRegion char2;
+	char ch;
+	
+	char lookupChar(int id){
+		for(Character ch : characterToIdMap.keySet() ){
+			if(characterToIdMap.get(ch).equals(Integer.valueOf(id))){
+				return ch.charValue();
+			}
+		}
+		
+		throw new IllegalArgumentException();
+	}
+	
+	public void playSound(){
+		Sound sound = tm.letterSound(ch);
+		sound.play();
+	}
 	
 	public Letter(NetaGame ng, int id){
 		this.setSize(30, 30);
@@ -71,10 +91,12 @@ public class Letter extends AbstractFigure{
 		 circle = a.findRegion("FIGURA2W");
 		 char1 = a.findRegion(String.format("CHAR%dW", id));
 		 char2 = a.findRegion(String.format("CHAR%dB", id));
-	
+		 ch = lookupChar(id);
 	}
 	
-
+	public char getCharacter(){
+		return ch;
+	}
 
 
 

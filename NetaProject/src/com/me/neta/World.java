@@ -33,6 +33,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -42,6 +43,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldFilter;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.StringBuilder;
+import com.me.neta.CellarGroup.LogicFlower;
 import com.me.neta.Context.ContextProperty;
 import com.me.neta.dummy.Dummy;
 import com.me.neta.dummy.DummyContext;
@@ -49,7 +51,7 @@ import com.me.neta.dummy.DummyHelper;
 //import com.me.neta.dummy.Dummy.DummyType;
 import com.me.neta.dummy.DummyContext.DummyInfo;
 import com.me.neta.dummy.DummyContext.GroupInfo;
-import com.me.neta.events.LyricsIconEvent;
+import com.me.neta.events.CreateCellarsEvent;
 import com.me.neta.events.ZIndexEvent;
 import com.me.neta.factories.LetterFactory;
 import com.me.neta.figures.AbstractFigure;
@@ -108,6 +110,91 @@ public abstract class World extends Group{
 	
 	public abstract void populateLetters();
 	
+	private LogicFlower activeFlower;
+	
+	public void step(){
+
+		activeFlower.getLetter().playSound(); //activeFlower must not be null
+			activeFlower.setDone(true);
+			activeFlower.getLetter().animateVacant();
+			final CellarGroup activeCG =activeFlower.getGroup();		
+			for(Actor child : activeCG.getChildren()){
+				if(child instanceof LogicFlower){
+					LogicFlower flower = (LogicFlower)child;
+					if(!flower.isDone() && flower!=activeFlower){
+						activeFlower = activeFlower.isDone()? flower : ((activeFlower.getOrder() > flower.getOrder() ? flower : activeFlower));
+					}
+				}
+			}
+		
+		
+		if(activeFlower.isDone()){
+			//TODO no more flowers! go to next group;
+			Actor actor = findActor("cg"+(activeCG.getOrder()+1));
+			if(actor!=null){
+				final CellarGroup cg = (CellarGroup)actor;
+				activeFlower = (LogicFlower) cg.findActor("firstFlower");
+				
+				this.addAction(sequence(Util.zoomTo(0.7f,1, activeCG.getGroupOrigin().x, activeCG.getGroupOrigin().y,  null), delay(0.5f),
+						run(new Runnable() {
+					
+					@Override
+					public void run() {
+						Barrier barrier = (Barrier) activeCG.findActor("barrier");
+						barrier.open(0.35f);	
+					
+					}
+				}), delay(1), run(new Runnable() {
+					
+					@Override
+					public void run() {
+						cg.setEnabled(true);						
+					}
+				}),
+					Util.moveCameraTo(cg.getGroupOrigin().x, cg.getGroupOrigin().y, 1f, null), 
+					Util.zoomTo(cg.getZoom(), 1f, cg.getGroupOrigin().x, cg.getGroupOrigin().y, null), run(new Runnable() {
+						
+						@Override
+						public void run() {
+							activeFlower.getLetter().animateSelected();
+							Letter letter =  activeFlower.getLetter();
+						
+							char ch = letter.getCharacter();
+							ng.getContext().setProperty(ContextProperty.ACTIVE_LETTER, Character.valueOf(ch));
+						}
+					})));
+				
+			}
+			else{
+				//total WIN!!
+				System.out.println("WIN!");				
+				Action seq = sequence(Util.zoomTo(0.7f,1, activeCG.getGroupOrigin().x, activeCG.getGroupOrigin().y,  null),delay(0.5f),run(new Runnable() {
+					
+					@Override
+					public void run() {
+						Barrier barrier = (Barrier) activeCG.findActor("barrier");
+						barrier.open(0.35f);							
+					}
+				}), delay(1), Util.zoomTo(1, 1,activeCG.getGroupOrigin().x, activeCG.getGroupOrigin().y, null));
+				addAction(seq);
+				
+				ng.getContext().setProperty(ContextProperty.GAME_END, new Object());
+				ng.getContext().setProperty(ContextProperty.HALT, null);
+			}
+		}
+		else{
+			//go to next flower
+			
+			activeFlower.getLetter().animateSelected();
+			Letter letter =  activeFlower.getLetter();
+			
+			char ch = letter.getCharacter();
+			ng.getContext().setProperty(ContextProperty.ACTIVE_LETTER, Character.valueOf(ch));
+		}
+		
+
+		//letter.animateSelected();
+	}
 	
 	
 	public static Actor multiColorLabel(String text, String baseStyle, String[] colorNames, Skin skin){
@@ -221,16 +308,16 @@ public abstract class World extends Group{
 		Dummy dom =  (Dummy) findActor("dom"+domId);
 		
 		if(dom!=null){
-			Size go = dom.getGroupOrigin();
+			Vector2 go = dom.getGroupOrigin();
 			float zoom = dom.getZoom();	
 			 
 			List<Action> actions = new LinkedList<Action>();
 			if(domId!=1){
 				actions.add(Util.zoomTo(.6f, 1f, prevX, prevY, null));
 				actions.add(delay(2));
-				actions.add(Util.moveCameraTo(go.width, go.height, 1, null));
+				actions.add(Util.moveCameraTo(go.x, go.y, 1, null));
 			}
-			actions.addAll(Arrays.asList( Util.zoomTo(zoom, 1, go.width, go.height, null), delay(2), moveToSequence(domId+1, go.width, go.height)));
+			actions.addAll(Arrays.asList( Util.zoomTo(zoom, 1, go.x, go.y, null), delay(2), moveToSequence(domId+1, go.x, go.y)));
 			return sequence(actions.toArray(new Action[]{}));
 		}
 		
@@ -244,8 +331,19 @@ public abstract class World extends Group{
 	 }
 	
 	public  void start(){
+		CellarGroup cg1 = (CellarGroup) findActor("cg1");
+		cg1.setEnabled(true);
+		activeFlower = (LogicFlower) cg1.findActor("firstFlower");
+		ng.getContext().setProperty(ContextProperty.ACTIVE_LETTER, Character.valueOf(activeFlower.getLetter().getCharacter()));
+	
 		
-		this.addAction(moveToSequence(1, 0, 0));
+		addAction(sequence(Util.zoomTo(cg1.getZoom(), 1, cg1.getGroupOrigin().x, cg1.getGroupOrigin().y, null), run(new Runnable() {			
+			@Override
+			public void run() {
+				activeFlower.getLetter().animateSelected();
+			}
+		})));
+
 		
 	}
 	
@@ -274,7 +372,7 @@ public abstract class World extends Group{
 					letter.setName("letter");
 					letter.setPosition(20, 20);
 					letter.setColor(letterColor());
-					dummy.addActor(letter);
+					dummy.setLetter(letter);
 				}
 				
 				
@@ -309,29 +407,45 @@ public abstract class World extends Group{
 			}
 			
 			for(GroupInfo gInfo : dummyContext.getGroups()){
-				CellarGroup cg = new CellarGroup(ng, gInfo.getOrder());
+				CellarGroup cg = new CellarGroup(ng, gInfo.getOrder());				
+				cg.setGroupOrigin(gInfo.getOrigin());
+				cg.setZoom(gInfo.getZoom());
+				cg.setDone(false);
+				cg.setEnabled(false);
 				cg.setName("cg"+gInfo.getOrder());
+				cg.setPosition(gInfo.getOrigin().x, gInfo.getOrigin().y);
+				
+				cg.setScale(0.1f);
+				cg.addAction(Actions.scaleTo(1, 1, 1));
 				addActor(cg);
 				
-				
+				//Map<Integer, LogicFlower> flowers = new HashMap<Integer, CellarGroup.LogicFlower>();
 				for(DummyInfo info : gInfo.getFlowers()){
 					
 					if("start".equals(info.getType())){
 						StartButton btn = new StartButton(ng, this);
+						btn.setName("startButton");
 						ng.getContext().registerListener(btn);
 						btn.setPosition(info.getX(), info.getY());
 						
-						cg.addActor(btn);
+						addActor(btn);
 					}
 					else if("barrier".equals(info.getType())){
 						Barrier barrier = new Barrier(ng);
-						barrier.setPosition(info.getX(), info.getY());
+						barrier.setName("barrier");
+						barrier.setPosition(info.getX()-cg.getX(), info.getY()-cg.getY());
 						cg.addActor(barrier);
 					}
 					else if(info.getType().contains("FLOWER")){
-						CellarGroup.LogicFlower flower = new CellarGroup.LogicFlower(ng, info.getType());						
-						flower.setPosition(info.getX(), info.getY());
+						CellarGroup.LogicFlower flower = new CellarGroup.LogicFlower(ng, info.getType(), cg);				
+						flower.setDone(false);
+						flower.setPosition(info.getX()-cg.getX(), info.getY()-cg.getY());
+						flower.setOrder(Integer.valueOf(info.getName()));
+						if(flower.getOrder()==1){
+							flower.setName("firstFlower");
+						}
 						cg.addActor(flower);
+						//flowers.put(Integer.valueOf(info.getName()), flower);
 					}
 					else{
 						
@@ -342,15 +456,18 @@ public abstract class World extends Group{
 							dummy.addListener(new MetricListener());
 						}
 						dummy.setSize(info.getWidth(), info.getHeight());
-						dummy.setPosition(info.getX(), info.getY());
+						dummy.setPosition(info.getX()-cg.getX(), info.getY()-cg.getY());
 						dummy.setName(info.getName());
 						dummy.setGroup(gInfo.getOrder());
 						dummy.setType(info.getType());
 						
-						cg.addActor(dummy);		
+						//dummy.setScale(0);
+						cg.addActor(dummy);
+						//dummy.addAction(Actions.scaleTo(1, 1, 1));
 					}
 				}
 			
+		
 			}
 			
 

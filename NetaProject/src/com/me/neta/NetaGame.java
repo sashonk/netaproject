@@ -51,13 +51,7 @@ public class NetaGame implements ApplicationListener {
 	
 	void initContext(){
 		context.setProperty(ContextProperty.HALT, Boolean.TRUE);
-		context.setProperty(ContextProperty.PREPARED, null);
-		context.setProperty(ContextProperty.WORKING, null);
-		context.setProperty(ContextProperty.INGAME, null);
-		context.setProperty(ContextProperty.LETTER_ON, null);
-		context.setProperty(ContextProperty.LETTERS, null);
-		context.setProperty(ContextProperty.GAME_END, null);
-		context.setProperty(ContextProperty.CELLARS, null);
+
 
 	}
 	

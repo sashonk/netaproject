@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -30,6 +31,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.badlogic.gdx.utils.StringBuilder;
+import com.me.neta.figures.Letter;
 
 public class TextureManager {
 	
@@ -61,9 +64,19 @@ public class TextureManager {
 	
 	private Texture np9Error;
 	
-
+	Map<Character, Sound> soundMap = new HashMap<Character, Sound>();
+	
+	public Sound letterSound(Character c){
+		return soundMap.get(c);
+	}
 	
 	public void init(){
+		
+		for(Character c :  Letter.characterToIdMap.keySet()){
+			soundMap.put(c, Gdx.audio.newSound(Gdx.files.internal(new StringBuilder("data/sound/").append(c).append(".mp3").toString())));
+		}
+		
+		
 		atlas = new TextureAtlas(Gdx.files.internal("data/main.pack"));
 		miscAtlas = new TextureAtlas(Gdx.files.internal("data/misc/misc.pack"));
 
@@ -651,6 +664,11 @@ wondGenerator.dispose();
 	private TextureRegion instructScreenReg;
 	
 	private void disposeInternal(){
+		
+		for(Sound snd : soundMap.values()){
+			snd.dispose();
+		}
+		
 		np9.dispose();
 		np9Error.dispose();
 		

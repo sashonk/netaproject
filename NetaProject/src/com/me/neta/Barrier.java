@@ -27,9 +27,9 @@ public class Barrier extends Group{
 		boomImg.setOrigin(48*k, 12*k);
 	}
 
-	public void open(){
+	public void open(float speed){
 		if(!opened){
-			boomImg.addAction(Actions.rotateBy(45, 0.3f));
+			boomImg.addAction(Actions.rotateBy(45, speed));
 			opened = true;
 		}
 	}

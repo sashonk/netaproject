@@ -3,8 +3,8 @@ package com.me.neta.events;
 import com.badlogic.gdx.scenes.scene2d.Event;
 
 
-public  class LyricsIconEvent extends Event{
-	public LyricsIconEvent(int choise){
+public  class CreateCellarsEvent extends Event{
+	public CreateCellarsEvent(int choise){
 		this.choice = choise;
 	}
 	

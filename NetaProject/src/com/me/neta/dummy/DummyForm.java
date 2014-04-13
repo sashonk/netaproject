@@ -1,6 +1,7 @@
 package com.me.neta.dummy;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -80,7 +81,7 @@ public class DummyForm extends Window{
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				OrthographicCamera camera  = (OrthographicCamera) event.getListenerActor().getStage().getCamera();
 				camera.zoom=dummy.getZoom();
-				camera.position.set(dummy.getGroupOrigin().width, dummy.getGroupOrigin().height, 0);
+				camera.position.set(dummy.getGroupOrigin().x, dummy.getGroupOrigin().y, 0);
 				Util.constrainPosition(camera, event.getListenerActor().getStage() );
 				Util.constrainZoom(camera);
 				return true;
@@ -136,8 +137,8 @@ public class DummyForm extends Window{
 		type.setText(dummy.getType()!=null ? dummy.getType() : "");
 		zoom.setText(Float.toString(dummy.getZoom()));
 		if(dummy.getGroupOrigin()!=null){
-		originX.setText(Float.toString(dummy.getGroupOrigin().width));
-		originY.setText(Float.toString(dummy.getGroupOrigin().height));
+		originX.setText(Float.toString(dummy.getGroupOrigin().x));
+		originY.setText(Float.toString(dummy.getGroupOrigin().y));
 		}
 		size.setText(String.format("[w=%.1f; h=%.1f]", dummy.getWidth(), dummy.getHeight()));
 		position.setText(String.format("[x=%.1f; y=%.1f]", dummy.getX(), dummy.getY()));
@@ -158,7 +159,7 @@ public class DummyForm extends Window{
 			}
 			
 			if(originX.getText().length()>0 && originY.getText().length()>0){
-				dummy.setGroupOrigin(new Size(Float.parseFloat(originX.getText()),Float.parseFloat(originY.getText())));				
+				dummy.setGroupOrigin(new Vector2(Float.parseFloat(originX.getText()),Float.parseFloat(originY.getText())));				
 			}
 			if(zoom.getText().length()>0){
 				dummy.setZoom(Float.parseFloat(zoom.getText()));

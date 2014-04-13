@@ -2,9 +2,9 @@ package com.me.neta.events;
 
 import com.badlogic.gdx.scenes.scene2d.Event;
 
-public class LetterGroupEvent extends Event{
+public class LetterVariantEvent extends Event{
 	int ID;
-	public LetterGroupEvent(int ID){
+	public LetterVariantEvent(int ID){
 		this.ID = ID;
 	}
 	

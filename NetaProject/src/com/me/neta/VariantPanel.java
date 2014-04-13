@@ -16,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.me.neta.events.LetterGroupEvent;
+import com.me.neta.events.LetterVariantEvent;
 
 public class VariantPanel extends Group{
 	
@@ -43,7 +43,7 @@ public class VariantPanel extends Group{
 			
 			@Override
 			public boolean handle(Event event) {
-				if(event instanceof LetterGroupEvent){
+				if(event instanceof LetterVariantEvent){
 					event.getListenerActor().addAction(sequence(fadeOut(0.4f), visible(false)));	
 					return true;
 				}
@@ -56,7 +56,7 @@ public class VariantPanel extends Group{
 		final Label variant1 = new Label(text, ng.getManager().getSkin(), "title_orange");
 		variant1.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				event.getTarget().fire(new LetterGroupEvent(variantID));
+				event.getTarget().fire(new LetterVariantEvent(variantID));
 				return false;
 			}		
 		});

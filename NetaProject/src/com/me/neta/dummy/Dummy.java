@@ -28,11 +28,11 @@ public class Dummy extends Moveable{
 	
 	private String type;
 	
-	public Size getGroupOrigin() {
+	public Vector2 getGroupOrigin() {
 		return groupOrigin;
 	}
 
-	public void setGroupOrigin(Size groupOrigin) {
+	public void setGroupOrigin(Vector2 groupOrigin) {
 		this.groupOrigin = groupOrigin;
 	}
 
@@ -44,7 +44,7 @@ public class Dummy extends Moveable{
 		this.zoom = zoom;
 	}
 
-	private Size groupOrigin;
+	private Vector2 groupOrigin;
 	
 	private float zoom;
 	
@@ -82,7 +82,17 @@ public class Dummy extends Moveable{
 					if(Gdx.input.isKeyPressed(Keys.SHIFT_RIGHT)){
 						event.getListenerActor().remove();
 					}
+					if(Gdx.input.isKeyPressed(Keys.I)){
+						
+						OrthographicCamera c = (OrthographicCamera) getStage().getCamera();
+						Dummy.this.zoom = c.zoom;
+						Dummy.this.setGroupOrigin(new Vector2(c.position.x, c.position.y));
+						System.out.println("INJECTED!");
+						//Dummy.this.setGroupOrigin(c.position);
+					} 
 					else{
+
+						
 						DummyForm form = helper.getForm();
 						form.show(Dummy.this);
 					}

@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.me.neta.events.DesktopIconEvent;
+import com.me.neta.events.WorldSelectionEvent;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 public class DesktopsPanel extends Group{
@@ -80,7 +80,7 @@ public class DesktopsPanel extends Group{
 				}
 				
 				if(id>0){
-					DesktopIconEvent ev = new DesktopIconEvent(id);
+					WorldSelectionEvent ev = new WorldSelectionEvent(id);
 					fire(ev);
 					DesktopsPanel.this.addAction(sequence(alpha(0), visible(false)));
 				}

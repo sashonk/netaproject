@@ -3,31 +3,79 @@ package com.me.neta;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
+import com.me.neta.Context.ContextProperty;
+import com.me.neta.events.LogicLabelClickEvent;
 import com.me.neta.figures.Letter;
 
 public class CellarGroup extends Group{
 	NetaGame theGame;
 	int ID;
+	boolean isDone;
+	Vector2 groupOrigin;
+	float zoom;
+	boolean enabled;
 	public CellarGroup(NetaGame ng, int id){
 		theGame = ng;
 		ID= id;		
 	}
+	
+	public int getOrder(){
+		return ID;
+	}
+	
+	public boolean  isDone(){
+		return isDone;
+	}
+	
+	public void setDone(boolean value){
+		isDone = value;
+	}
+	
+	public void setEnabled(boolean value){
+		enabled = value;
+		
+		if(!enabled){
+			this.addAction(Actions.alpha(0.5f));
+		}
+		else{
+			this.addAction(Actions.alpha(1f));
+		}
+	}
+	
+	public boolean isEnabled(){
+		return enabled;
+	}
 
 	public static class LogicLabel extends Table{
-		public LogicLabel(NetaGame ng, String text, String styleSuff){
+		public LogicLabel(final NetaGame ng, String text, String styleSuff){
 			defaults().padRight(1);
 			for(int i=0; i<text.length();i++){
-				char c = text.charAt(i);
-				Label lab = new Label(new String(new char[]{c}), ng.getManager().getSkin(), "small-"+styleSuff);
+				final char c = text.charAt(i);
+				final Label lab = new Label(new String(new char[]{c}), ng.getManager().getSkin(), "small-"+styleSuff);
+				
+				lab.addListener(new InputListener(){
+					public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+						if(ng.getContext().getProperty(ContextProperty.INGAME)==null){
+							return false;
+						}
+						
+						event.getListenerActor().fire(new LogicLabelClickEvent(c));
+											
+						return true;
+					}
+				});
+				
 				add(lab);
 				
 			}
@@ -38,7 +86,47 @@ public class CellarGroup extends Group{
 	
 	public static class LogicFlower extends Group{
 		
-		public LogicFlower(NetaGame ng, String info){
+		int order;
+		boolean isDone;
+		LogicFlower next;
+		CellarGroup cellarGroup;
+		
+		public CellarGroup getGroup(){
+			return cellarGroup;
+		}
+		
+		public int getOrder(){
+			return order;
+		}
+		
+		public void setOrder(int value){
+			order = value;
+		}
+		
+		public boolean  isDone(){
+			return isDone;
+		}
+		
+		public void setDone(boolean value){
+			isDone = value;
+		}
+
+
+		public Letter getLetter(){
+			return (Letter) findActor("letter");
+		}
+		
+		public void setLetter(Letter lt){
+			Actor letter = findActor("letter");
+			if(letter!=null){
+				removeActor(letter);
+			}
+			addActor(lt);
+			
+		}
+		
+		public LogicFlower(NetaGame ng, String info, CellarGroup cg){
+			cellarGroup= cg;
 			TextureRegion reg = ng.getManager().getAtlas().findRegion(info);
 			Image img = new Image(reg);
 			img.setSize(reg.getRegionWidth(), reg.getRegionHeight());
@@ -58,18 +146,20 @@ public class CellarGroup extends Group{
 	
 	}
 	
-	public void setSucceed(){
-		Actor actor = findActor("gate");
-		
-		//gate.open();
-	}
-	
-	public void addFlower(LogicFlower flower){
-		addActor(flower);
-		flower.addListener(new CoorListener());
+	public void setZoom(float zoom){
+		this.zoom = zoom;
 	}
 
-
+	public float getZoom(){
+		return zoom;
+	}
 	
+	public void setGroupOrigin(Vector2 value){
+		groupOrigin = value;
+	}
+	
+	public Vector2 getGroupOrigin(){
+		return groupOrigin;
+	}
 	
 }

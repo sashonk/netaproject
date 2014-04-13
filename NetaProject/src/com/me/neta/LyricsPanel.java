@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.me.neta.events.LyricsIconEvent;
+import com.me.neta.events.CreateCellarsEvent;
 
 public class LyricsPanel extends Group{
 	
@@ -56,7 +56,7 @@ public class LyricsPanel extends Group{
 				
 				if(choice>0){
 					System.out.println("lyricsPanel::choise="+choice);
-					LyricsIconEvent ev = new LyricsIconEvent(choice);
+					CreateCellarsEvent ev = new CreateCellarsEvent(choice);
 					
 					fire(ev);
 				}
