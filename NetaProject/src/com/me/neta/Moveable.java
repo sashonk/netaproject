@@ -8,14 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 
-public abstract class Moveable extends Actor{
+public interface  Moveable{
 
-	protected float dragStartX ;
-	protected float dragStartY ;
 	
-	protected float sx ;
-	protected float sy ;
-	
-	public abstract boolean isDisposable();
+	public  boolean isDisposable();
 	
 }

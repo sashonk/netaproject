@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -65,9 +66,14 @@ public class TextureManager {
 	private Texture np9Error;
 	
 	Map<Character, Sound> soundMap = new HashMap<Character, Sound>();
+	Map<String, Music> levinSound = new HashMap<String, Music>();
 	
 	public Sound letterSound(Character c){
 		return soundMap.get(c);
+	}
+	
+	public Music getMusic(String name){
+		return levinSound.get(name);
 	}
 	
 	public void init(){
@@ -76,6 +82,13 @@ public class TextureManager {
 			soundMap.put(c, Gdx.audio.newSound(Gdx.files.internal(new StringBuilder("data/sound/").append(c).append(".mp3").toString())));
 		}
 		
+		String[] worldNames = {"ant", "spider", "piton", "tiger"};
+		
+		for(String name : worldNames){
+			levinSound.put(name, Gdx.audio.newMusic(Gdx.files.internal(new StringBuilder("data/sound/").append(name).append(".ogg").toString())));
+
+		}
+	
 		
 		atlas = new TextureAtlas(Gdx.files.internal("data/main.pack"));
 		miscAtlas = new TextureAtlas(Gdx.files.internal("data/misc/misc.pack"));
@@ -516,7 +529,7 @@ wondGenerator.dispose();
 		
 		LabelStyle lStyleSmallSpider = new LabelStyle();
 		lStyleSmallSpider.font = skin.getFont("36");
-		lStyleSmallSpider.fontColor = Color.ORANGE;
+		lStyleSmallSpider.fontColor = Color.BLACK;
 		skin.add("small-spider", lStyleSmallSpider);	
 		
 		
@@ -666,6 +679,10 @@ wondGenerator.dispose();
 	private void disposeInternal(){
 		
 		for(Sound snd : soundMap.values()){
+			snd.dispose();
+		}
+		
+		for(Music snd : levinSound.values()){
 			snd.dispose();
 		}
 		

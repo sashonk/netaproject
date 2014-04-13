@@ -41,10 +41,7 @@ public class SpiderWorld extends World{
 		return "spider";
 	}
 	
-	public void lyrics(){
-		
-	}
-	
+
 	@Override
 	public Actor createTitle() {
 		return Util.multiColorLabel("паучок", "title", new String[]{"red", "orange", "yellow", "green", "blue", "green"}, ng.getManager().getSkin());
@@ -82,6 +79,110 @@ public class SpiderWorld extends World{
 		return false;
 	}
 
+	public void lyrics(){
+		float dx = 55;
+		float dy = 30;
+		float scale = 0.25f;
+		{
+			Table block1 = block();			
+			
+			Table line1 = line();
+			line1.add(label("Паучок "));
+			line1.add(label("приехал"));
+			
+			Table line2 = line();
+			line2.add(label("На"));
+			line2.add(label("базар:"));
+			
+			block1.add(line1).row();
+			block1.add(line2).row();
+			block1.pack();
+			
+			Group wrap = new Group();
+			wrap.addActor(block1);
+			wrap.setScale(scale);
+			Group cg1 = (Group) findActor("cg1");
+			Actor dom1 = cg1.findActor("dom1");
+			wrap.setPosition(dom1.getX()+dx, dom1.getY()+dy);		
+			cg1.addActor(wrap);
+		}
+		
+		{
+			Table block1 = block();						
+			Table line3 = line();		
+			line3.add(label("Мухам"));
+			line3.add(label("паучок"));
+			
+			Table line4 =line();			
+			line4.add(label("Привез"));
+			line4.add(label("товар."));
+			
+			block1.add(line3).row();
+			block1.add(line4).row();
+			block1.pack();
+			
+			Group wrap = new Group();
+			wrap.addActor(block1);
+			wrap.setScale(scale);
+			Group cg1 = (Group) findActor("cg2");
+			Actor dom1 = cg1.findActor("dom2");
+			wrap.setPosition(dom1.getX()+dx, dom1.getY()+dy);		
+			cg1.addActor(wrap);
+		}
+		
+		{
+			Table block1 = block();			
+			
+			Table line1 = line();
+			line1.add(label("Он"));
+			line1.add(label("его"));
+			line1.add(label("развесил"));
+
+			
+			Table line2 = line();
+			line2.add(label("на"));
+			line2.add(label("осинке:"));
+		
+			
+			block1.add(line1).row();
+			block1.add(line2).row();
+			block1.pack();
+			
+			Group wrap = new Group();
+			wrap.addActor(block1);
+			wrap.setScale(scale);
+			Group cg1 = (Group) findActor("cg3");
+			Actor dom1 = cg1.findActor("dom3");
+			wrap.setPosition(dom1.getX()+dx, dom1.getY()+dy);		
+			cg1.addActor(wrap);
+		}
+		
+		
+		{
+			Table block1 = block();			
+			
+			Table line1 = line();
+			line1.add(label("-Кто"));
+			line1.add(label("желает"));
+			
+			Table line2 = line();
+			line2.add(label("свежей"));
+			line2.add(label("паутинки?"));
+
+			
+			block1.add(line1).row();
+			block1.add(line2).row();
+			block1.pack();
+			
+			Group wrap = new Group();
+			wrap.addActor(block1);
+			wrap.setScale(scale);
+			Group cg1 = (Group) findActor("cg4");
+			Actor dom1 = cg1.findActor("dom4");
+			wrap.setPosition(dom1.getX()+dx, dom1.getY()+dy);		
+			cg1.addActor(wrap);
+		}
+	}
 	
 	@Override
 	public void populateLetters(){

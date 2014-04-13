@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
@@ -17,7 +18,7 @@ import com.me.neta.Moveable;
 import com.me.neta.NetaGame;
 import com.me.neta.Size;
 
-public class Dummy extends Moveable{
+public class Dummy extends Actor implements Moveable{
 	
 /*	public enum DummyType implements Serializable{
 		HOUSE,

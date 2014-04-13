@@ -195,7 +195,7 @@ public class DummyHelper {
 			
 			ObjectOutputStream oos = null;
 			try{
-				File dummyFile = new File("D:\\dummy.txt");
+				File dummyFile = new File("D:\\dummy-"+world.getTitle()+".txt");
 				if(dummyFile.exists()){
 					File backup = new File(dummyFile.getAbsolutePath());
 					backup.renameTo( new File(dummyFile.getAbsolutePath()+System.currentTimeMillis()+".back"));
@@ -227,11 +227,11 @@ public class DummyHelper {
 			try{
 				
 				
-				FileHandle dummyFile = Gdx.files.absolute("D:\\dummy.txt");//Gdx.files.internal("data/dummy/dummy-"+world.getTitle()+".ser");				
+				FileHandle dummyFile = Gdx.files.internal("data/dummy/dummy-"+world.getTitle()+".ser");//Gdx.files.internal("data/dummy/dummy-"+world.getTitle()+".ser");				
 				ois = new ObjectInputStream(new ByteArrayInputStream(dummyFile.readBytes()));
 				dummyContext = (DummyContext) ois.readObject();
 				
-				List<Actor> rm = new ArrayList<Actor>( world.getChildren().size);
+				List<Actor> rm = new ArrayList<Actor>(world.getChildren().size);
 				Iterator<Actor> iter = world.getChildren().iterator();
 				while(iter.hasNext()){
 					Actor a = iter.next();

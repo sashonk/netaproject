@@ -332,6 +332,8 @@ public class Workspace extends Group{
 					
 					ng.getContext().setProperty(ContextProperty.WORKING, Boolean.TRUE) ;
 					ng.getContext().setProperty(ContextProperty.LETTERS, null);
+					ng.getContext().setProperty(ContextProperty.CELLARS, null);
+					ng.getContext().setProperty(ContextProperty.INGAME, null);
 
 				}
 				

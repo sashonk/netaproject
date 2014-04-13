@@ -15,6 +15,8 @@ import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -44,6 +46,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.me.neta.CellarGroup.LogicFlower;
+import com.me.neta.CellarGroup.LogicLabel;
 import com.me.neta.Context.ContextProperty;
 import com.me.neta.dummy.Dummy;
 import com.me.neta.dummy.DummyContext;
@@ -175,11 +178,18 @@ public abstract class World extends Group{
 						Barrier barrier = (Barrier) activeCG.findActor("barrier");
 						barrier.open(0.35f);							
 					}
-				}), delay(1), Util.zoomTo(1, 1,activeCG.getGroupOrigin().x, activeCG.getGroupOrigin().y, null));
+				}), delay(1), Util.zoomTo(1, 1,activeCG.getGroupOrigin().x, activeCG.getGroupOrigin().y, null), run(new Runnable() {
+					
+					@Override
+					public void run() {
+						ng.getContext().setProperty(ContextProperty.GAME_END, new Object());
+						ng.getContext().setProperty(ContextProperty.HALT, null);
+						World.this.playLevin();
+					}
+				}));
 				addAction(seq);
 				
-				ng.getContext().setProperty(ContextProperty.GAME_END, new Object());
-				ng.getContext().setProperty(ContextProperty.HALT, null);
+
 			}
 		}
 		else{
@@ -193,7 +203,6 @@ public abstract class World extends Group{
 		}
 		
 
-		//letter.animateSelected();
 	}
 	
 	
@@ -284,7 +293,7 @@ public abstract class World extends Group{
 
 		ObjectInputStream ois = null;
 		try{
-		FileHandle dummyFile = Gdx.files.absolute("D:\\dummy.txt");// Gdx.files.internal("data/dummy/dummy-"+getTitle()+".ser");				
+		FileHandle dummyFile = Gdx.files.internal("data/dummy/dummy-"+getTitle()+".ser");// Gdx.files.internal("data/dummy/dummy-"+getTitle()+".ser");				
 		ois = new ObjectInputStream(new ByteArrayInputStream(dummyFile.readBytes()));
 		 baseDummyContext = (DummyContext) ois.readObject();
 		}
@@ -674,4 +683,27 @@ public abstract class World extends Group{
 		populateForeground();
 	}
 	
+	public LogicLabel label(String txt){
+		LogicLabel l1 = new LogicLabel(ng, txt, getTitle());
+		return l1;
+	}
+	
+	public Table line(){
+		Table table = new Table();
+		table.defaults().padRight(16);
+		return table;
+	}
+	
+	public Table block(){
+		Table block1 = new Table();
+		float pad = 2;
+		block1.defaults().align(Align.left).padRight(pad);
+		return block1;
+	}
+	
+	
+	 void playLevin(){
+		 Music snd =  tm.getMusic(getTitle());
+		snd.play();
+	 }
 }

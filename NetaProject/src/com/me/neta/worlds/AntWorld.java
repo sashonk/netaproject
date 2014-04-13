@@ -91,23 +91,7 @@ public class AntWorld extends World{
 
 	}
 	
-	LogicLabel label(String txt){
-		LogicLabel l1 = new LogicLabel(ng, txt, getTitle());
-		return l1;
-	}
-	
-	Table line(){
-		Table table = new Table();
-		table.defaults().padRight(16);
-		return table;
-	}
-	
-	Table block(){
-		Table block1 = new Table();
-		float pad = 2;
-		block1.defaults().align(Align.left).padRight(pad);
-		return block1;
-	}
+
 	
 	public void lyrics(){
 		
