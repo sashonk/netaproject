@@ -90,6 +90,7 @@ public class CellarGroup extends Group{
 		boolean isDone;
 		LogicFlower next;
 		CellarGroup cellarGroup;
+		String info;
 		
 		public CellarGroup getGroup(){
 			return cellarGroup;
@@ -125,7 +126,12 @@ public class CellarGroup extends Group{
 			
 		}
 		
+		public String getInfo(){
+			return info;
+		}
+		
 		public LogicFlower(NetaGame ng, String info, CellarGroup cg){
+			this.info = info;
 			cellarGroup= cg;
 			TextureRegion reg = ng.getManager().getAtlas().findRegion(info);
 			Image img = new Image(reg);

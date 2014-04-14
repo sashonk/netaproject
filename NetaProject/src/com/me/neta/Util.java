@@ -4,7 +4,9 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
@@ -12,10 +14,63 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.StringBuilder;
+import com.me.neta.Util.OnEventAction.Predicate;
 import com.sun.org.apache.bcel.internal.generic.GETFIELD;
 
 public class Util {
+	
+	
+	public static Action vibration(float aplitude, float duration){
+		VibrationAction action = new VibrationAction(aplitude);
+		action.setDuration(duration);
+		return action;
+	}
+	
+	
+	//TODO
+	 static class VibrationAction extends TemporalAction{
+		 float amp;
+		 public VibrationAction(float amplitude){
+			 amp = amplitude;
+		 }
+		@Override
+		protected void update(float percent) {
+			float degree = amp*percent;
+			getActor().setRotation(degree);
+		}
+		 
+	 }
+	
+	public static Action onEvent(Action eventAction, Predicate p){
+		OnEventAction a = new OnEventAction(eventAction, p);
+		return a;
+	}
+	
 
+	 static class OnEventAction extends Action{
+		Predicate predicate;
+		Action eventAction;
+		public OnEventAction(Action runnable, Predicate predicate){
+			this.eventAction = runnable;
+			this.predicate = predicate;
+		}
+		
+		public  static  interface Predicate{
+			boolean accept();
+		}
+
+		@Override
+		public boolean act(float delta) {
+			if(predicate.accept()){
+				getActor().addAction(eventAction);
+				return true;
+			}
+			return false;
+		}
+
+
+	}
+	
 
 	public static TemporalAction zoomTo(float value, float duration, float x, float y, Interpolation interpolation){
 		ZoomToAction zoomTo = new ZoomToAction(value, x ,y);

@@ -8,7 +8,9 @@ import java.util.Map;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.me.neta.Hero;
 import com.me.neta.NetaGame;
 import com.me.neta.Piton;
@@ -64,8 +66,118 @@ public class PitonWorld extends World{
 		addActor(bird);		
 	}
 
+
 	public void lyrics(){
+		float dx = 70;
+		float dy = 33;
+		float scale = 0.22f;
+		{
+			Table block1 = block();			
+			
+			Table line1 = line();
+			line1.add(label("Плачет"));
+
+			Table line2 = line();
+			line2.add(label("маленький"));
+			line2.add(label("питон:"));
+			
+			Table line3 = line();
+			line3.add(label("Сам"));
+			line3.add(label("себя"));
+			
+			Table line4 = line();
+			line4.add(label("запутал"));
+			line4.add(label("он."));
+			
+			block1.add(line1).row();
+			block1.add(line2).row();
+			block1.add(line3).row();
+			block1.add(line4).row();
+			block1.pack();
+			
+			Group wrap = new Group();
+			wrap.addActor(block1);
+			wrap.setScale(scale);
+			Group cg1 = (Group) findActor("cg1");
+			Actor dom1 = cg1.findActor("dom1");
+			wrap.setPosition(dom1.getX()+dx, dom1.getY()+dy);		
+			cg1.addActor(wrap);
+		}
 		
+		{
+			Table block1 = block();						
+			Table line1 = line();		
+			line1.add(label("Сам"));
+			line1.add(label("себя"));
+			
+			Table line2 =line();			
+			line2.add(label("переползал"));
+			
+			Table line3 = line();		
+			line3.add(label("И"));
+			line3.add(label("себя"));
+			line3.add(label("узлом"));
+			
+			Table line4 =line();			
+			line4.add(label("связал."));
+		
+			block1.add(line1).row();
+			block1.add(line2).row();
+			block1.add(line3).row();
+			block1.add(line4).row();
+			block1.pack();
+			
+			Group wrap = new Group();
+			wrap.addActor(block1);
+			wrap.setScale(scale);
+			Group cg1 = (Group) findActor("cg2");
+			Actor dom1 = cg1.findActor("dom2");
+			wrap.setPosition(dom1.getX()+dx, dom1.getY()+dy);		
+			cg1.addActor(wrap);
+		}
+		
+		{
+			Table block1 = block();			
+			
+			Table line1 = line();
+			line1.add(label("Кто"));
+			line1.add(label("теперь"));
+
+
+			
+			Table line2 = line();
+			line2.add(label("ему"));
+			line2.add(label("поможет:"));
+			
+			
+			Table line3 = line();
+			line3.add(label("Он"));
+			line3.add(label("себя"));
+			line3.add(label("найти"));
+
+			
+			Table line4 = line();
+			line4.add(label("не"));
+			line4.add(label("может!"));
+		
+			
+			block1.add(line1).row();
+			block1.add(line2).row();
+			block1.add(line3).row();
+			block1.add(line4).row();
+			block1.pack();
+			
+			Group wrap = new Group();
+			wrap.addActor(block1);
+			wrap.setScale(scale);
+			Group cg1 = (Group) findActor("cg3");
+			Actor dom1 = cg1.findActor("dom3");
+			wrap.setPosition(dom1.getX()+dx, dom1.getY()+dy);		
+			cg1.addActor(wrap);
+		}
+		
+		
+
 	}
 	
 	@Override

@@ -25,6 +25,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
@@ -48,6 +49,7 @@ import com.badlogic.gdx.utils.StringBuilder;
 import com.me.neta.CellarGroup.LogicFlower;
 import com.me.neta.CellarGroup.LogicLabel;
 import com.me.neta.Context.ContextProperty;
+import com.me.neta.Util.OnEventAction.Predicate;
 import com.me.neta.dummy.Dummy;
 import com.me.neta.dummy.DummyContext;
 import com.me.neta.dummy.DummyHelper;
@@ -182,9 +184,22 @@ public abstract class World extends Group{
 					
 					@Override
 					public void run() {
-						ng.getContext().setProperty(ContextProperty.GAME_END, new Object());
-						ng.getContext().setProperty(ContextProperty.HALT, null);
-						World.this.playLevin();
+
+						final Music speech = World.this.playLevin();
+						World.this.addAction(Util.onEvent(Actions.run(new Runnable() {
+							
+							@Override
+							public void run() {
+								ng.getContext().setProperty(ContextProperty.GAME_END, new Object());
+								ng.getContext().setProperty(ContextProperty.HALT, null);								
+							}
+						}), new Predicate() {
+							
+							@Override
+							public boolean accept() {
+								return !speech.isPlaying();
+							}
+						}));
 					}
 				}));
 				addAction(seq);
@@ -379,7 +394,16 @@ public abstract class World extends Group{
 					Integer letterID = Letter.getCharId(ch);
 					Letter letter = new Letter(ng, letterID.intValue());
 					letter.setName("letter");
-					letter.setPosition(20, 20);
+					if(dummy.getInfo().contains("1")){
+						letter.setPosition(20, 20);
+					}
+					else if(dummy.getInfo().contains("2")){
+						letter.setPosition(15, 12);
+					}
+					else if(dummy.getInfo().contains("3")){
+						letter.setPosition(18, 18);
+					}
+
 					letter.setColor(letterColor());
 					dummy.setLetter(letter);
 				}
@@ -418,6 +442,7 @@ public abstract class World extends Group{
 			for(GroupInfo gInfo : dummyContext.getGroups()){
 				CellarGroup cg = new CellarGroup(ng, gInfo.getOrder());				
 				cg.setGroupOrigin(gInfo.getOrigin());
+				//cg.setOrigin(gInfo.getOrigin().x, gInfo.getOrigin().y);
 				cg.setZoom(gInfo.getZoom());
 				cg.setDone(false);
 				cg.setEnabled(false);
@@ -425,7 +450,8 @@ public abstract class World extends Group{
 				cg.setPosition(gInfo.getOrigin().x, gInfo.getOrigin().y);
 				
 				cg.setScale(0.1f);
-				cg.addAction(Actions.scaleTo(1, 1, 1));
+				//cg.setRotation(180);
+				cg.addAction((scaleTo(1, 1, 1)));
 				addActor(cg);
 				
 				//Map<Integer, LogicFlower> flowers = new HashMap<Integer, CellarGroup.LogicFlower>();
@@ -702,8 +728,9 @@ public abstract class World extends Group{
 	}
 	
 	
-	 void playLevin(){
+	Music playLevin(){
 		 Music snd =  tm.getMusic(getTitle());
 		snd.play();
+		return snd;
 	 }
 }
