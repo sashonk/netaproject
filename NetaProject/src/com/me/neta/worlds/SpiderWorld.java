@@ -64,7 +64,7 @@ public class SpiderWorld extends World{
 	public void populateForeground() {
 	
 		Hero muha = new Hero(ng,"MUH");
-		muha.setBounds(550, 560,53,31);
+		muha.setBounds(900, 160,53,31);
 		muha.setZIndex(9);
 		addActor(muha);
 		
@@ -87,7 +87,7 @@ public class SpiderWorld extends World{
 			Table block1 = block();			
 			
 			Table line1 = line();
-			line1.add(label("Паучок "));
+			line1.add(label("Паучок"));
 			line1.add(label("приехал"));
 			
 			Table line2 = line();
@@ -215,7 +215,7 @@ public class SpiderWorld extends World{
 		
 		Map<Integer, List<Character>> variant2 = new HashMap<Integer, List<Character>>();
 		List<Character> charGroup21 = new ArrayList<Character>(3);				
-		charGroup21.add(Character.valueOf('ё'));
+		charGroup21.add(Character.valueOf('е'));
 		charGroup21.add(Character.valueOf('б'));
 		charGroup21.add(Character.valueOf('а'));
 		variant2.put(Integer.valueOf(1),charGroup21);		

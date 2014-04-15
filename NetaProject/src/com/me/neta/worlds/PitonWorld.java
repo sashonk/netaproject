@@ -56,7 +56,7 @@ public class PitonWorld extends World{
 	
 	public void populateForeground(){ 	
 		Piton piton = new Piton(ng);
-		piton.setPosition(460, 130);
+		piton.setPosition(400, 130);
 		piton.setZIndex(10);
 		addActor(piton);
 		
