@@ -1,9 +1,12 @@
 package com.me.neta;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -36,15 +39,17 @@ public class PassportForm extends Group{
 		Image panel = new Image(tr);
 		panel.setBounds(0,0, getWidth(), getHeight());
 		this.addActor(panel);
-		this.addListener(new MetricListener());
 		Skin skin= tm.getSkin();
 		
 		tfName = new TextField("", skin, TEXT_FIELD_STYLE);
 		tfName.setMessageText("Имя ребёнка");
 		tfName.setBounds(PADX, 240, 228, H);
+		tfName.addListener(hideKeyBoard());
+
 		addActor(tfName);
 				
 		 tfAge = new TextField("", skin, TEXT_FIELD_STYLE);
+		 tfAge.addListener(hideKeyBoard());
 		tfAge.setMessageText("Возраст");
 		tfAge.setBounds(PADX, 205, 228, H);
 		tfAge.setMaxLength(2);
@@ -54,18 +59,23 @@ public class PassportForm extends Group{
 		 tfCity = new TextField("", skin, TEXT_FIELD_STYLE);
 		tfCity.setMessageText("Город (село)");
 		tfCity.setBounds(PADX, 170, 228, H);
+		tfCity.addListener(hideKeyBoard());
+
 		addActor(tfCity);
 		
 		 tfState = new TextField("", skin, TEXT_FIELD_STYLE);
 		tfState.setMessageText("Страна");
 		tfState.setBounds(PADX, 138, 228, H);
+		tfState.addListener(hideKeyBoard());
+
 		addActor(tfState);
 				
 		 tfYear = new TextField("", skin, TEXT_FIELD_STYLE);
 		tfYear.setMessageText("Год");
 		tfYear.setMaxLength(4);
 		tfYear.setBounds(PADX, 105, 228, H);
-		tfYear.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());	
+		tfYear.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
+		tfYear.addListener(hideKeyBoard());
 		addActor(tfYear);
 		
 		final Label ok = new Label("OK", skin, "system2");
@@ -74,6 +84,7 @@ public class PassportForm extends Group{
 		
 		addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				
 				Rectangle r = new Rectangle(171,74, 220 -171, 91 - 74);
 				if(r.contains(x,y)||event.getTarget()==ok){ //touch!
 					fire(new PassportEvent());
@@ -81,6 +92,19 @@ public class PassportForm extends Group{
 				return false;
 			}
 		});
+	}
+	
+	EventListener hideKeyBoard(){
+		return new InputListener(){
+			public boolean keyTyped (InputEvent event, char character) {
+				if(Keys.ENTER==event.getKeyCode()){				
+					Gdx.input.setOnscreenKeyboardVisible(false);
+					return true;
+				}
+				return false;
+				
+			}
+	 };
 	}
 	
 	public void update(Passport passport){

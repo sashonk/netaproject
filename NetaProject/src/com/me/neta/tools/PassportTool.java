@@ -7,10 +7,10 @@ import com.me.neta.Context.ContextProperty;
 import com.me.neta.events.RequestFocusEvent;
 
 
-public class LetterTool extends PanelTool{
+public class PassportTool extends PanelTool{
 
 
-	public LetterTool(NetaGame ng) {
+	public PassportTool(NetaGame ng) {
 		super(ng);
 		// TODO Auto-generated constructor stub
 	}

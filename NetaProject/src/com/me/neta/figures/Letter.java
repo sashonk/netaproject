@@ -17,6 +17,45 @@ import com.me.neta.util.ColorHelper;
 
 public class Letter extends AbstractFigure{
 	
+	public static final Map<Character, String> translit = new HashMap<Character, String>();
+	static{
+		translit.put(Character.valueOf('а'),"a");
+		translit.put(Character.valueOf('б'),"b");
+		translit.put(Character.valueOf('в'), "v");
+		translit.put(Character.valueOf('г'), "g");
+		translit.put(Character.valueOf('д'), "d");
+		translit.put(Character.valueOf('е'),"e");
+		translit.put(Character.valueOf('ё'), "eo");
+		translit.put(Character.valueOf('ж'),"zh");
+		translit.put(Character.valueOf('з'), "z");
+		translit.put(Character.valueOf('и'),"i");
+		translit.put(Character.valueOf('к'), "k");
+		translit.put(Character.valueOf('л'), "l");
+		translit.put(Character.valueOf('м'),"m");
+		translit.put(Character.valueOf('н'), "n");
+		translit.put(Character.valueOf('о'), "o");
+		translit.put(Character.valueOf('п'),"p");
+		translit.put(Character.valueOf('р'), "r");
+		translit.put(Character.valueOf('с'), "s");
+		translit.put(Character.valueOf('т'), "t");
+		translit.put(Character.valueOf('у'), "u");
+		translit.put(Character.valueOf('ф'), "f");		
+		translit.put(Character.valueOf('х'), "h");
+		translit.put(Character.valueOf('ц'), "c");
+		translit.put(Character.valueOf('ч'),"ch");
+		translit.put(Character.valueOf('ш'), "sh");
+		translit.put(Character.valueOf('щ'),"sch");
+		translit.put(Character.valueOf('ы'), "y");
+		translit.put(Character.valueOf('э'), "ea");
+		translit.put(Character.valueOf('ю'), "ju");
+		translit.put(Character.valueOf('я'), "ya");
+		translit.put(Character.valueOf('й'), "ii");
+		translit.put(Character.valueOf('ъ'), "sign_hard");
+		translit.put(Character.valueOf('ь'), "sign_soft");
+
+
+	}
+	
 	public static final Map<Character, Integer> characterToIdMap = new HashMap<Character, Integer>();
 	static {
 		characterToIdMap.put(Character.valueOf('а'), Integer.valueOf(25));
@@ -68,7 +107,7 @@ public class Letter extends AbstractFigure{
 	TextureRegion char2;
 	char ch;
 	
-	char lookupChar(int id){
+	public static char lookupChar(int id){
 		for(Character ch : characterToIdMap.keySet() ){
 			if(characterToIdMap.get(ch).equals(Integer.valueOf(id))){
 				return ch.charValue();

@@ -67,6 +67,7 @@ public class NetaGame implements ApplicationListener {
 		stage= new Stage(1024,768, false);
 			
 		space= new Workspace(this, 0, 0, stage.getWidth(), stage.getHeight());
+		context.registerListener(space);
 		space.initialize();
 
 		stage.addActor(space);

@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Source;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
 import com.me.neta.Factory;
+import com.me.neta.Letter2;
 import com.me.neta.NetaGame;
 import com.me.neta.TextureManager;
 import com.me.neta.events.DragEvent;
@@ -19,7 +20,7 @@ import com.me.neta.events.DragStopEvent;
 import com.me.neta.events.LetterDropEvent;
 import com.me.neta.figures.Letter;
 
-public class LetterFactory extends Factory{
+public class LetterFactory extends Factory {
 	TextureManager tm;
 	TextureRegion circle;
 	TextureRegion char1;
@@ -41,13 +42,14 @@ public class LetterFactory extends Factory{
 		 // "stupid designer" hack
 		 padx = (id >=31 && id <=33) ? 4 : 6;
 		 pady = (id==29) ? 4 : 6;
-				 
+	
+		 
 	}
 	
 	public void draw(SpriteBatch batch , float parentAlpha){
 
 		batch.draw(circle, getX(), getY(), getWidth(), getHeight());
-		batch.draw(char1, getX()+padx, getY()+pady);			
+		batch.draw(char1, getX()+padx, getY()+pady, 18, 19);			
 	}
 	
 
@@ -57,7 +59,7 @@ public class LetterFactory extends Factory{
 		Actor drag = new Actor(){
 			public void draw(SpriteBatch batch, float parentAlpha){
 				batch.draw(circle, getX(), getY(), getWidth(), getHeight());
-				batch.draw(char1, getX()+6, getY()+6);	
+				batch.draw(char1, getX()+6, getY()+6, 18, 19);	
 			}
 		};
 		
@@ -68,7 +70,17 @@ public class LetterFactory extends Factory{
 
 	@Override
 	public Actor createActor() {
+/*		char c = Letter.lookupChar(id);
+		
+		if(c=='к'){
+			Letter2 l2 = new Letter2(ng, Letter.lookupChar(id));
+			//l2.setScale(0.5f*.8f);
+			return l2;
+
+		}*/
 		return new Letter(ng, id);
+
+		//return new Letter(ng, id);
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
@@ -41,7 +43,9 @@ public class SpiderWorld extends World{
 		return "spider";
 	}
 	
-
+	 public Color letterColor(){
+		 return Color.YELLOW;
+	 }
 	@Override
 	public Actor createTitle() {
 		return Util.multiColorLabel("паучок", "title", new String[]{"red", "orange", "yellow", "green", "blue", "green"}, ng.getManager().getSkin());
@@ -60,6 +64,9 @@ public class SpiderWorld extends World{
 		Image flower = new Image(ng.getManager().getAtlas().findRegion("ZVET3"));
 		flower.setBounds(875, 340,57, 73);
 		addActor(flower);
+		
+		
+		ng.getWorkspace().findActor("topButtons").addAction(Actions.moveBy(-350, 0, 0.5f, Interpolation.swingOut));
 	}
 	public void populateForeground() {
 	
@@ -68,10 +75,12 @@ public class SpiderWorld extends World{
 		muha.setZIndex(9);
 		addActor(muha);
 		
+		
 		Spider spider = new Spider(ng);
 		spider.setPosition(100, 250);
 		spider.setZIndex(10);
 		addActor(spider);		
+		spider.setName("hero");
 	}
 
 	@Override
@@ -114,7 +123,7 @@ public class SpiderWorld extends World{
 			line3.add(label("паучок"));
 			
 			Table line4 =line();			
-			line4.add(label("Привез"));
+			line4.add(label("Привёз"));
 			line4.add(label("товар."));
 			
 			block1.add(line3).row();

@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -89,6 +90,10 @@ public abstract class World extends Group{
 		selectedActor =figure;
 	}
 	
+	public int getId(){
+		return id;
+	}
+	
 	public void setId(int id){
 		this.id = id;
 	}
@@ -134,13 +139,14 @@ public abstract class World extends Group{
 		
 		
 		if(activeFlower.isDone()){
+			ng.getContext().setProperty(ContextProperty.BETWEEN_CELLARS, Boolean.TRUE);
 			//TODO no more flowers! go to next group;
 			Actor actor = findActor("cg"+(activeCG.getOrder()+1));
 			if(actor!=null){
 				final CellarGroup cg = (CellarGroup)actor;
 				activeFlower = (LogicFlower) cg.findActor("firstFlower");
 				
-				this.addAction(sequence(Util.zoomTo(0.7f,1, activeCG.getGroupOrigin().x, activeCG.getGroupOrigin().y,  null), delay(0.5f),
+				this.addAction(sequence(delay(0.5f),Util.zoomTo(0.7f,1, activeCG.getGroupOrigin().x, activeCG.getGroupOrigin().y,  null), delay(0.5f),
 						run(new Runnable() {
 					
 					@Override
@@ -166,14 +172,19 @@ public abstract class World extends Group{
 						
 							char ch = letter.getCharacter();
 							ng.getContext().setProperty(ContextProperty.ACTIVE_LETTER, Character.valueOf(ch));
+							ng.getContext().setProperty(ContextProperty.BETWEEN_CELLARS, null);
+
 						}
 					})));
 				
 			}
 			else{
 				//total WIN!!
-				System.out.println("WIN!");				
-				Action seq = sequence(Util.zoomTo(0.7f,1, activeCG.getGroupOrigin().x, activeCG.getGroupOrigin().y,  null),delay(0.5f),run(new Runnable() {
+				System.out.println("WIN!");	
+
+
+				
+				Action seq = sequence(delay(0.5f),Util.zoomTo(0.7f,1, activeCG.getGroupOrigin().x, activeCG.getGroupOrigin().y,  null),delay(0.5f),run(new Runnable() {
 					
 					@Override
 					public void run() {
@@ -184,14 +195,21 @@ public abstract class World extends Group{
 					
 					@Override
 					public void run() {
+						Actor hero = World.this.findActor("hero");
 
+						Actor popup = ng.getWorkspace().popup("Молодец!\n Теперь стихи для тебя\n прочитает Вадим Левин", 0,0, "popupWin");
+						float x = hero.getX()+hero.getWidth()/2-popup.getWidth()/2;
+						float y = hero.getY()+ hero.getHeight()+10;
+						popup.setPosition(x, y);
+						
 						final Music speech = World.this.playLevin();
 						World.this.addAction(Util.onEvent(Actions.run(new Runnable() {
 							
 							@Override
 							public void run() {
 								ng.getContext().setProperty(ContextProperty.GAME_END, new Object());
-								ng.getContext().setProperty(ContextProperty.HALT, null);								
+								ng.getContext().setProperty(ContextProperty.HALT, null);	
+								ng.getWorkspace().findActor("popupWin").remove();
 							}
 						}), new Predicate() {
 							
@@ -260,10 +278,10 @@ public abstract class World extends Group{
 			Actor actor;
 			
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				Actor actor = hit(x, y, false);
-				if(actor instanceof Moveable && Gdx.input.isKeyPressed(Keys.M)){
+				Actor actor = hit(x, y, true);
+				if(actor instanceof Moveable){
 					if(actor instanceof AbstractFigure){
-						if(selectedActor!=actor){
+						if(selectedActor!=actor || selectedActor.isFilled()){
 							return false;
 						}
 					}
@@ -386,6 +404,7 @@ public abstract class World extends Group{
 					}
 				}		
 				
+				Random rnd = new Random(System.currentTimeMillis());
 				for(int i = 0; i<chars.size(); i++){
 					Character ch = chars.get(i);
 					CellarGroup.LogicFlower dummy = flowers.get(i);
@@ -406,6 +425,11 @@ public abstract class World extends Group{
 
 					letter.setColor(letterColor());
 					dummy.setLetter(letter);
+					
+					letter.setScale(0.1f);
+					
+					float dur =  rnd.nextFloat()*.5f;
+					letter.addAction(sequence(scaleTo(1,1, dur)));
 				}
 				
 				
@@ -480,6 +504,7 @@ public abstract class World extends Group{
 							flower.setName("firstFlower");
 						}
 						cg.addActor(flower);
+	
 						//flowers.put(Integer.valueOf(info.getName()), flower);
 					}
 					else{
@@ -733,4 +758,17 @@ public abstract class World extends Group{
 		snd.play();
 		return snd;
 	 }
+	
+	//public abstract String getLyricsAsString();
+	
+	public Actor lyricsForFrame(){
+		Table table = new Table();
+		//table.add
+		return table;
+	}
+	
+	public void showLyrics(){
+		//LyricsFrame frame= new LyricsFrame(ng,lyricsForFrame());
+		//addActor(frame);
+	}
 }

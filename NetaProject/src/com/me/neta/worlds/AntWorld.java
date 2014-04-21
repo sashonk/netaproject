@@ -87,7 +87,7 @@ public class AntWorld extends World{
 		ant.setPosition(50, 250);
 		ant.setZIndex(10);
 		addActor(ant);		
-	
+		ant.setName("hero");
 
 	}
 	
@@ -288,7 +288,13 @@ public class AntWorld extends World{
 		charGroup24.add(Character.valueOf('ц'));
 		variant2.put(Integer.valueOf(4),charGroup24);		
 		letters.put(Integer.valueOf(2), variant2);		
+//
+	}
 
+	//@Override
+	public String getLyricsAsString() {
+	//	String text = "Жил на свете муравей\nБез ресниц и без бровей\n Он терпеть не мог девиц\nБез"
+		return null;
 	}
 
 

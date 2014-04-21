@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 
 import com.badlogic.gdx.graphics.Color;
@@ -36,8 +37,10 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 
 
 
@@ -49,9 +52,9 @@ import com.me.neta.tools.BasketTool;
 import com.me.neta.tools.BrushTool;
 import com.me.neta.tools.FlowerTool;
 import com.me.neta.tools.ShopTool;
-import com.me.neta.tools.DesktopsTool;
+import com.me.neta.tools.WorldsTool;
 import com.me.neta.tools.FiguresTool;
-import com.me.neta.tools.LetterTool;
+import com.me.neta.tools.PassportTool;
 import com.me.neta.tools.ExitTool;
 import com.me.neta.tools.LyricsTool;
 import com.me.neta.tools.ColorTool;
@@ -66,14 +69,14 @@ import com.me.neta.worlds.PitonWorld;
 import com.me.neta.worlds.SpiderWorld;
 import com.me.neta.worlds.TigerWorld;
 
-public class Workspace extends Group{
+public class Workspace extends Group implements ContextListener{
 	
 
 	ZIndexTool zTool;
 	BrushTool bTool;
 	RotateTool rTool;
 	QuestionTool qTool;
-	
+	 FlowerTool flowerTool;
 	
 	static final float pad = 15;
 	PanelToolGroup ptGroup;
@@ -84,8 +87,13 @@ public class Workspace extends Group{
 	String bottomActorName = "bottomActor";
 	Table toolbarTable;
 	private Color selectedColor ;
-
-	
+	 WorldsTool worldsTool;	
+	  PassportTool passportTool ;
+	   LyricsTool lyricsTool;
+		 FiguresTool figuresTool;
+		  ColorTool paletteTool;
+		 
+		 
 	public Workspace(NetaGame ng, float x, float y, float width, float height){
 		this.ng = ng;
 		setBounds(x, y, width, height);
@@ -121,18 +129,18 @@ public class Workspace extends Group{
 		basketTool.setSize(68,78);
 		toolbarTable.add(basketTool).padRight(pad).padLeft(pad);
 						
-		final DesktopsTool fieldsTool = new DesktopsTool(ng);
-		final DesktopsPanel fieldsPanel = new DesktopsPanel(ng,600, 350);
-		fieldsPanel.setPosition(35, 75);
-		fieldsPanel.setVisible(false);
-		Color c = fieldsPanel.getColor();
-		fieldsPanel.setColor(c.r, c.g, c.b, 0);
-		addActor(fieldsPanel);
-		fieldsTool.setPanel(fieldsPanel);
-		toolbarTable.add(fieldsTool).padRight(pad).padLeft(pad);
+		 worldsTool = new WorldsTool(ng);
+		final WorldsPanel worldsPanel = new WorldsPanel(ng,600, 350);
+		worldsPanel.setPosition(35, 75);
+		worldsPanel.setVisible(false);
+		Color c = worldsPanel.getColor();
+		worldsPanel.setColor(c.r, c.g, c.b, 0);
+		addActor(worldsPanel);
+		worldsTool.setPanel(worldsPanel);
+		toolbarTable.add(worldsTool).padRight(pad).padLeft(pad);
 		
 		
-		final LyricsTool lyricsTool = new LyricsTool(ng);
+		lyricsTool = new LyricsTool(ng);
 		final LyricsPanel lyricsPanel = new LyricsPanel(ng,800, 400);
 		lyricsPanel.setPosition(105, 75);
 		lyricsPanel.setColor(c);
@@ -141,28 +149,28 @@ public class Workspace extends Group{
 		lyricsTool.setPanel(lyricsPanel);
 				
 		toolbarTable.add(lyricsTool).padRight(pad).padLeft(pad);
-		final LetterTool letterTool = new LetterTool(ng);
+		passportTool = new PassportTool(ng);
 		final PassportForm form = new PassportForm(ng);
 		form.setPosition(490-133, 75);
 		form.setColor(c);
 		form.setVisible(false);
 		addActor(form);
-		letterTool.setPanel(form);	
-		toolbarTable.add(letterTool).padRight(pad).padLeft(pad);
+		passportTool.setPanel(form);	
+		toolbarTable.add(passportTool).padRight(pad).padLeft(pad);
 		
 		
-		final FiguresTool figuresTool = new FiguresTool(ng);
+	figuresTool = new FiguresTool(ng);
 		toolbarTable.add(figuresTool).padRight(pad).padLeft(pad);
 		FiguresPanel figPanel = new FiguresPanel(ng);
 		figPanel.setColor(c);
 		figPanel.setVisible(false);
 		figPanel.setWidth(550);
 		figPanel.setHeight(450);
-		figPanel.setPosition(370, 75);
+		figPanel.setPosition(340, 75);
 		figuresTool.setPanel(figPanel);
 		this.addActor(figPanel);
 		
-		final FlowerTool flowerTool = new FlowerTool(ng);
+		  flowerTool = new FlowerTool(ng);
 		
 		VariantPanel lettersPanel = new VariantPanel(ng);
 		lettersPanel.setVisible(false);
@@ -172,7 +180,7 @@ public class Workspace extends Group{
 		Util.center(lettersPanel);
 
 		
-		final ColorTool paletteTool = new ColorTool(ng);
+		 paletteTool = new ColorTool(ng);
 		toolbarTable.add(paletteTool).padRight(pad).padLeft(pad);
 		ColorPanel palette= new ColorPanel(ng);
 		paletteTool.setPanel(palette);
@@ -180,7 +188,7 @@ public class Workspace extends Group{
 		palette.setVisible(false);
 		palette.setWidth(560);
 		palette.setHeight(460);
-		palette.setPosition(340, 75);
+		palette.setPosition(360, 75);
 		paletteTool.setPanel(palette);
 		this.addActor(palette);
 		
@@ -222,6 +230,7 @@ public class Workspace extends Group{
 		
 		
 		Table topButtons = new Table();
+		topButtons.setName("topButtons");
 		 rTool = new RotateTool(ng);
 		 zTool = new ZIndexTool(ng);
 		 bTool = new BrushTool(ng);
@@ -270,13 +279,25 @@ public class Workspace extends Group{
 				
 				if(event instanceof CreateCellarsEvent){
 					event.setBubbles(false);
-
-					world.createCellars();
-					//world.addLyrics(lyricsEvent.getChoice());
 					
-					//ng.getContext().setProperty(ContextProperty.LETTERS, new Object());
-					ng.getContext().setProperty(ContextProperty.CELLARS, Boolean.TRUE);
-					lyricsPanel.addAction(sequence(fadeOut(0.4f), visible(false)));
+					CreateCellarsEvent cEvent = (CreateCellarsEvent)event;
+					int choice = cEvent.getChoice();
+
+					if(choice==world.getId()){
+						world.createCellars();
+						//world.addLyrics(lyricsEvent.getChoice());
+						
+						//ng.getContext().setProperty(ContextProperty.LETTERS, new Object());
+						ng.getContext().setProperty(ContextProperty.CELLARS, Boolean.TRUE);
+						lyricsPanel.addAction(sequence(fadeOut(0.4f), visible(false)));
+						
+						if(!flowerTool.hasEverBeenClicked()){
+							popup("Выбери буквы", 515, 80, "popupFlowers");
+						}
+					}
+					else{
+						ng.getManager().getSound("error").play();
+					}
 				}
 				
 				if(event instanceof LetterVariantEvent){
@@ -287,6 +308,12 @@ public class Workspace extends Group{
 				}
 				
 				if(event instanceof WorldSelectionEvent){
+					for(Actor act : getChildren()){
+						if(act.getName()!=null && act.getName().contains("popup")){
+							act.addAction(Actions.removeActor());
+						}
+					}
+					
 					event.setBubbles(false);
 
 					WorldSelectionEvent desktopEvent = (WorldSelectionEvent) event;
@@ -299,35 +326,27 @@ public class Workspace extends Group{
 							 abandoningWorld = world;
 							 //abandoningWorld.setOrigin(abandoningWorld.getWidth()/2, abandoningWorld.getHeight()/2);
 							abandoningWorld.addAction(abandonWorldAction(abandoningWorld));
+							
 						}
 						
 						
 						world = worldFactories.get(desktopEvent.getId()).create();
+						findActor("topButtons").setPosition(800, 700);		
 						world.populate();
 						world.setZIndex(1);
 						
 		
 
-						fieldsPanel.setVisible(false);
+						worldsPanel.setVisible(false);
 						addActorBefore(abandoningWorld!=null ? abandoningWorld : Workspace.this.findActor(bottomActorName), world);
 
 						world.setId(desktopEvent.getId());
-						//desktop.addAction(Actions.sequence(Actions.fadeIn(.2f)));
-/*						world.addListener(new InputListener(){
-							public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-								getStage().setKeyboardFocus(null);
-								Workspace.this.setSelectedFigure(null);
-								Workspace.this.ptGroup.onShow(null);
-								Gdx.input.setOnscreenKeyboardVisible(false);
-								
-
-								
-								return true;
-								
-								
-							}
-						});*/
 						world.drawPassport(passport);
+	
+						if(!passportTool.hasEverBeenClicked()){
+							popup("Введи своё имя, возраст\n и где ты живешь", 280, 80, "popupPassport");
+						}
+
 					}
 					
 					ng.getContext().setProperty(ContextProperty.WORKING, Boolean.TRUE) ;
@@ -352,6 +371,10 @@ public class Workspace extends Group{
 					world.addActorBefore(z, letter);
 							
 					setSelectedFigure((AbstractFigure) letter);
+					
+					if(!paletteTool.hasEverBeenClicked()&& findActor("popupPalette")==null){
+						popup("Ты можешь выбрать цвет и\n раскрасить фигуры", 550, 80, "popupPalette");
+					}
 				}
 				
 				
@@ -367,17 +390,18 @@ public class Workspace extends Group{
 					event.setBubbles(false);
 					
 					LogicLabelClickEvent lEvent = (LogicLabelClickEvent) event;
-					char c = Character.toLowerCase(lEvent.getChar());
+					String c = lEvent.getChar().toLowerCase();
 					
 					Character activeLetter = (Character) ng.getContext().getProperty(ContextProperty.ACTIVE_LETTER);
 					System.out.println("LT="+activeLetter+"; CUR="+c);
 					
 					
-					if(activeLetter.charValue()==c){
+					if(c.contains(new String(new char[]{activeLetter.charValue()})) && ng.getContext().getProperty(ContextProperty.BETWEEN_CELLARS)==null){
+						lEvent.getContext().get(activeLetter).setStyle(ng.getManager().getSkin().get("small-"+world.getTitle()+"-hit", LabelStyle.class));
 						world.step();
 					}
 					else{
-						System.out.println("WRONG!");
+						errorSnd.play();
 					}
 				}		
 				
@@ -437,6 +461,9 @@ public class Workspace extends Group{
 					world.drawPassport(passport);
 					Workspace.this.ptGroup.onShow(null);
 
+					if(!lyricsTool.hasEverBeenClicked() && findActor("popupLyrics")==null){
+						popup("Выбери стихи ", 220,80, "popupLyrics");
+					}
 				}
 				
 				
@@ -463,28 +490,7 @@ public class Workspace extends Group{
 		instructionPanel.setVisible(false);
 		this.addActorAfter(Workspace.this.findActor(bottomActorName), instructionPanel);
 		qTool.setPanel(instructionPanel);	
-/*		final TextureRegion instructScreen = ng.getManager().getMiscAtlas().findRegion("instruct");
-		final Image instructActor = new Image(instructScreen);
-		instructActor.addListener(new InputListener(){
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				if(x>817 && x<889 && y>101 && y<169){
-					event.getTarget().setVisible(false);
-					
-					ng.getContext().setProperty(ContextProperty.PREPARED, true) ;
-					ng.getContext().setProperty(ContextProperty.HALT, false) ;
-					
-					fire(new ContextChangeEvent());
 
-					
-				}
-				return false;
-			}
-		});	
-
-		instructActor.setBounds(20,150, 980, 500);		
-		instructActor.setVisible(false);
-		this.addActorAfter(Workspace.this.findActor(bottomActorName), instructActor);
-		qTool.setPanel(instructActor);*/
 		
 //////////////////////////////////////////////////
 			//////// NIKOL LETTER //////////
@@ -515,56 +521,7 @@ public class Workspace extends Group{
 		this.addActorAfter(Workspace.this.findActor(bottomActorName), athorsPanel);
 		settingsPanel.setAuthorsPanel(athorsPanel);;	
 		
-/*		final Group authorsPanel = new Group();
-		authorsPanel.setBounds(20,150, 980, 500);		
-		authorsPanel.setVisible(false);
 
-		final TextureRegion authors = ng.getManager().getMiscAtlas().findRegion("authorsPanel");
-		Image authorsAct = new Image(authors);
-		authorsPanel.addListener(new InputListener(){
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-			if(x>817 && x<889 && y>101 && y<169){
-				event.getListenerActor().setVisible(false);
-				
-				
-				ng.getContext().setProperty(ContextProperty.PREPARED, true) ;
-				ng.getContext().setProperty(ContextProperty.HALT, false) ;
-				fire(new ContextChangeEvent());
-			}
-				return false;
-			}
-		});						
-		authorsAct.setBounds(0, 0, authorsPanel.getWidth(), authorsPanel.getHeight());		
-		authorsPanel.addActor(authorsAct);		
-		authorsPanel.addListener(new MetricListener());
-		this.addActorAfter(Workspace.this.findActor(bottomActorName), authorsPanel);
-		settingsPanel.setAuthorsPanel(authorsPanel);*/
-
-
-
-		
-		///////////////////////////////
-		//////// ADULTS PANEL //////////
-		//////////////////////////////		
-/*		final TextureRegion adultsPanel = ng.getManager().getMiscAtlas().findRegion("adultsPanel");
-		Image adultsAct = new Image(adultsPanel);
-		adultsAct.addListener(new InputListener(){
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-			if(x>817 && x<889 && y>101 && y<169){
-				event.getTarget().setVisible(false);
-				
-				
-				ng.getContext().setProperty(ContextProperty.PREPARED, true) ;
-				ng.getContext().setProperty(ContextProperty.HALT, false) ;
-				fire(new ContextChangeEvent());
-			}
-			return false;
-			}
-		});						
-		adultsAct.setBounds(20,150, 980, 500);		
-		adultsAct.setVisible(false);
-		this.addActorAfter(Workspace.this.findActor(bottomActorName), adultsAct);
-		settingsPanel.setAdultsPanel(adultsAct);*/
 		final Group adults2Panel = new AdultsPanel(ng);
 		adults2Panel.setPosition(20,150);		
 		adults2Panel.setVisible(false);
@@ -584,6 +541,8 @@ public class Workspace extends Group{
 				
 				ng.getContext().setProperty(ContextProperty.PREPARED, Boolean.TRUE) ;
 				ng.getContext().setProperty(ContextProperty.HALT, null) ;
+				
+
 			}
 			return false;
 			}
@@ -596,7 +555,7 @@ public class Workspace extends Group{
 
 		
 		ptGroup = new PanelToolGroup();
-		ptGroup.addTool(fieldsTool);
+		ptGroup.addTool(worldsTool);
 		ptGroup.addTool(lyricsTool);
 		ptGroup.addTool(figuresTool);
 		ptGroup.addTool(paletteTool);
@@ -604,15 +563,15 @@ public class Workspace extends Group{
 		ptGroup.addTool(saveTool);
 		ptGroup.addTool(settingTool);
 		ptGroup.addTool(shopTool);
-		ptGroup.addTool(letterTool);
+		ptGroup.addTool(passportTool);
 	
 		
 		
 		registerStateListener(linkTool);
 		registerStateListener(basketTool);
-		registerStateListener(fieldsTool);
+		registerStateListener(worldsTool);
 		registerStateListener(flowerTool);
-		registerStateListener(letterTool);
+		registerStateListener(passportTool);
 		registerStateListener(lyricsTool);
 		registerStateListener(figuresTool);
 		registerStateListener(paletteTool);
@@ -654,7 +613,26 @@ public class Workspace extends Group{
 			}
 		});
 		setSelectedColor(Color.WHITE);
+		
+/*		
+		this.addListener(new InputListener(){
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				
+			//	popup("Hello\nI'm popup!",x,y).addAction(sequence(delay(4), Actions.removeActor()));
+				return false;
+			}
+		});*/
+		
+		
+		errorSnd = ng.getManager().getSound("error");
+		
+		popup("Выбери игровое поле", 100, 80, "popupChooseWorld").setVisible(false);
+		
+
+		
 	}
+	
+	Sound errorSnd;
 	
 	public World getWorld(){
 		return world;
@@ -711,56 +689,7 @@ public class Workspace extends Group{
     public void saveScreenshot2(FileHandle fh) {
         Pixmap pixmap = getScreenshot(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
         PixmapIO.writePNG(fh, pixmap);
-        
-     
-        
-        
-      //  BufferedI
-        
-        //PixmapIO.writePNG(file, pixmap);
-       
-/*      try {
-       
-   
-               BufferedImage image = new BufferedImage(pixmap.getWidth(), pixmap.getHeight(), BufferedImage.TYPE_INT_ARGB);
-               for(int i = 0; i < pixmap.getHeight(); i++){
-                for(int j = 0; j<pixmap.getWidth(); j++){
-               int c= pixmap.getPixel(j, i);
-               
-               int r = (c >> 24) & 0xff;
-               int g = (c >> 16) & 0xff;
-               int b = (c >> 8) & 0xff;
-               int a = c & 0xff;
-               
-               int argb =0;
-               argb |= (a << 24) & 0xff000000;
-               argb |= (r << 16) & 0x00ff0000;
-               argb |= (g << 8)  & 0x0000ff00;
-               argb |= b  & 0x000000ff;
-               
-               image.setRGB(j, i, argb);
-                }
-               }
-               
-         
-               
-               if(file.exists()){
-                file.delete();
-               }
-               
-               
-               
-               
-               ImageIO.write(image, "png", file);
-               
-        } catch (IOException e) {
-                e.printStackTrace();
-                return;
-        }*/
-       
-      
-     // manager.get
-      System.out.println("format 2 done");
+
  
 }
 	
@@ -846,5 +775,102 @@ public class Workspace extends Group{
     	return sequence(Actions.parallel(Actions.scaleTo(0, 0, abandonTime), Actions.rotateBy(-500, abandonTime), Actions.moveBy(1000, 0, abandonTime)) ,Actions.removeActor());
      }
     
+     
+
+     
+     public Label popup(String message, float x, float y, String name){
+   
+    
+    	Label popup = new Label(message, ng.getManager().getSkin(), "popup");
+    	popup.setName(name!=null ? name : "popup");
+    	this.addActor(popup);
+
+		popup.setPosition(x, y);
+		popup.toFront();
+		//popup.getColor().a= 0;
+		//popup.addAction(sequence(alpha(1, 0.3f)));
+		return popup;
+     }
+
+     
+	@Override
+	public void contextChanged(Context ctx) {
+		if(ctx.getProperty(ContextProperty.PREPARED)!=null ){
+			if(!worldsTool.hasEverBeenClicked()){
+				Actor popup = findActor("popupChooseWorld");
+				if(popup!=null){
+					popup.addAction(sequence(visible(true)));
+				}
+			}
+			else{
+				Actor popup = findActor("popupChooseWorld");
+				if(popup!=null){
+					popup.addAction(sequence(Actions.removeActor()));
+				}	
+			}
+		}
+		if(ctx.getProperty(ContextProperty.WORKING)!=null){
+			if(passportTool.hasEverBeenClicked()){
+				Actor popup = findActor("popupPassport");
+				if(popup!=null){
+					popup.addAction(sequence(Actions.removeActor()));
+				}
+			}
+
+		}
+		if(ctx.getProperty(ContextProperty.WORKING)!=null){
+			if(lyricsTool.hasEverBeenClicked()){
+				Actor popup = findActor("popupLyrics");
+				if(popup!=null){
+					popup.addAction(sequence(Actions.removeActor()));
+				}
+			}
+
+		}
+		if(ctx.getProperty(ContextProperty.CELLARS)!=null){
+			if(flowerTool.hasEverBeenClicked()){
+				Actor popup = findActor("popupFlowers");
+				if(popup!=null){
+					popup.addAction(sequence(Actions.removeActor()));
+				}
+			}
+
+		}	
+		
+		if(ctx.getProperty(ContextProperty.GAME_END)!=null){
+			if(figuresTool.hasEverBeenClicked()){
+				Actor popup = findActor("popupFigures");
+				if(popup!=null){
+					popup.addAction(sequence(Actions.removeActor()));
+				}
+			}
+			else{
+				Actor popup = findActor("popupFigures");
+				if(popup==null){
+					popup = popup("Теперь выбери фигуры\nи создай иллюстрацию", 390, 80, "popupFigures");
+				}				
+			}
+
+		}	
+		
+		if(ctx.getProperty(ContextProperty.GAME_END)!=null){
+			if(paletteTool.hasEverBeenClicked()){
+				Actor popup = findActor("popupPalette");
+				if(popup!=null){
+					popup.addAction(sequence(Actions.removeActor()));
+				}
+			}
+			else{
+				Actor popup = findActor("popupPalette");
+				if(popup!=null){
+					popup.addAction(sequence(Actions.removeActor()));
+				}				
+			}
+
+		}	
+	}
+	
+	
+     
 }
 

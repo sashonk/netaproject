@@ -62,6 +62,15 @@ public abstract class Factory extends Actor{
 				
 				
 				Actor letter = createActor();
+				letter.addListener(new InputListener() {
+					public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+						event.getListenerActor().fire(new SelectFigureEvent());
+
+						return false;
+					}
+
+				});
+				
 /*				letter.addListener(new DoubleClickListener(.8f) {
 						
 						@Override

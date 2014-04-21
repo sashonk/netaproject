@@ -67,6 +67,7 @@ public class TextureManager {
 	
 	Map<Character, Sound> soundMap = new HashMap<Character, Sound>();
 	Map<String, Music> levinSound = new HashMap<String, Music>();
+	Map<String, Sound> sounds = new HashMap<String, Sound>();
 	
 	public Sound letterSound(Character c){
 		return soundMap.get(c);
@@ -76,10 +77,18 @@ public class TextureManager {
 		return levinSound.get(name);
 	}
 	
+	public Sound getSound(String name){
+		return sounds.get(name);
+	}
+	
+	
+	
 	public void init(){
 		
+		sounds.put("error", Gdx.audio.newSound(Gdx.files.internal("data/sound/error.ogg")));
+		
 		for(Character c :  Letter.characterToIdMap.keySet()){
-			soundMap.put(c, Gdx.audio.newSound(Gdx.files.internal(new StringBuilder("data/sound/").append(c).append(".mp3").toString())));
+			soundMap.put(c, Gdx.audio.newSound(Gdx.files.internal(new StringBuilder("data/sound/").append(Letter.translit.get(Character.valueOf(c))).append(".mp3").toString())));
 		}
 		
 		String[] worldNames = {"ant", "spider", "piton", "tiger"};
@@ -133,6 +142,8 @@ wondGenerator.dispose();
 		BitmapFont calibri16 = generatorCalibri.generateFont(16,DEFAULT_CHARS, false);
 		BitmapFont calibri18 = generatorCalibri.generateFont(18,DEFAULT_CHARS, false);
 		BitmapFont calibri36 = generatorCalibri.generateFont(36,DEFAULT_CHARS, false);
+		BitmapFont letterFont = generatorCalibri.generateFont(68,DEFAULT_CHARS, false);
+
 
 		generatorCalibri.dispose();
 		
@@ -143,6 +154,7 @@ wondGenerator.dispose();
 		skin.add("calibri16", calibri16);
 		skin.add("calibri18", calibri18);
 		skin.add("36", calibri36);
+		skin.add("letter", letterFont);
 
 
 		nickolLetter = new Texture(Gdx.files.internal("data/nikol.jpg"));
@@ -415,36 +427,18 @@ wondGenerator.dispose();
 		skin.add("lightBlue", lightBlue);	 
 		
 ///////////////////////////////////////////////
-       ///////////	 LYRICS 	/////////////
+       ///////////	 POPUP 	/////////////
 //////////////////////////////////////////////
  		
- 		skin.add("lyrics", new NinePatch(atlas.findRegion("lyricsDrawable"), 15, 15, 15, 15));
- 		NinePatchDrawable lyricsNpd = new NinePatchDrawable(skin.getPatch("lyrics")); 		
- 		skin.add("lyrics", lyricsNpd, Drawable.class);
- 		
- 		LabelStyle lStyleLyricsBlue = new LabelStyle();
- 		//lStyleLyricsBlue.background =skin.getDrawable("black");
- 		lStyleLyricsBlue.font = calibri14;
- 		lStyleLyricsBlue.fontColor = new Color(151 / 255f, 158 / 255f , 212 / 255f, 1);
- 		skin.add("lyricsBlue", lStyleLyricsBlue);
- 		
- 		LabelStyle lStyleLyricsGreen = new LabelStyle();
- 		lStyleLyricsGreen.background =skin.getDrawable("lyrics");
- 		lStyleLyricsGreen.font = calibri14;
- 		lStyleLyricsGreen.fontColor =  new Color(67 / 255f, 178 / 255f , 73 / 255f, 1);
- 		skin.add("lyricsGreen", lStyleLyricsGreen);
- 		
- 		LabelStyle lStyleLyricsBlack = new LabelStyle();
- 		lStyleLyricsBlack.background =skin.getDrawable("lyrics");
- 		lStyleLyricsBlack.font = calibri14;
- 		lStyleLyricsBlack.fontColor =  new Color(34 / 255f, 30 / 255f , 31 / 255f, 1);;
- 		skin.add("lyricsBlack", lStyleLyricsBlack);
- 		
- 		LabelStyle lStyleLyricsYellow = new LabelStyle();
- 		lStyleLyricsYellow.background =skin.getDrawable("lyrics");
- 		lStyleLyricsYellow.font = calibri14;
- 		lStyleLyricsYellow.fontColor =  new Color(246 / 255f, 177 / 255f , 12 / 255f, 1);
- 		skin.add("lyricsYellow", lStyleLyricsYellow);
+ 		skin.add("popup", new NinePatch(atlas.findRegion("bubble1"), 40, 40, 40, 40+53));
+ 		NinePatchDrawable lyricsNpd = new NinePatchDrawable(skin.getPatch("popup")); 		
+ 		skin.add("popup", lyricsNpd, Drawable.class); 		
+ 		LabelStyle lStylePopup = new LabelStyle();
+ 		lStylePopup.background =skin.getDrawable("popup");
+ 		lStylePopup.font = calibri14;
+ 		lStylePopup.fontColor = Color.BLACK.cpy();
+ 		skin.add("popup", lStylePopup);
+
          
 ///////////////////////////////////////////////
 ///////////	 INSTRUCTIONS 	/////////////
@@ -519,7 +513,30 @@ wondGenerator.dispose();
         tbStyleSystem2.up = skin.getDrawable("vknob");
         skin.add("default", tbStyleSystem2);
         
-        
+       
+		LabelStyle lStyleSmallAntHit = new LabelStyle();
+		lStyleSmallAntHit.font = skin.getFont("36");
+		lStyleSmallAntHit.fontColor = Color.MAGENTA;
+		lStyleSmallAntHit.background = skin.getDrawable("white");
+		skin.add("small-ant-hit", lStyleSmallAntHit);	
+		
+		LabelStyle lStyleSmallPitonHit = new LabelStyle();
+		lStyleSmallPitonHit.font = skin.getFont("36");
+		lStyleSmallPitonHit.fontColor = Color.MAGENTA;
+		lStyleSmallPitonHit.background = skin.getDrawable("white");
+		skin.add("small-piton-hit", lStyleSmallPitonHit);	
+		
+		LabelStyle lStyleSmallTigerHit = new LabelStyle();
+		lStyleSmallTigerHit.font = skin.getFont("36");
+		lStyleSmallTigerHit.fontColor = Colors.Violet;
+		lStyleSmallTigerHit.background = skin.getDrawable("white");
+		skin.add("small-tiger-hit", lStyleSmallTigerHit);	
+		
+		LabelStyle lStyleSmallSpiderHit = new LabelStyle();
+		lStyleSmallSpiderHit.font = skin.getFont("36");
+		lStyleSmallSpiderHit.fontColor = Color.MAGENTA;
+		lStyleSmallSpiderHit.background = skin.getDrawable("white");
+		skin.add("small-spider-hit", lStyleSmallSpiderHit);	
         
 		LabelStyle lStyleSmallAnt = new LabelStyle();
 		lStyleSmallAnt.font = skin.getFont("36");
@@ -543,6 +560,19 @@ wondGenerator.dispose();
 		lStyleSmallTiger.font = skin.getFont("36");
 		lStyleSmallTiger.fontColor = Color.RED;
 		skin.add("small-tiger", lStyleSmallTiger);	
+		
+		
+		TextureRegion trCircle = atlas.findRegion("circle");
+		NinePatch npCircle = new NinePatch(trCircle, 31, 31, 31, 31);
+		skin.add("circle", npCircle);
+		
+		LabelStyle lStyleLetter = new LabelStyle();
+		lStyleLetter.font = skin.getFont("letter");
+		lStyleLetter.fontColor = Color.BLACK;
+	//	lStyleLetter.background = skin.getDrawable("circle");
+		skin.add("letter", lStyleLetter);		
+		
+		
 	}
 	
 
@@ -573,7 +603,31 @@ wondGenerator.dispose();
 		return instructScreenReg;
 	}
 	
+	public Texture getEmptyCircle(Color c, float D){
+		int txsize = 2;
+		int pow = 1;
+		while(txsize<D){
+			txsize = (int) Math.pow(2, pow++);
+		}
+		
+		Map<Color, Texture> colorMap =data.get(txsize);
+		if(colorMap == null){
+			colorMap = new HashMap<Color, Texture>();
+			data.put(Integer.valueOf(txsize), colorMap);
+		}
+		
+		Texture tx = colorMap.get(c);
+		if(tx==null){
+			Pixmap pmap = new Pixmap(txsize, txsize, Format.RGBA8888);
+			pmap.setColor(c);
+			pmap.drawCircle(txsize/2-1, txsize/2-1, txsize/2-1);
+			tx = new Texture(pmap);
+			colorMap.put(c, tx);
+		}
+		
+		return tx;
 
+	}
 	
 	public Texture getCircle(Color c, float D){
 		int txsize = 2;
@@ -723,6 +777,10 @@ wondGenerator.dispose();
 			Texture tx = texIter.next();
 			tx.dispose();
 			texIter.remove();
+		}
+		
+		for(Sound snd : sounds.values()){
+			snd.dispose();
 		}
 
 	}

@@ -5,6 +5,8 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 public class Main {
 	public static void main(String[] args) {
+		System.out.println(Character.valueOf('c').equals(Character.valueOf('c')));
+		
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		cfg.title = "Was ist das?";
 		cfg.useGL20 = false;

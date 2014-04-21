@@ -25,7 +25,9 @@ public class Context {
 				new ContextProperty(ContextProperty.CELLARS, null),
 				new ContextProperty(ContextProperty.LETTERS, null),
 				new ContextProperty(ContextProperty.LETTER_ON, null),
-				new ContextProperty(ContextProperty.ACTIVE_LETTER, null)
+				new ContextProperty(ContextProperty.ACTIVE_LETTER, null),
+				new ContextProperty(ContextProperty.BETWEEN_CELLARS, null)
+
 		
 		}));
 		
@@ -106,6 +108,8 @@ public class Context {
 		public static String LETTER_ON = "letter_on";
 		public static String GAME_END ="game_end";
 		public static String ACTIVE_LETTER ="active_letter";
+		public static String BETWEEN_CELLARS ="between_cellars";
+
 		
 
 		

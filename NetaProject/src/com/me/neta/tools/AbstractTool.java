@@ -29,14 +29,20 @@ public abstract class AbstractTool extends Actor implements ContextListener{
 	TextureRegion region;
 	
 	protected boolean blink;
+	protected boolean everClicked;
+	
+	public boolean hasEverBeenClicked(){
+		return everClicked;
+	}
 
 	public float getK(){
 		return .65f;
 	}
 	
-	public AbstractTool(NetaGame ng){
+	public AbstractTool(final NetaGame ng){
 		enabled = false;
 		blink = true;
+		everClicked= false;
 			
 		AtlasRegion reg = ng.getManager().getAtlas().findRegion(getImagePath());
 		Texture tex = reg.getTexture();
@@ -44,17 +50,15 @@ public abstract class AbstractTool extends Actor implements ContextListener{
 		 region = new TextureRegion(tex, reg.getRegionX(), reg.getRegionY(), reg.getRegionWidth(), reg.getRegionHeight());
 				
 
-		
-		
-		
 		this.addListener(new InputListener(){
 
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				if(enabled()){
 					if(blink)event.getTarget().addAction(alpha(.4f));					
 					doAction();
+					everClicked = true;
+					ng.getContext().notifyListeners();
 				}
-				//System.out.println(new StringBuilder(AbstractTool.this.getClass().getName()).append("[w=").append(event.getTarget().getWidth()).append("; h=").append(event.getTarget().getHeight()).append("]"));
 				event.setBubbles(false);
 				return true;
 			}

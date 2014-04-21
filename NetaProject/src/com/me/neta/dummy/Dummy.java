@@ -18,7 +18,7 @@ import com.me.neta.Moveable;
 import com.me.neta.NetaGame;
 import com.me.neta.Size;
 
-public class Dummy extends Actor implements Moveable{
+public class Dummy extends Actor{
 	
 /*	public enum DummyType implements Serializable{
 		HOUSE,
@@ -108,7 +108,7 @@ public class Dummy extends Actor implements Moveable{
 		});
 	}
 
-	@Override
+	//@Override
 	public boolean isDisposable() {
 		// TODO Auto-generated method stub
 		return false;

@@ -17,8 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.me.neta.Context.ContextProperty;
-import com.me.neta.events.QuestionEvent;
+
 
 public class InstructionPanel extends Frame{
 	public InstructionPanel(NetaGame ng){
@@ -47,7 +46,7 @@ public class InstructionPanel extends Frame{
 				 "Отлично! Игра - шагалка готова! Ты молодчина!",
 				 "ВСЁ! Теперь в шагалку можно играть - шагать по дорожкам, а по пути читать стихотворение - по кусочку на каждой станции.",
 				 "Когда пройдете маршрут, выберите букву из тех, которые внизу на лепестках цветов. Выбирать букву можно с помощью считалочки. А считалочка - это то стихотворение, с которым вы играете. Букву, на которой окончилась считалка, разыщите во всех строчках стихов.",
-				 "Точно так же ты можешь создать игры и с другими стихами, сохранить их, а потом поиграть с друзьями и знакомыми - ровесниками или взрослыми. Или нажать на кнопку (       ) прислать на страничку ИГРЫ ОТ НИКОЛЬ И Ко в фейсбуке."
+				 "Точно так же ты можешь создать игры и с другими стихами, сохранить их, а потом поиграть с друзьями и знакомыми - ровесниками или взрослыми. Или нажать на кнопку (      ) прислать на страничку ИГРЫ ОТ НИКОЛЬ И Ко в фейсбуке."
 			
 		 };
 		 
@@ -61,6 +60,39 @@ public class InstructionPanel extends Frame{
 		for(String item : items){
 			addItem(content, item, ng);
 		}
+		
+		float w = 25, h = 20;
+		Image monitor = new Image(ng.getManager().getAtlas().findRegion("monitor"));
+		monitor.setBounds(146, 928, w, h);
+		content.addActor(monitor);
+		
+		Image letter = new Image(ng.getManager().getAtlas().findRegion("letter"));
+		letter.setBounds(146, 900 , w, h);
+		content.addActor(letter);
+		
+		Image book = new Image(ng.getManager().getAtlas().findRegion("book"));
+		book.setBounds(146, 838 , w, h);
+		content.addActor(book);
+		
+		Image figures = new Image(ng.getManager().getAtlas().findRegion("figures"));
+		figures.setBounds(146, 614 , w, h);
+		content.addActor(figures);
+		
+		Image palette = new Image(ng.getManager().getAtlas().findRegion("palette"));
+		palette.setBounds(146, 464 , w, h);
+		content.addActor(palette);
+		
+		Image figures2 = new Image(ng.getManager().getAtlas().findRegion("figures"));
+		figures2.setBounds(146, 376, w, h);
+		content.addActor(figures2);
+		
+		Image save = new Image(ng.getManager().getAtlas().findRegion("save"));
+		save.setBounds(146, 70, w, h);
+		content.addActor(save);
+		
+		
+		//content.addListener(new MetricListener());
+		
 		 Label end = new Label("Интересной Вам игры!\nВсего доброго!", ng.getManager().getSkin(), "instruction");
 		 end.setWrap(true);
 		content.add(end).colspan(2).width(width).row();

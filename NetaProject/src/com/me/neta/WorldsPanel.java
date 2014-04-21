@@ -17,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.me.neta.events.WorldSelectionEvent;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
-public class DesktopsPanel extends Group{
+public class WorldsPanel extends Group{
 	
 	public static float HOTSPOT_X =150;
 	public static float HOTSPOT_Y = 0;
@@ -38,7 +38,7 @@ public class DesktopsPanel extends Group{
 	Texture field4Tex;
 
 	
-	public DesktopsPanel(NetaGame ng, float width, float height){
+	public WorldsPanel(NetaGame ng, float width, float height){
 		this.setWidth(width);
 		this.setHeight(height);
 		
@@ -82,7 +82,7 @@ public class DesktopsPanel extends Group{
 				if(id>0){
 					WorldSelectionEvent ev = new WorldSelectionEvent(id);
 					fire(ev);
-					DesktopsPanel.this.addAction(sequence(alpha(0), visible(false)));
+					WorldsPanel.this.addAction(sequence(alpha(0), visible(false)));
 				}
 				
 				return false;

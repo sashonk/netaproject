@@ -8,11 +8,11 @@ import com.me.neta.Context.ContextProperty;
 
 
 
-public class DesktopsTool extends PanelTool{
+public class WorldsTool extends PanelTool{
 
 
 
-	public DesktopsTool(NetaGame ng) {
+	public WorldsTool(NetaGame ng) {
 		super(ng);
 		// TODO Auto-generated constructor stub
 	}

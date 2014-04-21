@@ -22,12 +22,18 @@ import com.me.neta.events.SelectFigureEvent;
 public abstract class AbstractFigure extends Group implements Moveable {
 	protected boolean filled;
 	
+	public boolean isFilled(){
+		return filled;
+	}
+	
 	public AbstractFigure(){
 		
 		filled= false;
 		
-
-
+	}
+	
+	public void oldFashionedDraw(SpriteBatch batch, float parentAlpha){
+		super.draw(batch, parentAlpha);
 	}
 	
 	@Override
@@ -40,8 +46,7 @@ public abstract class AbstractFigure extends Group implements Moveable {
 		 float duration = .1f;
 		 float minAlpha = .2f;
 		 float maxAlpha = 1;
-		 return   forever(sequence(alpha(minAlpha, duration), alpha(maxAlpha ,duration)));
-		 	
+		 return   forever(sequence(alpha(minAlpha, duration), alpha(maxAlpha ,duration)));		 	
 	 }
 	
 	private Action animationAction;

@@ -59,6 +59,8 @@ public class PitonWorld extends World{
 		piton.setPosition(400, 130);
 		piton.setZIndex(10);
 		addActor(piton);
+		piton.setName("hero");
+
 		
 		Hero bird = new Hero(ng,"POPUGAI");
 		bird.setBounds(200+10, 115+50,43,30);
@@ -227,4 +229,13 @@ public class PitonWorld extends World{
 
 	}
 
+	//@Override
+	public String getLyricsAsString() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	 public Color letterColor(){
+		 return Color.RED;
+	 }
 }

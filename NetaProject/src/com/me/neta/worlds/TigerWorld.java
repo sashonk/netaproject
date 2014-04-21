@@ -38,7 +38,9 @@ public class TigerWorld extends World{
 		return Util.multiColorLabel("тигр", "title", new String[]{"red", "orange", "yellow", "green"}, ng.getManager().getSkin());
 	}
 
-
+	 public Color letterColor(){
+		 return Color.BLUE;
+	 }
 
 	@Override
 	public String getTitle() {
@@ -63,15 +65,17 @@ public class TigerWorld extends World{
 	}
 	public void populateForeground(){
 		Hero zebra = new Hero(ng,"ZEBRA");
-		zebra.setBounds(420, 170, 93, 72);
+		zebra.setBounds(480, 150, 93, 72);
 		zebra.setZIndex(9);
 		addActor(zebra);
+		zebra.setName("hero");
 	//420 170
 				
 		Tiger tiger = new Tiger(ng);
 		tiger.setPosition(120, 320);
 		tiger.setZIndex(10);
-		addActor(tiger);		
+		addActor(tiger);	
+		
 	}
 
 	

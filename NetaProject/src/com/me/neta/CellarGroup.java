@@ -1,5 +1,8 @@
 package com.me.neta;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -58,13 +61,14 @@ public class CellarGroup extends Group{
 	}
 
 	public static class LogicLabel extends Table{
-		public LogicLabel(final NetaGame ng, String text, String styleSuff){
+		public LogicLabel(final NetaGame ng, final String text, String styleSuff){
 			defaults().padRight(1);
+			final Map<Character, Label > context = new HashMap<Character, Label>();
 			for(int i=0; i<text.length();i++){
 				final char c = text.charAt(i);
 				final Label lab = new Label(new String(new char[]{c}), ng.getManager().getSkin(), "small-"+styleSuff);
 				
-				lab.addListener(new InputListener(){
+/*				lab.addListener(new InputListener(){
 					public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 						if(ng.getContext().getProperty(ContextProperty.INGAME)==null){
 							return false;
@@ -74,12 +78,27 @@ public class CellarGroup extends Group{
 											
 						return true;
 					}
-				});
+				});*/
 				
+				if(!context.containsKey(Character.toLowerCase(c))){
+					context.put(Character.valueOf(Character.toLowerCase(c)), lab);
+				}
 				add(lab);
 				
 			}
 			pack();
+			
+			addListener(new InputListener(){
+				public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+					if(ng.getContext().getProperty(ContextProperty.INGAME)==null){
+						return false;
+					}
+					
+					event.getListenerActor().fire(new LogicLabelClickEvent(text, context));
+										
+					return true;
+				}
+			});
 
 		}
 	}
