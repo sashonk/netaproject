@@ -585,7 +585,7 @@ public class Workspace extends Group implements ContextListener{
 		
 		
 
-		Image splash = new Image(new TextureRegion(new Texture(Gdx.files.internal("data/zastavka.jpg")), 0,0,1024, 600));
+/*		Image splash = new Image(new TextureRegion(new Texture(Gdx.files.internal("data/zastavka.jpg")), 0,0,1024, 600));
 		splash.setBounds(0,0,1024, 768);
 		splash.addAction(sequence(delay(3),alpha(0, 3), visible(false), Actions.removeActor()));
 		splash.addListener(new InputListener(){
@@ -594,7 +594,7 @@ public class Workspace extends Group implements ContextListener{
 				return false;
 			}
 		});
-		addActor(splash);
+		addActor(splash);*/
 		
 		this.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {

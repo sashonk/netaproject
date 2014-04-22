@@ -4,8 +4,14 @@ package com.me.neta;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.me.neta.Context.ContextProperty;
@@ -15,7 +21,7 @@ import com.me.neta.Context.ContextProperty;
 
 public class NetaGame implements ApplicationListener {
 	
-	
+	boolean inited;
 	 Native natiff;
 	 boolean error = false;
 	
@@ -51,36 +57,30 @@ public class NetaGame implements ApplicationListener {
 	
 	void initContext(){
 		context.setProperty(ContextProperty.HALT, Boolean.TRUE);
-
-
 	}
-	
+	Texture splash;
 	@Override
 	public void create() {
-		
+		inited  = false;
 		context = new Context();
 		initContext();
 	
+		 splash = new Texture(Gdx.files.internal("data/zastavka.jpg"));
+		 splashBatch = new SpriteBatch();
+		
 		texManager = new TextureManager();
 		texManager.loadResources();
-		texManager.finishLoading();
-		texManager.init();
-				
-		stage= new Stage(1024,768, false);
-			
-		space= new Workspace(this, 0, 0, stage.getWidth(), stage.getHeight());
-		context.registerListener(space);
-		space.initialize();
+		//texManager.finishLoading();
 
-		stage.addActor(space);
-		
-
-		Gdx.input.setInputProcessor(stage);
-
+		FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/wonderland.ttf"));
+		splashFont = gen.generateFont(36, "%0123456789.", false);
+		splashFont.setColor(Color.GRAY);
+		gen.dispose();
 
 	}
 	
-
+	SpriteBatch splashBatch;
+	BitmapFont splashFont;
 
 	@Override
 	public void resize(int width, int height) {
@@ -88,31 +88,59 @@ public class NetaGame implements ApplicationListener {
 		
 	}
 
+	float d;
+	String progress;
+	
 	@Override
 	public void render() {
-	//	Gdx.gl.glClearColor(1, .1f, 1, 1);
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
-		
-	
-	
-		try{
-			stage.draw();	
-			
-			if(!error){
-				stage.act();
+		if(!texManager.update()){
+			if(d>0.4 || progress ==null){
+				progress = texManager.getProgressAsString();
+				d = 0;
 			}
-			else{
-				if(Gdx.input.isTouched()){
-					Gdx.app.exit();
-				}			}
-		}
-		catch(Exception ex){
-			MessageHelper.error(this, "Критическая ошибка!", ex);
-			error = true;
-		}
+				splashBatch.begin();
+				splashBatch.draw(splash, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0, 0, 1024, 600, false, false);
+				splashFont.draw(splashBatch, progress, 300*Gdx.graphics.getWidth()/640, 150*Gdx.graphics.getHeight()/480);
+				splashBatch.end();
 
+			d+=Gdx.graphics.getDeltaTime();
+		}
+		else{
+			if(!inited){
+				texManager.init();				
+				stage= new Stage(1024,768, false);			
+				space= new Workspace(this, 0, 0, stage.getWidth(), stage.getHeight());
+				context.registerListener(space);
+				space.initialize();
+				stage.addActor(space);		
+				Gdx.input.setInputProcessor(stage);
+				inited = true;
+				
+				splash.dispose();
+				splashBatch.dispose();
+				splashFont.dispose();
+			}
+			
+			
+			try{
+				stage.draw();	
+				
+				if(!error){
+					stage.act();
+				}
+				else{
+					if(Gdx.input.isTouched()){
+						Gdx.app.exit();
+					}			}
+			}
+			catch(Exception ex){
+				MessageHelper.error(this, "Критическая ошибка!", ex);
+				error = true;
+			}
+		}
 		
 	
 		
@@ -136,6 +164,7 @@ public class NetaGame implements ApplicationListener {
 
 	@Override
 	public void dispose() {
+
 		stage.dispose();
 		texManager.dispose();
 	}

@@ -1,6 +1,8 @@
 package com.me.neta;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -84,9 +86,25 @@ public class TextureManager {
 		manager.finishLoading();
 	}
 	
+	public boolean update(){
+		return manager.update();
+	}
+	
+	public boolean update(int millis){
+		return manager.update(millis);
+	}
+
+	public String getProgressAsString(){	
+		
+		BigDecimal bd = BigDecimal.valueOf(100* manager.getProgress()).setScale(0, RoundingMode.HALF_UP);
+		return new StringBuilder(bd.toString()).append("%").toString();
+	}
+	
 	public void loadResources(){
 	
+	
 		manager = new AssetManager();
+
 		manager.load("data/sound/error.ogg", Sound.class);
 
 		for(Character c :  Letter.characterToIdMap.keySet()){
