@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
@@ -61,51 +62,63 @@ public class TextureManager {
 	
 
 	
-	private Texture np9 ;
-	
-	private Texture np9Error;
-	
-	Map<Character, Sound> soundMap = new HashMap<Character, Sound>();
-	Map<String, Music> levinSound = new HashMap<String, Music>();
-	Map<String, Sound> sounds = new HashMap<String, Sound>();
+	//Map<Character, Sound> soundMap = new HashMap<Character, Sound>();
+	//Map<String, Music> levinSound = new HashMap<String, Music>();
+	//Map<String, Sound> sounds = new HashMap<String, Sound>();
 	
 	public Sound letterSound(Character c){
-		return soundMap.get(c);
+		return manager.get(new StringBuilder("data/sound/").append(Letter.translit.get(Character.valueOf(c))).append(".mp3").toString(), Sound.class);
 	}
 	
 	public Music getMusic(String name){
-		return levinSound.get(name);
+		return manager.get(new StringBuilder("data/sound/").append(name).append(".ogg").toString());
 	}
 	
 	public Sound getSound(String name){
-		return sounds.get(name);
+		return manager.get(String.format("data/sound/%s.ogg", name));
 	}
 	
+	AssetManager manager;
 	
+	public void finishLoading(){
+		manager.finishLoading();
+	}
 	
-	public void init(){
-		
-		sounds.put("error", Gdx.audio.newSound(Gdx.files.internal("data/sound/error.ogg")));
-		
+	public void loadResources(){
+	
+		manager = new AssetManager();
+		manager.load("data/sound/error.ogg", Sound.class);
+
 		for(Character c :  Letter.characterToIdMap.keySet()){
-			soundMap.put(c, Gdx.audio.newSound(Gdx.files.internal(new StringBuilder("data/sound/").append(Letter.translit.get(Character.valueOf(c))).append(".mp3").toString())));
+			manager.load(new StringBuilder("data/sound/").append(Letter.translit.get(Character.valueOf(c))).append(".mp3").toString(), Sound.class);
 		}
 		
 		String[] worldNames = {"ant", "spider", "piton", "tiger"};
 		
 		for(String name : worldNames){
-			levinSound.put(name, Gdx.audio.newMusic(Gdx.files.internal(new StringBuilder("data/sound/").append(name).append(".ogg").toString())));
-
+			manager.load((new StringBuilder("data/sound/").append(name).append(".ogg").toString()), Music.class);
 		}
 	
-		
-		atlas = new TextureAtlas(Gdx.files.internal("data/main.pack"));
-		miscAtlas = new TextureAtlas(Gdx.files.internal("data/misc/misc.pack"));
+		manager.load("data/main.pack", TextureAtlas.class);
+		manager.load("data/misc/misc.pack", TextureAtlas.class);
 
-		fields.add(new Texture(Gdx.files.internal("data/field1.jpg")));
-		fields.add(new Texture(Gdx.files.internal("data/field2.jpg")));
-		fields.add(new Texture(Gdx.files.internal("data/field3.jpg")));
-		fields.add(new Texture(Gdx.files.internal("data/field4.jpg")));
+		manager.load(("data/field1.jpg"), Texture.class);
+		manager.load(("data/field2.jpg"), Texture.class);
+		manager.load(("data/field3.jpg"), Texture.class);
+		manager.load(("data/field4.jpg"), Texture.class);
+		
+		
+		manager.load("data/nikol.jpg", Texture.class);
+		manager.load("data/instruct.jpg", Texture.class);
+		manager.load("data/np.png", Texture.class);
+		manager.load("data/errnp.png", Texture.class);
+		
+
+	}
+	
+	public void init(){
+		
+
 		
 		skin = new Skin();
 
@@ -157,12 +170,11 @@ wondGenerator.dispose();
 		skin.add("letter", letterFont);
 
 
-		nickolLetter = new Texture(Gdx.files.internal("data/nikol.jpg"));
+		 Texture nickolLetter = manager.get("data/nikol.jpg");
 		 nikolLetterRegion = new TextureRegion(nickolLetter, 0, 0, 925, 433);
-		 instructScreen = new Texture(Gdx.files.internal("data/instruct.jpg"));
+		 Texture instructScreen = manager.get("data/instruct.jpg");
 		 instructScreenReg =  new TextureRegion(instructScreen, 0, 0, 925, 433);
-		 np9 = new Texture(Gdx.files.internal("data/np.png"));
-		 np9Error = new Texture(Gdx.files.internal("data/errnp.png"));
+	
 		
 
 		 Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
@@ -227,6 +239,7 @@ wondGenerator.dispose();
          skin.add("default", labelStyle);
          
          
+         TextureAtlas atlas = manager.get("data/main.pack");
          skin.add("panelNP", new NinePatch(atlas.findRegion("panel"), 52, 52 , 0,0));
          skin.add("system", new NinePatch(atlas.findRegion("npsystem"), 8, 8, 8, 8));
          skin.add("error", new NinePatch(atlas.findRegion("nperror"), 8, 8, 8, 8));
@@ -583,17 +596,18 @@ wondGenerator.dispose();
 	}
 	
 	public TextureAtlas getAtlas(){
-		return atlas;
+		return manager.get("data/main.pack");
 	}
 	
 
 	
 	public TextureAtlas getMiscAtlas(){
-		return miscAtlas;
+		return manager.get("data/misc/misc.pack");
 	}
 	
 	public Texture getGameField(int i){
-		return fields.get(i);
+		
+		return manager.get(String.format("data/field%d.jpg", i));
 	}
 	
 	public TextureRegion getNikoleLetter(){
@@ -709,12 +723,12 @@ wondGenerator.dispose();
 	}
 	
 
-	private List<Texture> fields = new ArrayList<Texture>(4); 
+	//private List<Texture> fields = new ArrayList<Texture>(4); 
 	
-	private TextureAtlas atlas;
+	//private TextureAtlas atlas;
 	
 	
-	private TextureAtlas miscAtlas;
+	//private TextureAtlas miscAtlas;
 	
 	
 	
@@ -722,42 +736,23 @@ wondGenerator.dispose();
 	
 	private Skin skin;
 
-	private Texture nickolLetter;
+	//private Texture nickolLetter;
 	
 	private TextureRegion nikolLetterRegion;
 	
-	private Texture instructScreen;
+	//private Texture instructScreen;
 	
 	private TextureRegion instructScreenReg;
 	
 	private void disposeInternal(){
 		
-		for(Sound snd : soundMap.values()){
-			snd.dispose();
-		}
-		
-		for(Music snd : levinSound.values()){
-			snd.dispose();
-		}
-		
-		np9.dispose();
-		np9Error.dispose();
-		
-		atlas.dispose();
-		//fieldsAtlas.dispose();
-		miscAtlas.dispose();
+
 		
 
-		Iterator<Texture> iter = fields.iterator();
-		while(iter.hasNext()){
-			Texture tex = iter.next();
-			tex.dispose();
-			iter.remove();
-		}
-
+		
 		skin.dispose();
-		nickolLetter.dispose();
-		instructScreen.dispose();
+		//nickolLetter.dispose();
+		//instructScreen.dispose();
 		
 		Iterator<Map<Color, Texture>> rootIter = data.values().iterator();
 		while(rootIter.hasNext()){
@@ -779,10 +774,11 @@ wondGenerator.dispose();
 			texIter.remove();
 		}
 		
-		for(Sound snd : sounds.values()){
+/*		for(Sound snd : sounds.values()){
 			snd.dispose();
-		}
+		}*/
 
+		manager.dispose();
 	}
 	
 

@@ -62,6 +62,8 @@ public class NetaGame implements ApplicationListener {
 		initContext();
 	
 		texManager = new TextureManager();
+		texManager.loadResources();
+		texManager.finishLoading();
 		texManager.init();
 				
 		stage= new Stage(1024,768, false);
@@ -78,15 +80,7 @@ public class NetaGame implements ApplicationListener {
 
 	}
 	
-	public void zoom(float value){
-		OrthographicCamera camera = (OrthographicCamera) stage.getCamera();
-		camera.zoom = value;	
-	}
-	
-	public void setCameraPosition(Vector2 position){
-		OrthographicCamera camera = (OrthographicCamera) stage.getCamera();
-		camera.position.set(position.x, position.y, 0);
-	}
+
 
 	@Override
 	public void resize(int width, int height) {
@@ -100,6 +94,8 @@ public class NetaGame implements ApplicationListener {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
+		
+	
 	
 		try{
 			stage.draw();	
