@@ -62,6 +62,7 @@ public class NetaGame implements ApplicationListener {
 	@Override
 	public void create() {
 		inited  = false;
+		lastSplashRenderCall = false;
 		context = new Context();
 		initContext();
 	
@@ -90,6 +91,14 @@ public class NetaGame implements ApplicationListener {
 
 	float d;
 	String progress;
+	boolean lastSplashRenderCall;
+	
+	void renderSplash(){
+		splashBatch.begin();
+		splashBatch.draw(splash, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0, 0, 1024, 600, false, false);
+		splashFont.draw(splashBatch, progress, 300*Gdx.graphics.getWidth()/640, 150*Gdx.graphics.getHeight()/480);
+		splashBatch.end();
+	}
 	
 	@Override
 	public void render() {
@@ -101,44 +110,49 @@ public class NetaGame implements ApplicationListener {
 				progress = texManager.getProgressAsString();
 				d = 0;
 			}
-				splashBatch.begin();
-				splashBatch.draw(splash, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0, 0, 1024, 600, false, false);
-				splashFont.draw(splashBatch, progress, 300*Gdx.graphics.getWidth()/640, 150*Gdx.graphics.getHeight()/480);
-				splashBatch.end();
+			renderSplash();
 
 			d+=Gdx.graphics.getDeltaTime();
 		}
-		else{
+		else{			
 			if(!inited){
-				texManager.init();				
-				stage= new Stage(1024,768, false);			
-				space= new Workspace(this, 0, 0, stage.getWidth(), stage.getHeight());
-				context.registerListener(space);
-				space.initialize();
-				stage.addActor(space);		
-				Gdx.input.setInputProcessor(stage);
-				inited = true;
-				
-				splash.dispose();
-				splashBatch.dispose();
-				splashFont.dispose();
-			}
-			
-			
-			try{
-				stage.draw();	
-				
-				if(!error){
-					stage.act();
-				}
+				if(!lastSplashRenderCall){
+					progress = texManager.getProgressAsString();
+					renderSplash();
+					lastSplashRenderCall = true;
+				}				
 				else{
-					if(Gdx.input.isTouched()){
-						Gdx.app.exit();
-					}			}
-			}
-			catch(Exception ex){
-				MessageHelper.error(this, "Критическая ошибка!", ex);
-				error = true;
+					texManager.init();				
+					stage= new Stage(1024,768, false);			
+					space= new Workspace(this, 0, 0, stage.getWidth(), stage.getHeight());
+					context.registerListener(space);
+					space.initialize();
+					stage.addActor(space);		
+					Gdx.input.setInputProcessor(stage);
+
+					
+					splash.dispose();
+					splashBatch.dispose();
+					splashFont.dispose();
+					inited = true;
+				}
+			}			
+			else{
+				try{
+					stage.draw();	
+					
+					if(!error){
+						stage.act();
+					}
+					else{
+						if(Gdx.input.isTouched()){
+							Gdx.app.exit();
+						}			}
+				}
+				catch(Exception ex){
+					MessageHelper.error(this, "Критическая ошибка!", ex);
+					error = true;
+				}
 			}
 		}
 		
