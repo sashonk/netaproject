@@ -45,6 +45,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 
 
 import com.me.neta.Context.ContextProperty;
+import com.me.neta.Popup.PopupGroup;
 import com.me.neta.events.*;
 import com.me.neta.figures.AbstractFigure;
 import com.me.neta.tools.AbstractTool;
@@ -52,6 +53,8 @@ import com.me.neta.tools.BasketTool;
 import com.me.neta.tools.BrushTool;
 import com.me.neta.tools.FlowerTool;
 import com.me.neta.tools.ShopTool;
+import com.me.neta.tools.StartButton;
+import com.me.neta.tools.UnfillTool;
 import com.me.neta.tools.WorldsTool;
 import com.me.neta.tools.FiguresTool;
 import com.me.neta.tools.PassportTool;
@@ -77,9 +80,15 @@ public class Workspace extends Group implements ContextListener{
 	RotateTool rTool;
 	QuestionTool qTool;
 	 FlowerTool flowerTool;
-	
+	 UnfillTool uTool;	
+
+	 
 	static final float pad = 15;
 	PanelToolGroup ptGroup;
+	public PanelToolGroup getPtGroup(){
+		return ptGroup;
+	}
+	
 	private Pinch2ZoomListener2 pinch2Zoom;
 	Passport passport;
 	Map<Integer, WorldFactory> worldFactories = new HashMap<Integer, WorldFactory>();
@@ -88,11 +97,14 @@ public class Workspace extends Group implements ContextListener{
 	Table toolbarTable;
 	private Color selectedColor ;
 	 WorldsTool worldsTool;	
-	  PassportTool passportTool ;
-	   LyricsTool lyricsTool;
-		 FiguresTool figuresTool;
-		  ColorTool paletteTool;
-		 
+	 PassportTool passportTool ;
+	LyricsTool lyricsTool;
+ FiguresTool figuresTool;
+ColorTool paletteTool;
+	SettingsTool settingTool	 ;
+	 BasketTool basketTool;	
+	boolean startHasEverBeenClickedOnPopup;
+			 
 		 
 	public Workspace(NetaGame ng, float x, float y, float width, float height){
 		this.ng = ng;
@@ -103,6 +115,7 @@ public class Workspace extends Group implements ContextListener{
 	
 	public void initialize(){
 		
+		startHasEverBeenClickedOnPopup= false;
 		populateWorldFactories(ng);
 		passport = new Passport();
 		pinch2Zoom = new Pinch2ZoomListener2();
@@ -125,7 +138,7 @@ public class Workspace extends Group implements ContextListener{
 //////////////////////////////////////////////////////////////////		
 	////////////////// 	 TOOLS  /////////////////////////
 /////////////////////////////////////////////////////////////////
-		final BasketTool basketTool = new BasketTool(ng); 
+		 basketTool = new BasketTool(ng); 
 		basketTool.setSize(68,78);
 		toolbarTable.add(basketTool).padRight(pad).padLeft(pad);
 						
@@ -172,7 +185,7 @@ public class Workspace extends Group implements ContextListener{
 		
 		  flowerTool = new FlowerTool(ng);
 		
-		VariantPanel lettersPanel = new VariantPanel(ng);
+		FlowerPanel lettersPanel = new FlowerPanel(ng);
 		lettersPanel.setVisible(false);
 		flowerTool.setPanel(lettersPanel);
 		this.addActor(lettersPanel);
@@ -212,7 +225,7 @@ public class Workspace extends Group implements ContextListener{
 		saveTool.setPanel(savePanel);
 		this.addActor(savePanel);
 		
-		final SettingsTool settingTool = new SettingsTool(ng);
+		settingTool = new SettingsTool(ng);
 		toolbarTable.add(settingTool).padRight(pad).padLeft(pad);
 		SettingsPanel settingsPanel = new SettingsPanel(ng);
 		settingTool.setPanel(palette);
@@ -233,17 +246,15 @@ public class Workspace extends Group implements ContextListener{
 		topButtons.setName("topButtons");
 		 rTool = new RotateTool(ng);
 		 zTool = new ZIndexTool(ng);
+		 uTool = new UnfillTool(ng);
 		 bTool = new BrushTool(ng);
 		qTool = new QuestionTool(ng);
 		
 		float topPad = 2;
-		float topPadRight ;
-		float topPadLeft ;
-		
-		
+
 		topButtons.add(rTool).padRight(topPad);
 		topButtons.add(bTool).padRight(topPad);
-		topButtons.add(zTool).padRight(topPad);
+		topButtons.add(uTool).padRight(topPad);
 		topButtons.add(qTool).padRight(topPad);
 		topButtons.pack();
 		topButtons.setPosition(800, 700);
@@ -251,7 +262,7 @@ public class Workspace extends Group implements ContextListener{
 		addActorAfter(this.findActor(bottomActorName), topButtons);
 
 		toolbarTable.pack();
-		
+
 
 			
 //////////////////////////////////////////////////////////////////////		
@@ -291,8 +302,9 @@ public class Workspace extends Group implements ContextListener{
 						ng.getContext().setProperty(ContextProperty.CELLARS, Boolean.TRUE);
 						lyricsPanel.addAction(sequence(fadeOut(0.4f), visible(false)));
 						
-						if(!flowerTool.hasEverBeenClicked()){
-							popup("Выбери буквы", 515, 80, "popupFlowers");
+						if(!flowerTool.hasEverBeenClickedOnPopup()){
+							//popup("Выбери буквы", 515, 80, "popupFlowers");
+							flowerTool.setPopup("Выбери буквы для цветочков", 0, new PopupGroup(flowerTool), 0);
 						}
 					}
 					else{
@@ -305,6 +317,10 @@ public class Workspace extends Group implements ContextListener{
 
 					//world.start();
 					world.letters(((LetterVariantEvent)event).getLetterGroupID());
+					
+					if(!figuresTool.hasEverBeenClickedOnPopup()){
+						figuresTool.setPopup("Соедини СТАНЦИИ дорожкой из камешков.\nТолько не перепутай порядок СТАНЦИЙ!", 0, new PopupGroup(figuresTool,basketTool, paletteTool, rTool, bTool, uTool), 0);
+					}
 				}
 				
 				if(event instanceof WorldSelectionEvent){
@@ -343,8 +359,8 @@ public class Workspace extends Group implements ContextListener{
 						world.setId(desktopEvent.getId());
 						world.drawPassport(passport);
 	
-						if(!passportTool.hasEverBeenClicked()){
-							popup("Введи своё имя, возраст\n и где ты живешь", 280, 80, "popupPassport");
+						if(!passportTool.hasEverBeenClickedOnPopup()){
+							passportTool.setPopup("Напиши своё имя, возраст\n и где ты живешь", 00, new PopupGroup(passportTool), 0);
 						}
 
 					}
@@ -353,18 +369,19 @@ public class Workspace extends Group implements ContextListener{
 					ng.getContext().setProperty(ContextProperty.LETTERS, null);
 					ng.getContext().setProperty(ContextProperty.CELLARS, null);
 					ng.getContext().setProperty(ContextProperty.INGAME, null);
+					ng.getContext().setProperty(ContextProperty.GAME_END, null);
 
 				}
 				
 				
 				
-				if(event instanceof LetterDropEvent){
+				if(event instanceof FigureDropEvent){
 					event.setBubbles(false);
 
 
 				
 					
-					LetterDropEvent dropEvent = (LetterDropEvent) event;
+					FigureDropEvent dropEvent = (FigureDropEvent) event; 
 					Actor letter= dropEvent.getActor();		
 					
 					Actor z = world.findActor("zactor");
@@ -372,16 +389,27 @@ public class Workspace extends Group implements ContextListener{
 							
 					setSelectedFigure((AbstractFigure) letter);
 					
-					if(!paletteTool.hasEverBeenClicked()&& findActor("popupPalette")==null){
-						popup("Ты можешь выбрать цвет и\n раскрасить фигуры", 550, 80, "popupPalette");
+					if(!paletteTool.hasEverBeenClickedOnPopup()&& findActor("popupPalette")==null){
+						//popup("Ты можешь выбрать цвет и\n раскрасить фигуры", 550, 80, "popupPalette");
+						paletteTool.setPopup("Ты можешь выбрать цвет и\n раскрасить фигуры", 00, new PopupGroup(figuresTool,basketTool, paletteTool, rTool, bTool, uTool), 0);
 					}
 				}
 				
 				
 				if(event instanceof SelectFigureEvent){
 					setSelectedFigure((AbstractFigure) event.getTarget());	
-					if(bTool.checked()){
-						world.getSelected().setColor(selectedColor);
+					if(bTool.checked() && ng.getContext().getProperty(ContextProperty.HALT)==null){
+						world.getSelected().fill(selectedColor);
+						
+						StartButton sb = world.getStartButton();
+						if(sb!=null && !startHasEverBeenClickedOnPopup){
+							sb.setPopup("Когда будешь готов, жми СТАРТ и игра начнётся!", -100, new PopupGroup(figuresTool, basketTool,  paletteTool, rTool, bTool, uTool,world.getStartButton()), 5);
+							startHasEverBeenClickedOnPopup = true;
+						}
+					}
+					else{
+						//world.getSelected().unfill();
+
 					}
 					event.setBubbles(false);
 
@@ -407,16 +435,32 @@ public class Workspace extends Group implements ContextListener{
 				
 				if(event instanceof SelectColorEvent){
 					SelectColorEvent colorEvent = (SelectColorEvent) event;
+					
+					//if(ng.getContext().getProperty(ContextProperty.HALT)!=null){
 					setSelectedColor(colorEvent.getColor());
+					//}
 					event.setBubbles(false);
 
+
+				}
+				
+				if(event instanceof GameEndEvent){
+					event.setBubbles(false);
+					
+					ng.getContext().setProperty(ContextProperty.GAME_END, new Object());
+					ng.getContext().setProperty(ContextProperty.HALT, null);
+					
+					if(!saveTool.hasEverBeenClickedOnPopup()){
+						saveTool.setPopup("Можешь прислать  сохраненные игровые поля на\n страничку НИКОЛЬ И ЕЁ ДРУЗЬЯ  в  фейсбук.", 100, new PopupGroup(saveTool), 0);
+						ng.getContext().setProperty(ContextProperty.POPUP, null);
+					}
 				}
 				
 				if(event instanceof TrashButtonEvent){
 					event.setBubbles(false);
 
 					System.out.println("TrashButtonEvent::handle");
-					if(world.getSelected()!=null){
+					if(world.getSelected()!=null && ng.getContext().getProperty(ContextProperty.HALT)==null){
 						final Actor actor = world.getSelected();
 						actor.addAction(deleteFigureAction(actor));
 						beingRemoved.add(world.getSelected());
@@ -431,9 +475,15 @@ public class Workspace extends Group implements ContextListener{
 				if(event instanceof RotationEvent){
 					event.setBubbles(false);
 
-					System.out.println("RotationEvent::handle");
-					if(world.getSelected()!=null){
+					if(world.getSelected()!=null&&ng.getContext().getProperty(ContextProperty.HALT)==null){
 						world.getSelected().rotate(((RotationEvent)event).getDegrees());
+					}
+				}
+				
+				if(event instanceof UnfillEvent && ng.getContext().getProperty(ContextProperty.HALT)==null){
+					event.setBubbles(false);
+					if(world.getSelected()!=null){
+						world.getSelected().unfill();
 					}
 				}
 				
@@ -442,6 +492,18 @@ public class Workspace extends Group implements ContextListener{
 
 					if(world!=null){
 						world.setFocus();
+					}
+				}
+				
+				if(event instanceof InstructionCloseEvent){
+					if(!settingTool.hasEverBeenClickedOnPopup()){
+						settingTool.setPopup("Спроси взрослого, который будет тебе помогать,\nвнимательно ли он прочитал короткую записку\nдля взрослых.",160,new PopupGroup(settingTool), 0);
+					}
+				}
+				
+				if(event instanceof AdultsCloseEvent){
+					if(!worldsTool.hasEverBeenClickedOnPopup()){
+						worldsTool.setPopup("Выбери игровое поле",0 ,new PopupGroup(worldsTool), 0);
 					}
 				}
 				 
@@ -461,13 +523,13 @@ public class Workspace extends Group implements ContextListener{
 					world.drawPassport(passport);
 					Workspace.this.ptGroup.onShow(null);
 
-					if(!lyricsTool.hasEverBeenClicked() && findActor("popupLyrics")==null){
-						popup("Выбери стихи ", 220,80, "popupLyrics");
+					if(!lyricsTool.hasEverBeenClickedOnPopup() && findActor("popupLyrics")==null){
+						lyricsTool.setPopup("Выбери подходящие стихи ", 0, new PopupGroup(lyricsTool), 0);
 					}
 				}
 				
 				
-				if(event instanceof ZIndexEvent){
+				if(event instanceof ZIndexEvent && ng.getContext().getProperty(ContextProperty.HALT)==null){
 					event.setBubbles(false);
 
 					ZIndexEvent zevent = (ZIndexEvent)event;
@@ -580,6 +642,7 @@ public class Workspace extends Group implements ContextListener{
 		registerStateListener(settingTool);		
 		registerStateListener(qTool);
 		registerStateListener(bTool);
+		registerStateListener(uTool);
 		registerStateListener(rTool);
 		registerStateListener(zTool);
 		
@@ -602,7 +665,7 @@ public class Workspace extends Group implements ContextListener{
 				if(event.getTarget()==world){
 					getStage().setKeyboardFocus(null);
 					Workspace.this.setSelectedFigure(null);
-					Workspace.this.ptGroup.onShow(null);
+					//Workspace.this.ptGroup.onShow(null);
 					Gdx.input.setOnscreenKeyboardVisible(false);
 				}
 
@@ -626,7 +689,7 @@ public class Workspace extends Group implements ContextListener{
 		
 		errorSnd = ng.getManager().getSound("error");
 		
-		popup("Выбери игровое поле", 100, 80, "popupChooseWorld").setVisible(false);
+		//popup("Выбери игровое поле", 100, 80, "popupChooseWorld").setVisible(false);
 		
 
 		
@@ -777,7 +840,7 @@ public class Workspace extends Group implements ContextListener{
     
      
 
-     
+/*     
      public Label popup(String message, float x, float y, String name){
    
     
@@ -790,13 +853,13 @@ public class Workspace extends Group implements ContextListener{
 		//popup.getColor().a= 0;
 		//popup.addAction(sequence(alpha(1, 0.3f)));
 		return popup;
-     }
+     }*/
 
      
 	@Override
-	public void contextChanged(Context ctx) {
+	public void contextChanged(Context ctx) {/*
 		if(ctx.getProperty(ContextProperty.PREPARED)!=null ){
-			if(!worldsTool.hasEverBeenClicked()){
+			if(!worldsTool.hasEverBeenClickedOnPopup()){
 				Actor popup = findActor("popupChooseWorld");
 				if(popup!=null){
 					popup.addAction(sequence(visible(true)));
@@ -810,7 +873,7 @@ public class Workspace extends Group implements ContextListener{
 			}
 		}
 		if(ctx.getProperty(ContextProperty.WORKING)!=null){
-			if(passportTool.hasEverBeenClicked()){
+			if(passportTool.hasEverBeenClickedOnPopup()){
 				Actor popup = findActor("popupPassport");
 				if(popup!=null){
 					popup.addAction(sequence(Actions.removeActor()));
@@ -819,7 +882,7 @@ public class Workspace extends Group implements ContextListener{
 
 		}
 		if(ctx.getProperty(ContextProperty.WORKING)!=null){
-			if(lyricsTool.hasEverBeenClicked()){
+			if(lyricsTool.hasEverBeenClickedOnPopup()){
 				Actor popup = findActor("popupLyrics");
 				if(popup!=null){
 					popup.addAction(sequence(Actions.removeActor()));
@@ -828,7 +891,7 @@ public class Workspace extends Group implements ContextListener{
 
 		}
 		if(ctx.getProperty(ContextProperty.CELLARS)!=null){
-			if(flowerTool.hasEverBeenClicked()){
+			if(flowerTool.hasEverBeenClickedOnPopup()){
 				Actor popup = findActor("popupFlowers");
 				if(popup!=null){
 					popup.addAction(sequence(Actions.removeActor()));
@@ -838,7 +901,7 @@ public class Workspace extends Group implements ContextListener{
 		}	
 		
 		if(ctx.getProperty(ContextProperty.GAME_END)!=null){
-			if(figuresTool.hasEverBeenClicked()){
+			if(figuresTool.hasEverBeenClickedOnPopup()){
 				Actor popup = findActor("popupFigures");
 				if(popup!=null){
 					popup.addAction(sequence(Actions.removeActor()));
@@ -847,14 +910,14 @@ public class Workspace extends Group implements ContextListener{
 			else{
 				Actor popup = findActor("popupFigures");
 				if(popup==null){
-					popup = popup("Теперь выбери фигуры\nи создай иллюстрацию", 390, 80, "popupFigures");
+					//popup = popup("Теперь выбери фигуры\nи создай иллюстрацию", 390, 80, "popupFigures");
 				}				
 			}
 
 		}	
 		
 		if(ctx.getProperty(ContextProperty.GAME_END)!=null){
-			if(paletteTool.hasEverBeenClicked()){
+			if(paletteTool.hasEverBeenClickedOnPopup()){
 				Actor popup = findActor("popupPalette");
 				if(popup!=null){
 					popup.addAction(sequence(Actions.removeActor()));
@@ -868,7 +931,7 @@ public class Workspace extends Group implements ContextListener{
 			}
 
 		}	
-	}
+	*/}
 	
 	
      

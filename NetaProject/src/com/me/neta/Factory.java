@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
 import com.me.neta.events.DragEvent;
 import com.me.neta.events.DragStartEvent;
 import com.me.neta.events.DragStopEvent;
-import com.me.neta.events.LetterDropEvent;
+import com.me.neta.events.FigureDropEvent;
 import com.me.neta.events.SelectFigureEvent;
 import com.me.neta.figures.AbstractFigure;
 
@@ -87,7 +87,7 @@ public abstract class Factory extends Actor{
 				});
 				letter.setPosition(getActor().getX()+x-ox, getActor().getY()+y-oy);
 				
-				Factory.this.fire(new LetterDropEvent(letter));
+				Factory.this.fire(new FigureDropEvent(letter));
 			}
 			
 			@Override

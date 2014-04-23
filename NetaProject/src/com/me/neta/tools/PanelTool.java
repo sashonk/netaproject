@@ -30,13 +30,13 @@ public abstract class PanelTool extends AbstractTool{
 		this.panel= panel;
 	}
 	
-	private void onHide(){
+	protected void onHide(){
 		for(PanelToolListener listener : listeners){
 			listener.onHide(this);
 		}
 	}
 	
-	private void onShow(){
+	protected void onShow(){
 		for(PanelToolListener listener : listeners){
 			listener.onShow(this);
 		}

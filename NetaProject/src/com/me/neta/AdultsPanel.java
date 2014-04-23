@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -14,6 +15,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.me.neta.Context.ContextProperty;
+import com.me.neta.events.AdultsCloseEvent;
+import com.me.neta.events.InstructionCloseEvent;
 import com.me.neta.events.QuestionEvent;
 
 public class AdultsPanel extends Frame{
@@ -49,8 +52,10 @@ public class AdultsPanel extends Frame{
 		 
 		 
 		 FileHandle infoFile =Gdx.files.internal("data/forAdults.txt");
-		 String infoText = infoFile.readString();		 
+		 String infoText = infoFile.readString();	
+		
 		 Label info = new Label(infoText, skin, "instruction");
+		// info.setAlignment(Align.right, Align.center);
 		// info.setWidth(300);
 		 info.setWrap(true);
 		 
@@ -70,5 +75,13 @@ public class AdultsPanel extends Frame{
 		content.setPosition(getWidth()/3, 55);
 		
 		addActor(content);
+		
+		Actor decal = findActor("close");
+		decal.addListener(new InputListener(){
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				fire(new AdultsCloseEvent());
+				return true;
+			}
+		});
 	}
 }

@@ -1,35 +1,42 @@
 package com.me.neta.tools;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.me.neta.Context;
 import com.me.neta.NetaGame;
 import com.me.neta.Size;
 import com.me.neta.Context.ContextProperty;
+import com.me.neta.events.BrushToolChangeEvent;
 import com.me.neta.events.RotationEvent;
+import com.me.neta.events.UnfillEvent;
 
-public class RotateTool extends TopTool{
+public class UnfillTool extends TopTool{
 
-	public RotateTool(NetaGame ng) {
+	public UnfillTool(NetaGame ng) {
 		super(ng);
 		// TODO Auto-generated constructor stub
 	}
 
+
 	@Override
 	public void doAction() {
-		fire(new RotationEvent(-45));
+
+		fire(new UnfillEvent());
 	}
 
 	@Override
 	public String getImagePath() {
-		return "POVOROT";
+		return "ZAPERED";
 	}
 	
 
 	@Override
 	public boolean accept(Context ctx) {
-		return ctx.getProperty(ContextProperty.HALT)==null &&ctx.getProperty(ContextProperty.WORKING)!=null &&
+		return ctx.getProperty(ContextProperty.HALT)==null &&ctx.getProperty(ContextProperty.WORKING)!=null&& 
 				popupAccepted( ctx);	
 	}
 
+	
 
 }

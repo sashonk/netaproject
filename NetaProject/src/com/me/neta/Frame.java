@@ -30,6 +30,7 @@ public  class Frame extends Group{
 			levin.setPosition(50, getHeight()-300);
 			addActor(levin);
 			Image decalArrow = new Image(ng.getManager().getAtlas().findRegion(abandonTextureName()));
+			decalArrow.setName("close");
 			decalArrow.setPosition(getWidth()-200, 50);
 			decalArrow.addListener(new InputListener(){
 				public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {

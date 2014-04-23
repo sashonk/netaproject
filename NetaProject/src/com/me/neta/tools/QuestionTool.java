@@ -45,7 +45,8 @@ public class QuestionTool extends TopTool{
 
 	@Override
 	public boolean accept(Context ctx) {
-		return ctx.getProperty(ContextProperty.HALT)==null;
+		return ctx.getProperty(ContextProperty.HALT)==null && 
+				popupAccepted( ctx);	
 	}
 
 }

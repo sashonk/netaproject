@@ -1,28 +1,29 @@
 package com.me.neta.tools;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
+
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+
 import com.me.neta.Context;
+import com.me.neta.Context.ContextProperty;
+import com.me.neta.Popup.PopupGroup;
 import com.me.neta.ContextListener;
 import com.me.neta.NetaGame;
+import com.me.neta.Popup;
 import com.me.neta.Size;
-import com.me.neta.TextureManager;
 
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.alpha;
 
-public abstract class AbstractTool extends Actor implements ContextListener{
+public abstract class AbstractTool extends Group implements ContextListener{
 	
 	
 	
@@ -30,8 +31,9 @@ public abstract class AbstractTool extends Actor implements ContextListener{
 	
 	protected boolean blink;
 	protected boolean everClicked;
+	protected NetaGame ng;
 	
-	public boolean hasEverBeenClicked(){
+	public boolean hasEverBeenClickedOnPopup(){
 		return everClicked;
 	}
 
@@ -39,10 +41,28 @@ public abstract class AbstractTool extends Actor implements ContextListener{
 		return .65f;
 	}
 	
+	protected boolean popupAccepted(Context ctx){
+		return 	(ctx.getProperty(ContextProperty.POPUP)==null ||((PopupGroup)ctx.getProperty(ContextProperty.POPUP)).contains(this));
+
+	}
+	
+	public void setPopup(String text, float tailPadX, final PopupGroup pg, final float hideTimeout){
+	    
+		if(findActor("popup")==null){
+			Popup p = new Popup(ng, this, text,getWidth()/2, getHeight()+10, tailPadX);
+			p.setName("popup");
+			if(hideTimeout>0){
+				p.addAction(Actions.sequence(Actions.delay(hideTimeout), Actions.removeActor()));
+			}
+			ng.getContext().setProperty(ContextProperty.POPUP, pg);
+		}
+	}
+	
 	public AbstractTool(final NetaGame ng){
+		this.ng = ng;
 		enabled = false;
 		blink = true;
-		everClicked= false;
+		everClicked= false; // Preferences->...
 			
 		AtlasRegion reg = ng.getManager().getAtlas().findRegion(getImagePath());
 		Texture tex = reg.getTexture();
@@ -53,10 +73,20 @@ public abstract class AbstractTool extends Actor implements ContextListener{
 		this.addListener(new InputListener(){
 
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+		/*		if(event.getTarget() instanceof Popup){
+					return false;
+				}*/
+				
 				if(enabled()){
-					if(blink)event.getTarget().addAction(alpha(.4f));					
+					if(blink)event.getTarget().addAction(alpha(.4f));
+					Actor popup = AbstractTool.this.findActor("popup");
+					if(popup!=null){
+						everClicked = true;
+						popup.remove();
+					//	ng.getContext().setProperty(ContextProperty.POPUP,null);
+					}
 					doAction();
-					everClicked = true;
+	
 					ng.getContext().notifyListeners();
 				}
 				event.setBubbles(false);
@@ -89,6 +119,7 @@ public abstract class AbstractTool extends Actor implements ContextListener{
 	
 	@Override
 	public void draw(SpriteBatch batch, float parentAlfa){
+		super.draw(batch, parentAlfa);
 		if(enabled()){
 			Color c = getColor();
 			batch.setColor(c.r, c.g, c.b, c.a*parentAlfa);

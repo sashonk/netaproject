@@ -17,7 +17,7 @@ import com.me.neta.TextureManager;
 import com.me.neta.events.DragEvent;
 import com.me.neta.events.DragStartEvent;
 import com.me.neta.events.DragStopEvent;
-import com.me.neta.events.LetterDropEvent;
+import com.me.neta.events.FigureDropEvent;
 import com.me.neta.figures.Letter;
 
 public class LetterFactory extends Factory {

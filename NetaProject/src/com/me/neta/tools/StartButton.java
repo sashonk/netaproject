@@ -27,7 +27,8 @@ public class StartButton extends AbstractTool{
 
 	@Override
 	public boolean accept(Context ctx) {
-		return ctx.getProperty(ContextProperty.LETTERS)!=null && ctx.getProperty(ContextProperty.INGAME)==null;
+		return ctx.getProperty(ContextProperty.LETTERS)!=null && ctx.getProperty(ContextProperty.INGAME)==null && 
+				popupAccepted( ctx);	
 	}
 
 	@Override

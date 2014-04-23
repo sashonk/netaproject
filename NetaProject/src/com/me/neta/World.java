@@ -58,10 +58,12 @@ import com.me.neta.dummy.DummyHelper;
 import com.me.neta.dummy.DummyContext.DummyInfo;
 import com.me.neta.dummy.DummyContext.GroupInfo;
 import com.me.neta.events.CreateCellarsEvent;
+import com.me.neta.events.GameEndEvent;
 import com.me.neta.events.ZIndexEvent;
 import com.me.neta.factories.LetterFactory;
 import com.me.neta.figures.AbstractFigure;
 import com.me.neta.figures.Letter;
+import com.me.neta.tools.AbstractTool;
 import com.me.neta.tools.BrushTool;
 import com.me.neta.tools.RotateTool;
 import com.me.neta.tools.StartButton;
@@ -81,6 +83,11 @@ public abstract class World extends Group{
 	protected Map<Integer, Map<Integer, List<Character>>> letters = new HashMap<Integer, Map<Integer, List<Character>>>();
 	DummyHelper dummyHelper;
 	DummyContext baseDummyContext;
+	StartButton startButton;
+	
+	public StartButton getStartButton(){
+		return startButton;
+	}
 	
 	public AbstractFigure getSelected(){
 		return selectedActor;
@@ -197,19 +204,20 @@ public abstract class World extends Group{
 					public void run() {
 						Actor hero = World.this.findActor("hero");
 
-						Actor popup = ng.getWorkspace().popup("Молодец!\n Теперь стихи для тебя\n прочитает Вадим Левин", 0,0, "popupWin");
-						float x = hero.getX()+hero.getWidth()/2-popup.getWidth()/2;
+						
+						float x = hero.getX()+hero.getWidth()/2;
 						float y = hero.getY()+ hero.getHeight()+10;
-						popup.setPosition(x, y);
+						new Popup(ng, World.this, "Молодец!\n Теперь стихи для тебя\n прочитает Вадим Левин", x, y, 5).addAction(sequence(delay(5), Actions.removeActor()));
+
 						
 						final Music speech = World.this.playLevin();
 						World.this.addAction(Util.onEvent(Actions.run(new Runnable() {
 							
 							@Override
 							public void run() {
-								ng.getContext().setProperty(ContextProperty.GAME_END, new Object());
-								ng.getContext().setProperty(ContextProperty.HALT, null);	
-								ng.getWorkspace().findActor("popupWin").remove();
+								/*ng.getContext().setProperty(ContextProperty.GAME_END, new Object());
+								ng.getContext().setProperty(ContextProperty.HALT, null);	*/
+								fire(new GameEndEvent());
 							}
 						}), new Predicate() {
 							
@@ -279,7 +287,7 @@ public abstract class World extends Group{
 			
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				Actor actor = hit(x, y, true);
-				if(actor instanceof Moveable){
+				if(actor instanceof Moveable && ng.getContext().getProperty(ContextProperty.HALT)==null){
 					if(actor instanceof AbstractFigure){
 						if(selectedActor!=actor || selectedActor.isFilled()){
 							return false;
@@ -321,7 +329,7 @@ public abstract class World extends Group{
 		populateLetters();
 		
 		
-		dummyHelper = new DummyHelper(ng, this);
+		//dummyHelper = new DummyHelper(ng, this);
 		
 
 		ObjectInputStream ois = null;
@@ -387,6 +395,7 @@ public abstract class World extends Group{
 		})));
 
 		
+		ng.getWorkspace().getPtGroup().onShow(null);
 	}
 	
 	protected void letters(int variant){
@@ -423,7 +432,7 @@ public abstract class World extends Group{
 						letter.setPosition(18, 18);
 					}
 
-					letter.setColor(letterColor());
+					letter.fill(letterColor());
 					dummy.setLetter(letter);
 					
 					letter.setScale(0.1f);
@@ -437,6 +446,10 @@ public abstract class World extends Group{
 
 		
 		ng.getContext().setProperty(ContextProperty.LETTERS, new Object());
+		/*	AbstractTool startButton =  (AbstractTool) findActor("startButton");
+		if(!startButton.hasEverBeenClickedOnPopup()){
+			startButton.setPopup("Нажми на кнопку СТАРТ. Игра началась!", -100);
+		}*/
 	}
 
 	protected void createCellars(){
@@ -482,12 +495,12 @@ public abstract class World extends Group{
 				for(DummyInfo info : gInfo.getFlowers()){
 					
 					if("start".equals(info.getType())){
-						StartButton btn = new StartButton(ng, this);
-						btn.setName("startButton");
-						ng.getContext().registerListener(btn);
-						btn.setPosition(info.getX(), info.getY());
+						startButton = new StartButton(ng, this);
+						startButton.setName("startButton");
+						ng.getContext().registerListener(startButton);
+						startButton.setPosition(info.getX(), info.getY());
 						
-						addActor(btn);
+						addActor(startButton);
 					}
 					else if("barrier".equals(info.getType())){
 						Barrier barrier = new Barrier(ng);

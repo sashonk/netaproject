@@ -36,10 +36,13 @@ public abstract class AbstractFigure extends Group implements Moveable {
 		super.draw(batch, parentAlpha);
 	}
 	
-	@Override
-	public void setColor(Color c){
+	public void fill(Color c){
 		super.setColor(c);
-		filled = true;
+		filled = true;	
+	}
+	
+	public void unfill(){
+		filled = false;
 	}
 	
 	static Action createAnimationAction(){

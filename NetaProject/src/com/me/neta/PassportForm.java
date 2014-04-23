@@ -3,13 +3,17 @@ package com.me.neta;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -31,8 +35,10 @@ public class PassportForm extends Group{
 	TextField tfCity;
 	TextField tfYear;
 	public PassportForm(NetaGame ng){
+		
 
 		setSize(275, 275);
+		this.setOrigin(getWidth()/2, getHeight()/2);
 		TextureManager tm = ng.getManager();
 		tr = tm.getAtlas().findRegion("passform");			
 		
@@ -45,6 +51,8 @@ public class PassportForm extends Group{
 		tfName.setMessageText("Имя ребёнка");
 		tfName.setBounds(PADX, 240, 228, H);
 		tfName.addListener(hideKeyBoard());
+		tfName.setFocusTraversal(true);
+	//	tfName.setFocusTraversal(focusTraversal)
 
 		addActor(tfName);
 				
@@ -87,6 +95,8 @@ public class PassportForm extends Group{
 				
 				Rectangle r = new Rectangle(171,74, 220 -171, 91 - 74);
 				if(r.contains(x,y)||event.getTarget()==ok){ //touch!
+					
+					PassportForm.this.addAction(Util.zoomTo(1, 0, null));
 					fire(new PassportEvent());
 				}
 				return false;
@@ -98,7 +108,10 @@ public class PassportForm extends Group{
 		return new InputListener(){
 			public boolean keyTyped (InputEvent event, char character) {
 				if(Keys.ENTER==event.getKeyCode()){				
-					Gdx.input.setOnscreenKeyboardVisible(false);
+					//Gdx.input.setOnscreenKeyboardVisible(false);
+					Stage s = event.getStage();
+					OrthographicCamera cam =  (OrthographicCamera) s.getCamera();
+					cam.translate(new Vector2(0, -H));
 					return true;
 				}
 				return false;

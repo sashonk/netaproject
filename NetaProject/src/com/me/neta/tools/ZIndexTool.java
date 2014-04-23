@@ -24,10 +24,7 @@ public class ZIndexTool extends TopTool{
 	private boolean  pressed = false;
 	
 
-	public void pushDown(){
-		pressed =true;
-	}
-	
+
 
 	
 	public void setSelectedFigure(AbstractFigure figure){
@@ -57,7 +54,8 @@ public class ZIndexTool extends TopTool{
 
 	@Override
 	public boolean accept(Context ctx) {
-		return ctx.getProperty(ContextProperty.HALT)==null &&ctx.getProperty(ContextProperty.WORKING)!=null;
+		return ctx.getProperty(ContextProperty.HALT)==null &&ctx.getProperty(ContextProperty.WORKING)!=null&& 
+				popupAccepted( ctx);	
 	}
 
 	private Color tint = new Color(.4f,1f,.4f, 1);

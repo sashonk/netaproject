@@ -8,6 +8,7 @@ import com.me.neta.NetaGame;
 import com.me.neta.Size;
 import com.me.neta.TextureManager;
 import com.me.neta.Context.ContextProperty;
+import com.me.neta.Popup.PopupGroup;
 import com.me.neta.events.BrushToolChangeEvent;
 
 public class BrushTool extends TopTool{
@@ -15,7 +16,7 @@ public class BrushTool extends TopTool{
 	public BrushTool(NetaGame ng){
 		super(ng);
 		blink = false;
-		checked =false;
+		checked =true;
 		tm = ng.getManager();
 		
 	}
@@ -29,8 +30,8 @@ public class BrushTool extends TopTool{
 
 	@Override
 	public boolean accept(Context ctx) {
-		return ctx.getProperty(ContextProperty.HALT)==null &&ctx.getProperty(ContextProperty.WORKING)!=null;
-	}
+		return ctx.getProperty(ContextProperty.HALT)==null &&ctx.getProperty(ContextProperty.WORKING)!=null&&
+				popupAccepted( ctx);	}
 
 	@Override
 	public void doAction() {
@@ -41,7 +42,6 @@ public class BrushTool extends TopTool{
 			checked = true;
 		}
 		
-		fire(new BrushToolChangeEvent(checked));
 	}
 	
 	@Override

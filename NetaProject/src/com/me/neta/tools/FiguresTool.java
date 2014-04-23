@@ -10,6 +10,7 @@ import com.me.neta.Context;
 import com.me.neta.NetaGame;
 import com.me.neta.Size;
 import com.me.neta.Context.ContextProperty;
+import com.me.neta.Popup.PopupGroup;
 
 
 public class FiguresTool extends PanelTool{
@@ -33,6 +34,7 @@ public class FiguresTool extends PanelTool{
 
 	@Override
 	public boolean accept(Context ctx) {
-		return ctx.getProperty(ContextProperty.HALT)==null &&ctx.getProperty(ContextProperty.WORKING)!=null;
+		return ctx.getProperty(ContextProperty.HALT)==null &&ctx.getProperty(ContextProperty.WORKING)!=null&&
+				popupAccepted( ctx);	
 	}
 }

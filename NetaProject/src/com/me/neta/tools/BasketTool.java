@@ -2,6 +2,7 @@ package com.me.neta.tools;
 
 import com.me.neta.Context;
 import com.me.neta.NetaGame;
+import com.me.neta.Popup.PopupGroup;
 import com.me.neta.Size;
 import com.me.neta.Context.ContextProperty;
 import com.me.neta.events.TrashButtonEvent;
@@ -31,7 +32,8 @@ public class BasketTool extends AbstractTool{
 
 	@Override
 	public boolean accept(Context ctx) {
-		return ctx.getProperty(ContextProperty.HALT)==null &&ctx.getProperty(ContextProperty.WORKING)!=null;
+		return ctx.getProperty(ContextProperty.HALT)==null &&ctx.getProperty(ContextProperty.WORKING)!=null &&
+				 popupAccepted( ctx);
 			
 	}
 

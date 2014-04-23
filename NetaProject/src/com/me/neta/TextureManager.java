@@ -56,7 +56,7 @@ public class TextureManager {
 			"\u04CD\u04CE\u04CF\u04D0\u04D1\u04D2\u04D3\u04D4\u04D5\u04D6\u04D7\u04D8\u04D9\u04DA\u04DB\u04DC" +
 			"\u04DD\u04DE\u04DF\u04E0\u04E1\u04E2\u04E3\u04E4\u04E5\u04E6\u04E7\u04E8\u04E9\u04EA\u04EB\u04EC" +
 			"\u04ED\u04EE\u04EF\u04F0\u04F1\u04F2\u04F3\u04F4\u04F5\u04F6\u04F7\u04F8\u04F9\u04FA\u04FB\u04FC" +
-			"\u04FD\u04FE\u04FF";
+			"\u04FD\u04FE\u04FF ";
 	
 	
 	
@@ -95,13 +95,13 @@ public class TextureManager {
 	}
 
 	public String getProgressAsString(){	
-		
-		BigDecimal bd = BigDecimal.valueOf(100* manager.getProgress()).setScale(0, RoundingMode.HALF_UP);
-		return new StringBuilder(bd.toString()).append("%").toString();
+		return "Загрузка...";
+		//BigDecimal bd = BigDecimal.valueOf(100* manager.getProgress()).setScale(0, RoundingMode.HALF_UP);
+		//return new StringBuilder("Загрузка ").append(bd.toString()).append("%").toString();
 	}
 	
 	public void loadResources(){
-	
+		Gdx.app.debug(this.getClass().getName(), "begin loading resources");
 	
 		manager = new AssetManager();
 
@@ -135,7 +135,8 @@ public class TextureManager {
 	}
 	
 	public void init(){
-		
+		Gdx.app.debug(this.getClass().getName(), "initializing");
+
 
 		
 		skin = new Skin();
@@ -144,46 +145,37 @@ public class TextureManager {
 ///////////	 WONDERLAND 	/////////////
 //////////////////////////////////////////////
 FreeTypeFontGenerator wondGenerator = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/wonderland.ttf"));
-BitmapFont wond12 = wondGenerator.generateFont(12,DEFAULT_CHARS, false);
-BitmapFont wond14 = wondGenerator.generateFont(14,DEFAULT_CHARS, false);
-BitmapFont wond16 = wondGenerator.generateFont(16,DEFAULT_CHARS, false);
-BitmapFont wond18 = wondGenerator.generateFont(18,DEFAULT_CHARS, false);
-BitmapFont wond20 = wondGenerator.generateFont(20,DEFAULT_CHARS, false);
-BitmapFont wond28 = wondGenerator.generateFont(28,DEFAULT_CHARS, false);
 BitmapFont wond36 = wondGenerator.generateFont(36,DEFAULT_CHARS, false);
 
 wondGenerator.dispose();
 
-	skin.add("wond12", wond12);
+/*	skin.add("wond12", wond12);
 	skin.add("wond14", wond14);
 	skin.add("wond16", wond16);
 	skin.add("wond18", wond18);
 	skin.add("wond20", wond20);
 	skin.add("wond28", wond28);
-	skin.add("wond36", wond36);
+	skin.add("wond36", wond36);*/
 	skin.add("title", wond36);
 
 ///////////////////////////////////////////////
 ///////////	 CALIBRI 	/////////////
 //////////////////////////////////////////////	
         FreeTypeFontGenerator generatorCalibri = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/arialbd.ttf"));
-		BitmapFont calibri6 = generatorCalibri.generateFont(6,DEFAULT_CHARS, false);
 		BitmapFont calibri12 = generatorCalibri.generateFont(12,DEFAULT_CHARS, false);
 		BitmapFont calibri14 = generatorCalibri.generateFont(14,DEFAULT_CHARS, false);
-		BitmapFont calibri16 = generatorCalibri.generateFont(16,DEFAULT_CHARS, false);
-		BitmapFont calibri18 = generatorCalibri.generateFont(18,DEFAULT_CHARS, false);
 		BitmapFont calibri36 = generatorCalibri.generateFont(36,DEFAULT_CHARS, false);
 		BitmapFont letterFont = generatorCalibri.generateFont(68,DEFAULT_CHARS, false);
 
 
 		generatorCalibri.dispose();
 		
-		skin.add("small", calibri6);
-		skin.add("calibri12", calibri12);
+	//	skin.add("small", calibri6);
+	//	skin.add("calibri12", calibri12);
 		skin.add("calibri14", calibri14);
 		skin.add("default", calibri14);
-		skin.add("calibri16", calibri16);
-		skin.add("calibri18", calibri18);
+	//	skin.add("calibri16", calibri16);
+	//	skin.add("calibri18", calibri18);
 		skin.add("36", calibri36);
 		skin.add("letter", letterFont);
 
@@ -200,17 +192,20 @@ wondGenerator.dispose();
          pixmap.fill();
          skin.add("white", new Texture(pixmap));
          
-         pixmap.setColor(Color.BLACK);
-         pixmap.fill();
-         skin.add("black", new Texture(pixmap));
-                           
-         pixmap.setColor(Color.GRAY);
-         pixmap.fill();
-         skin.add("gray", new Texture(pixmap));
+		 Pixmap pixmap2 = new Pixmap(1, 1, Format.RGBA8888);
+		 pixmap2.setColor(Color.BLACK);
+		 pixmap2.fill();
+         skin.add("black", new Texture(pixmap2));
+              
+		 Pixmap pixmap3 = new Pixmap(1, 1, Format.RGBA8888);
+		 pixmap3.setColor(Color.GRAY);
+		 pixmap3.fill();
+         skin.add("gray", new Texture(pixmap3));
          
-         pixmap.setColor(new Color(112/255f, 207/255f, 238/255f, 1));
-         pixmap.fill();
-         skin.add("blue", new Texture(pixmap));
+		 Pixmap pixmap4 = new Pixmap(1, 1, Format.RGBA8888);
+		 pixmap4.setColor(new Color(112/255f, 207/255f, 238/255f, 1));
+		 pixmap4.fill();
+         skin.add("blue", new Texture(pixmap4));
                   
          Pixmap p2 = new Pixmap(4, 4, Format.RGBA8888);
          p2.setColor(Color.BLACK);
@@ -232,21 +227,21 @@ wondGenerator.dispose();
          blueCalibri.fontColor = new Color(.4f, .57f, .74f,1);
         //textFieldStyle.background = skin.newDrawable("white", new Color(.4f, .57f, .74f,1));               
          blueCalibri.font = skin.getFont("default");
-         skin.add("blue_calibri", blueCalibri);         
+       //  skin.add("blue_calibri", blueCalibri);         
          
          
          TextFieldStyle lightBlueCalibri = new TextFieldStyle();
          lightBlueCalibri.fontColor = new Color(.47f, .87f, .93f,1);
         //textFieldStyle.background = skin.newDrawable("white", new Color(.4f, .57f, .74f,1));               
          lightBlueCalibri.font = skin.getFont("default");
-         skin.add("light_blue_calibri", lightBlueCalibri);   
+       //  skin.add("light_blue_calibri", lightBlueCalibri);   
          
          
          TextFieldStyle violetCalibri = new TextFieldStyle();
          violetCalibri.fontColor = new Color(.22f, .08f, .45f,1);
         //textFieldStyle.background = skin.newDrawable("white", new Color(.4f, .57f, .74f,1));               
          violetCalibri.font = skin.getFont("default");
-         skin.add("violet_calibri", violetCalibri);   
+      //   skin.add("violet_calibri", violetCalibri);   
          
 
          
@@ -316,12 +311,12 @@ wondGenerator.dispose();
         skin.add("default", tfStyleSystem2);      
 
  		
-        LabelStyle lStyleSystem2 = new LabelStyle();
+       LabelStyle lStyleSystem2 = new LabelStyle();
         lStyleSystem2.font = calibri14;
         lStyleSystem2.fontColor = Color.BLACK;
         skin.add("system2", lStyleSystem2);   
         
- 		TextFieldStyle tfStyleTextAnt = new TextFieldStyle();
+        /* 		TextFieldStyle tfStyleTextAnt = new TextFieldStyle();
  		tfStyleTextAnt.font = calibri12;
  		tfStyleTextAnt.fontColor = new Color(215/255f, 100/255f, 40/255f, 1);
  		tfStyleTextAnt.cursor = skin.getDrawable("black");	 	
@@ -343,7 +338,7 @@ wondGenerator.dispose();
  		tfStyleTextSpider.font = calibri12;
  		tfStyleTextSpider.fontColor = Color.YELLOW;
  		tfStyleTextSpider.cursor = skin.getDrawable("black");	 	 		 		 		
- 		skin.add("spider", tfStyleTextSpider);
+ 		skin.add("spider", tfStyleTextSpider);*/
  		
  		LabelStyle lStyleTextAnt = new LabelStyle();
  		lStyleTextAnt.font = skin.getFont("default");
@@ -470,9 +465,17 @@ wondGenerator.dispose();
  		lStylePopup.fontColor = Color.BLACK.cpy();
  		skin.add("popup", lStylePopup);
 
-         
+ 		
+ 		skin.add("popup2", new NinePatch(atlas.findRegion("bubble2"), 40, 40, 40, 40));
+ 		NinePatchDrawable popup2NPD = new NinePatchDrawable(skin.getPatch("popup2")); 		
+ 		skin.add("popup2", popup2NPD, Drawable.class); 		
+ 		LabelStyle lStylePopup2 = new LabelStyle();
+ 		lStylePopup2.background =skin.getDrawable("popup2");
+ 		lStylePopup2.font = calibri14;
+ 		lStylePopup2.fontColor = Color.BLACK.cpy();
+ 		skin.add("popup2", lStylePopup2);   
 ///////////////////////////////////////////////
-///////////	 INSTRUCTIONS 	/////////////
+///////////	 INSTRUCTIONS / ADULTS 	/////////////
 //////////////////////////////////////////////
 		LabelStyle lStyleMarker = new LabelStyle();
 		lStyleMarker.font = calibri14;
@@ -493,6 +496,7 @@ wondGenerator.dispose();
 		lStyleInstruction2.font = calibri14;
 		lStyleInstruction2.fontColor = new Color(105 /255f , 160 /255f, 200 /255f, 1);
 		skin.add("instruction2", lStyleInstruction2);	
+
 		
  		NinePatch vscrollNP = new NinePatch(atlas.findRegion("vscroll"), 0, 0, 20, 20);
  		skin.add("vscroll_", vscrollNP);

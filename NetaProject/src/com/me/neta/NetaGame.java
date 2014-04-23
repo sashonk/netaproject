@@ -74,7 +74,7 @@ public class NetaGame implements ApplicationListener {
 		//texManager.finishLoading();
 
 		FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/wonderland.ttf"));
-		splashFont = gen.generateFont(36, "%0123456789.", false);
+		splashFont = gen.generateFont(36, TextureManager.DEFAULT_CHARS, false);
 		splashFont.setColor(Color.GRAY);
 		gen.dispose();
 
@@ -126,6 +126,8 @@ public class NetaGame implements ApplicationListener {
 					stage= new Stage(1024,768, false);			
 					space= new Workspace(this, 0, 0, stage.getWidth(), stage.getHeight());
 					context.registerListener(space);
+					Gdx.app.debug(this.getClass().getName(), "initializing workspace");
+
 					space.initialize();
 					stage.addActor(space);		
 					Gdx.input.setInputProcessor(stage);
@@ -135,6 +137,9 @@ public class NetaGame implements ApplicationListener {
 					splashBatch.dispose();
 					splashFont.dispose();
 					inited = true;
+					
+					Gdx.app.debug(this.getClass().getName(), "ready");
+
 				}
 			}			
 			else{
