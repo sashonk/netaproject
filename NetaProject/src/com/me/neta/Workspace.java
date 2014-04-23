@@ -185,7 +185,7 @@ ColorTool paletteTool;
 		
 		  flowerTool = new FlowerTool(ng);
 		
-		FlowerPanel lettersPanel = new FlowerPanel(ng);
+		final FlowerPanel lettersPanel = new FlowerPanel(ng);
 		lettersPanel.setVisible(false);
 		flowerTool.setPanel(lettersPanel);
 		this.addActor(lettersPanel);
@@ -371,6 +371,7 @@ ColorTool paletteTool;
 					ng.getContext().setProperty(ContextProperty.INGAME, null);
 					ng.getContext().setProperty(ContextProperty.GAME_END, null);
 
+					lettersPanel.setVariants(world.getLetters());
 				}
 				
 				
