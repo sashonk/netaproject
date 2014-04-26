@@ -1,5 +1,6 @@
 package com.me.neta.tools;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -47,9 +48,19 @@ public abstract class AbstractTool extends Group implements ContextListener{
 	}
 	
 	public void setPopup(String text, float tailPadX, final PopupGroup pg, final float hideTimeout){
+		this.setPopup(text, tailPadX, pg, hideTimeout, false);
+	}
+	
+	public void setPopup(String text, float tailPadX, final PopupGroup pg, final float hideTimeout, boolean upsideDown){
 	    
 		if(findActor("popup")==null){
-			Popup p = new Popup(ng, this, text,getWidth()/2, getHeight()+10, tailPadX);
+			
+			float y = getHeight()+10;
+			if(upsideDown){
+				y = 0 - 10;
+			}
+			
+			Popup p = new Popup(ng, this, text,getWidth()/2,y, tailPadX, upsideDown);
 			p.setName("popup");
 			if(hideTimeout>0){
 				p.addAction(Actions.sequence(Actions.delay(hideTimeout), Actions.removeActor()));
@@ -62,7 +73,7 @@ public abstract class AbstractTool extends Group implements ContextListener{
 		this.ng = ng;
 		enabled = false;
 		blink = true;
-		everClicked= false; // Preferences->...
+		everClicked= !Gdx.app.getPreferences(NetaGame.class.getName()).getBoolean("showPopup");
 			
 		AtlasRegion reg = ng.getManager().getAtlas().findRegion(getImagePath());
 		Texture tex = reg.getTexture();

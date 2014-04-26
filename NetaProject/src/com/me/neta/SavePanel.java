@@ -17,131 +17,88 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.me.neta.events.ScreenshotEvent;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
-public class SavePanel extends Group{
+public class SavePanel extends Window{
 	
 	String ALBUM_NAME="Nikole&CO";
-	
+	NetaGame ng;
 	TextureRegion treg;
 	public SavePanel(final NetaGame ng){
-		treg= ng.getManager().getMiscAtlas().findRegion("savePanel");
-
-		addListener(new InputListener(){
-			public boolean touchDown(InputEvent event, float x, float y,
-					int pointer, int button) {
-				event.setBubbles(false);
-
-				final Native p = ng.getNative();
-
-				Rectangle save = new Rectangle(22, 221, 237, 50);
-				Rectangle email = new Rectangle(22, 153, 237, 50);
-				Rectangle facebook = new Rectangle(22, 84, 237, 50);
-				Rectangle print = new Rectangle(22, 84, 212, 38);
-
-				boolean result = false;
-				
-				
-				if (save.contains(x, y)) {
-	
-				
-
-					SavePanel.this.addAction(delay(.1f,run(new Runnable(){
-
-						@Override
-						public void run() {				
-							if (Gdx.files.isExternalStorageAvailable()) {
-							try {
-								final Pixmap pixmap = getScreenshot(0, 0,
-										Gdx.graphics.getWidth(),
-										Gdx.graphics.getHeight(), true);
-								MessageHelper.message(ng, "Пожалуйста, подождите...");	
-								
-								SavePanel.this.addAction(delay(.1f, Actions.run(new Runnable(){public void run() {	
-								FileHandle handle = Gdx.files.external(String
-										.format("picture%d.png",
-												System.currentTimeMillis()));
-	
-								
-								//for(int i = 0; i<50; i++){
-									PixmapIO.writePNG(handle, pixmap);
-							//	}
-								
-								String text ="Изображение сохранено "+  (NetaGame.debug ? new StringBuilder("[файл:").append(handle.file().getAbsolutePath()).append(']').toString() : "");  
-								MessageHelper.notify(ng, text);
-								
-								}})));
-							} catch (Exception ex) {
-								MessageHelper.error(ng, "Ошибка! Изображение не сохранено!", ex);
-							}
-						} else {
-							MessageHelper.error(ng, "Файловое хранилище недоступно!", null);
-
-						}	}})));
-					
-				
-					result = true;
-				} else if (email.contains(x, y)) {
-					// email
-
-					SavePanel.this.addAction(delay(.1f,run(new Runnable(){
-						@Override
-						public void run() {	
-					if (Gdx.files.isExternalStorageAvailable()) {
-						try {
-							final Pixmap pixmap = getScreenshot(0, 0,
-									Gdx.graphics.getWidth(),
-									Gdx.graphics.getHeight(), true);
-							MessageHelper.message(ng, "Пожалуйста, подождите...");
-							
-							SavePanel.this.addAction(delay(.1f, Actions.run(new Runnable(){public void run() {	
-							
-							FileHandle handle = Gdx.files.external(String
-									.format("picture%d.png",
-											System.currentTimeMillis()));
-							PixmapIO.writePNG(handle, pixmap);
-							p.setForEmail("nikoldruzya@ya.ru", handle.file(), "Письмо Николь");
-							MessageHelper.hide(ng);
-							}})));
-						} catch (Exception ex) {
-							MessageHelper.error(ng, "Ошибка!", ex);
-						}
-					} else {
-						MessageHelper.error(ng, "Файловое хранилище недоступно!", null);
+		super("", ng.getManager().getSkin());
+		this.ng = ng;
+		//treg= ng.getManager().getMiscAtlas().findRegion("savePanel");
+		this.setClip(false);
 
 
-					}}})));
-
-					result = true;
-				} else if (facebook.contains(x, y)) {
-					p.openWebPage("https://www.facebook.com/groups/nikoldruzya/");
-					result = true;
-				} else if (print.contains(x, y)) {
-					
-					try{
-						throw new UnsupportedOperationException();
-					}
-					catch(Exception ex){
-						MessageHelper.error(ng, "", ex);
-					}
-					
-				}
-				
-				if(result){
-					event.getTarget().setVisible(false);
-				}
-
-				return result;
-			}
-		});
 		
-		this.addListener(new MetricListener());
+		Table table = this;
+		TextButton item1 = new TextButton("Сохранить в фото альбом", ng.getManager().getSkin(), "menuitem");
+		TextButton item2 = new TextButton("Email", ng.getManager().getSkin(), "menuitem");
+		TextButton item3 = new TextButton("Facebook", ng.getManager().getSkin(), "menuitem");
+		table.add(item1).row();
+		table.add(item2).row();
+		table.add(item3).row();
+		table.pack();
+
+		Image background = new Image(ng.getManager().getSkin().getPatch("frame"));
+		background.setFillParent(true);
+		addActor(background);
+		background.toBack();
+		
+		
+		TextureRegion tr = new TextureRegion(ng.getManager().getAtlas().findRegion("frame-tail"));
+		Image tail = new Image(tr);
+		tail.setSize(52, 65);
+		tail.setPosition(190, -51);
+		addActor(tail);
+		table.pack();
+		
+		
+		item1.addListener(new InputListener(
+				){	public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+					event.setBubbles(false);
+					saveAction();
+					
+					SavePanel.this.addAction(sequence(fadeOut(0.4f), visible(false)));
+
+					return true;
+				}});
+
+		
+		item2.addListener(new InputListener(
+				){	public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+					event.setBubbles(false);
+
+					emailAction();
+					SavePanel.this.addAction(sequence(fadeOut(0.4f), visible(false)));
+
+					return true;
+				}});
+		
+		item3.addListener(new InputListener(
+				){	public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+					event.setBubbles(false);
+					facebookAction();
+					SavePanel.this.addAction(sequence(fadeOut(0.4f), visible(false)));
+
+					return true;
+				}});
+		
+
+		//this.addListener(new MetricListener());
 	}
 	
 
@@ -170,11 +127,89 @@ public class SavePanel extends Group{
         
         return pixmap;
 }
+
+    
+    
+    void saveAction(){
+
+
+		SavePanel.this.addAction(delay(.1f,run(new Runnable(){
+
+			@Override
+			public void run() {				
+				if (Gdx.files.isExternalStorageAvailable()) {
+				try {
+					final Pixmap pixmap = getScreenshot(0, 0,
+							Gdx.graphics.getWidth(),
+							Gdx.graphics.getHeight(), true);
+					MessageHelper.message(ng, "Пожалуйста, подождите...");	
+					
+					SavePanel.this.addAction(delay(.1f, Actions.run(new Runnable(){public void run() {	
+					FileHandle handle = Gdx.files.external(String
+							.format("picture%d.png",
+									System.currentTimeMillis()));
+
+					
+					//for(int i = 0; i<50; i++){
+						PixmapIO.writePNG(handle, pixmap);
+				//	}
+					
+					String text ="Изображение сохранено "+  (NetaGame.debug ? new StringBuilder("[файл:").append(handle.file().getAbsolutePath()).append(']').toString() : "");  
+					MessageHelper.notify(ng, text);
+					
+					}})));
+				} catch (Exception ex) {
+					MessageHelper.error(ng, "Ошибка! Изображение не сохранено!", ex);
+				}
+			} else {
+				MessageHelper.error(ng, "Файловое хранилище недоступно!", null);
+
+			}	}})));
+		
+					
+		
+
+    }
+    
+    void emailAction(){
+
+		// email
+
+		SavePanel.this.addAction(delay(.1f,run(new Runnable(){
+			@Override
+			public void run() {	
+		if (Gdx.files.isExternalStorageAvailable()) {
+			try {
+				final Native p = ng.getNative();
+				final Pixmap pixmap = getScreenshot(0, 0,
+						Gdx.graphics.getWidth(),
+						Gdx.graphics.getHeight(), true);
+				MessageHelper.message(ng, "Пожалуйста, подождите...");
+				
+				SavePanel.this.addAction(delay(.1f, Actions.run(new Runnable(){public void run() {	
+				
+				FileHandle handle = Gdx.files.external(String
+						.format("picture%d.png",
+								System.currentTimeMillis()));
+				PixmapIO.writePNG(handle, pixmap);
+				p.setForEmail("nikoldruzya@ya.ru", handle.file(), "Письмо Николь");
+				MessageHelper.hide(ng);
+				}})));
+			} catch (Exception ex) {
+				MessageHelper.error(ng, "Ошибка!", ex);
+			}
+		} else {
+			MessageHelper.error(ng, "Файловое хранилище недоступно!", null);
+
+
+		}}})));
 	
-	public void draw(SpriteBatch batch , float parentAlpha){
-		Color c = this.getColor();
-		batch.setColor(c.r, c.g, c.b, c.a* parentAlpha);
-		batch.draw(treg, this.getX(), this.getY(), this.getWidth(), this.getHeight());				
-		super.draw(batch, parentAlpha);
+    	
+    	
+	}
+    
+    void facebookAction(){
+		final Native p = ng.getNative();
+		p.openWebPage("https://www.facebook.com/groups/nikoldruzya/");
 	}
 }

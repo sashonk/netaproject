@@ -8,8 +8,8 @@ public class Main {
 		System.out.println(Character.valueOf('c').equals(Character.valueOf('c')));
 		
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
-		cfg.title = "Was ist das?";
-		cfg.useGL20 = false;
+		cfg.title = "Run this game for kids on PC";
+		cfg.useGL20 = true;
 	//	cfg.fullscreen = true;
 		cfg.width = 1024;
 		cfg.height = 768;

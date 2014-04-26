@@ -25,6 +25,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle;
@@ -511,6 +512,21 @@ wondGenerator.dispose();
  		NinePatch frameNP = new NinePatch(frameTex, 28, 30, 27, 33);
  		skin.add("frame", frameNP);
  		
+ 		TextureRegion menuitem = atlas.findRegion("menuitem");
+ 		NinePatch menuitemNP = new NinePatch(menuitem, 10, 15, 10, 15);
+ 		skin.add("menuitem", menuitemNP);
+ 		
+ 		TextButtonStyle tbsMenuItem = new TextButtonStyle();
+ 		tbsMenuItem.up = skin.getDrawable("menuitem");
+ 		tbsMenuItem.font = skin.getFont("default");
+ 		tbsMenuItem.fontColor = Color.BLACK;
+ 		tbsMenuItem.pressedOffsetX = 2;
+ 		tbsMenuItem.pressedOffsetY = -2;
+ 		skin.add("menuitem", tbsMenuItem);
+
+/* 		TextureRegion frameTail = atlas.findRegion("frame-tail");
+ 		skin.add("frameTail", frameTail);*/
+ 		
  		TextureRegion fillTex = atlas.findRegion("fill");
  		NinePatch fillNP = new NinePatch(fillTex, 3, 3, 3, 3);		
  		skin.add("fill", fillNP);
@@ -537,6 +553,7 @@ wondGenerator.dispose();
  		
  		
  		WindowStyle wStyle = new WindowStyle();
+ 	
  		wStyle.background = skin.getDrawable("frame");
  		wStyle.titleFont = skin.getFont("default");
  		skin.add("default", wStyle);
@@ -607,7 +624,34 @@ wondGenerator.dispose();
 	//	lStyleLetter.background = skin.getDrawable("circle");
 		skin.add("letter", lStyleLetter);		
 		
+		TextureRegion checkedRegion =  atlas.findRegion("checked2");
+		TextureRegion uncheckedRegion = atlas.findRegion("unchecked2");
+		NinePatch checkedNP = new NinePatch(checkedRegion, 7, 7, 7, 7);
+		NinePatch uncheckedNP = new NinePatch(uncheckedRegion, 7, 7, 7, 7);
+		skin.add("checked", checkedNP);
+		skin.add("unchecked", uncheckedNP);
+
 		
+		CheckBoxStyle cbs = new CheckBoxStyle();
+	
+		
+		cbs.checkboxOn = skin.getDrawable("checked") ;
+		cbs.checkboxOff= skin.getDrawable("unchecked") ;
+		cbs.font = skin.getFont("default");
+		cbs.fontColor = Color.BLACK;
+		skin.add("default", cbs);
+		
+		TextureRegion buttonRegion =  atlas.findRegion("button");
+		NinePatch buttonNP = new NinePatch(buttonRegion, 10, 17, 1, 8);
+		skin.add("button", buttonNP);
+	
+		TextButtonStyle tbs = new TextButtonStyle();
+		tbs.pressedOffsetY = -1;
+		tbs.pressedOffsetX = 1;
+		tbs.font = skin.getFont("default");
+		tbs.fontColor = Color.BLACK;
+		tbs.up = skin.getDrawable("button");
+		skin.add("button", tbs);
 	}
 	
 

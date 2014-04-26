@@ -62,35 +62,35 @@ public class InstructionPanel extends Frame{
 		
 		float w = 25, h = 20;
 		Image monitor = new Image(ng.getManager().getAtlas().findRegion("monitor"));
-		monitor.setBounds(146, 928, w, h);
+		monitor.setBounds(146, 920, w, h);
 		content.addActor(monitor);
 		
 		Image letter = new Image(ng.getManager().getAtlas().findRegion("letter"));
-		letter.setBounds(146, 900 , w, h);
+		letter.setBounds(146, 891 , w, h);
 		content.addActor(letter);
 		
 		Image book = new Image(ng.getManager().getAtlas().findRegion("book"));
-		book.setBounds(146, 838 , w, h);
+		book.setBounds(146, 846 , w, h);
 		content.addActor(book);
 		
 		Image figures = new Image(ng.getManager().getAtlas().findRegion("figures"));
-		figures.setBounds(146, 614 , w, h);
+		figures.setBounds(250, 754 , w, h);
 		content.addActor(figures);
 		
-		Image palette = new Image(ng.getManager().getAtlas().findRegion("palette"));
-		palette.setBounds(146, 464 , w, h);
+		Image palette = new Image(ng.getManager().getAtlas().findRegion("ZVETOKOK_A"));
+		palette.setBounds(146, 678 , w, h);
 		content.addActor(palette);
 		
 		Image figures2 = new Image(ng.getManager().getAtlas().findRegion("figures"));
-		figures2.setBounds(146, 376, w, h);
+		figures2.setBounds(72, 587, w, h);
 		content.addActor(figures2);
 		
-		Image save = new Image(ng.getManager().getAtlas().findRegion("save"));
-		save.setBounds(146, 70, w, h);
+		Image save = new Image(ng.getManager().getAtlas().findRegion("palette"));
+		save.setBounds(146, 543, w, h);
 		content.addActor(save);
 		
 		
-		//content.addListener(new MetricListener());
+		content.addListener(new MetricListener());
 		
 		 Label end = new Label("Интересной Вам игры!\nВсего доброго!", ng.getManager().getSkin(), "instruction");
 		 end.setWrap(true);

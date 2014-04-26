@@ -1,19 +1,25 @@
 package com.me.neta;
 
 
+import java.util.Random;
+
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.me.neta.Context.ContextProperty;
 
 
@@ -54,30 +60,42 @@ public class NetaGame implements ApplicationListener {
 	public Context getContext(){
 		return context;
 	}
-	
-	void initContext(){
-		context.setProperty(ContextProperty.HALT, Boolean.TRUE);
-	}
+
 	Texture splash;
+	ShaderProgram sp;
 	@Override
 	public void create() {
+		
+
+
+		
 		inited  = false;
 		lastSplashRenderCall = false;
 		context = new Context();
-		initContext();
 	
 		 splash = new Texture(Gdx.files.internal("data/zastavka.jpg"));
 		 splashBatch = new SpriteBatch();
-		
+/*			 sp = new ShaderProgram(Gdx.files.internal("data/vertexShader.txt"), Gdx.files.internal("data/fragmentShader.txt"));
+			if(!sp.isCompiled()){
+				Gdx.app.log("Problem loading shader:", sp.getLog());
+				
+			}
+
+			splashBatch.setShader(sp);*/
+
 		texManager = new TextureManager();
 		texManager.loadResources();
 		//texManager.finishLoading();
+		
+
 
 		FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/wonderland.ttf"));
 		splashFont = gen.generateFont(36, TextureManager.DEFAULT_CHARS, false);
 		splashFont.setColor(Color.GRAY);
 		gen.dispose();
 
+		
+		
 	}
 	
 	SpriteBatch splashBatch;
@@ -95,6 +113,10 @@ public class NetaGame implements ApplicationListener {
 	
 	void renderSplash(){
 		splashBatch.begin();
+/*		
+		Random rnd = new Random();
+		sp.setUniformf("u_myvar", rnd.nextFloat());
+*/
 		splashBatch.draw(splash, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0, 0, 1024, 600, false, false);
 		splashFont.draw(splashBatch, progress, 300*Gdx.graphics.getWidth()/640, 150*Gdx.graphics.getHeight()/480);
 		splashBatch.end();
@@ -123,9 +145,27 @@ public class NetaGame implements ApplicationListener {
 				}				
 				else{
 					texManager.init();				
-					stage= new Stage(1024,768, false);			
+					stage= new Stage(1024,768, false);
+/*					PerspectiveCamera  cam = new PerspectiveCamera(90, 1024, 768);
+				       cam.position.set(1024/2,368/2, 400f);
+				       cam.lookAt(1024/2,768/2,0);
+				       cam.near = 0.1f;
+				       cam.far = 1500f;
+	
+				       cam.update();
+					stage.setCamera(cam);*/
+
+
+					
+/*					 sp = new ShaderProgram(Gdx.files.internal("data/vertexShader.txt"), Gdx.files.internal("data/fragmentShader.txt"));
+					if(!sp.isCompiled()){
+						Gdx.app.log("Problem loading shader:", sp.getLog());						
+					}*/
+					
+				//	stage.getSpriteBatch().setShader(sp);
+				//	sp.setUniformf("u_myvar", 1f);
+					
 					space= new Workspace(this, 0, 0, stage.getWidth(), stage.getHeight());
-					context.registerListener(space);
 					Gdx.app.debug(this.getClass().getName(), "initializing workspace");
 
 					space.initialize();

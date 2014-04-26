@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 
@@ -46,6 +47,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 
 import com.me.neta.Context.ContextProperty;
 import com.me.neta.Popup.PopupGroup;
+import com.me.neta.Util.OnEventAction.Predicate;
 import com.me.neta.events.*;
 import com.me.neta.figures.AbstractFigure;
 import com.me.neta.tools.AbstractTool;
@@ -72,8 +74,9 @@ import com.me.neta.worlds.PitonWorld;
 import com.me.neta.worlds.SpiderWorld;
 import com.me.neta.worlds.TigerWorld;
 
-public class Workspace extends Group implements ContextListener{
-	
+public class Workspace extends Group {
+
+
 
 	ZIndexTool zTool;
 	BrushTool bTool;
@@ -115,6 +118,9 @@ ColorTool paletteTool;
 	
 	public void initialize(){
 		
+		initContext(ng.getContext());
+		
+		
 		startHasEverBeenClickedOnPopup= false;
 		populateWorldFactories(ng);
 		passport = new Passport();
@@ -138,6 +144,8 @@ ColorTool paletteTool;
 //////////////////////////////////////////////////////////////////		
 	////////////////// 	 TOOLS  /////////////////////////
 /////////////////////////////////////////////////////////////////
+		float panelHeight = 115;
+		
 		 basketTool = new BasketTool(ng); 
 		basketTool.setSize(68,78);
 		toolbarTable.add(basketTool).padRight(pad).padLeft(pad);
@@ -206,9 +214,9 @@ ColorTool paletteTool;
 		this.addActor(palette);
 		
 		final ShopTool shopTool = new ShopTool(ng);
-		final Image gameshopPanel = new Image(ng.getManager().getMiscAtlas().findRegion("gameshop"));
+		final ShopPanel gameshopPanel = new ShopPanel(ng);
 		gameshopPanel.setVisible(false);
-		gameshopPanel.setBounds(70, 75, 878, 358);
+		gameshopPanel.setPosition(600, panelHeight);
 		this.addActor(gameshopPanel);
 		shopTool.setPanel(gameshopPanel);
 		toolbarTable.add(shopTool).padRight(pad).padLeft(pad);
@@ -219,21 +227,20 @@ ColorTool paletteTool;
 		saveTool.setPanel(palette);
 		savePanel.setColor(c);
 		savePanel.setVisible(false);
-		savePanel.setWidth(260);
-		savePanel.setHeight(300);
-		savePanel.setPosition(750, 75);
+		savePanel.setPosition(700, panelHeight);
 		saveTool.setPanel(savePanel);
 		this.addActor(savePanel);
 		
 		settingTool = new SettingsTool(ng);
 		toolbarTable.add(settingTool).padRight(pad).padLeft(pad);
 		SettingsPanel settingsPanel = new SettingsPanel(ng);
+
+		
+		
 		settingTool.setPanel(palette);
 		settingsPanel.setColor(c);
 		settingsPanel.setVisible(false);
-		settingsPanel.setWidth(300);
-		settingsPanel.setHeight(250);
-		settingsPanel.setPosition(730, 75);
+		settingsPanel.setPosition(735, panelHeight);
 		settingTool.setPanel(settingsPanel);
 		this.addActor(settingsPanel);
 				
@@ -276,13 +283,11 @@ ColorTool paletteTool;
 			@Override
 			public boolean handle(Event event) {
 				if(event instanceof DragStartEvent){
-				//	world.setPinch2ZoomEnabled(false);
 					pinch2Zoom.setCanPan(false);
 					event.setBubbles(false);
 
 				}
 				if(event instanceof DragStopEvent){
-					//world.setPinch2ZoomEnabled(true);
 					pinch2Zoom.setCanPan(true);
 					event.setBubbles(false);
 
@@ -363,6 +368,7 @@ ColorTool paletteTool;
 							passportTool.setPopup("Напиши своё имя, возраст\n и где ты живешь", 00, new PopupGroup(passportTool), 0);
 						}
 
+
 					}
 					
 					ng.getContext().setProperty(ContextProperty.WORKING, Boolean.TRUE) ;
@@ -404,7 +410,7 @@ ColorTool paletteTool;
 						
 						StartButton sb = world.getStartButton();
 						if(sb!=null && !startHasEverBeenClickedOnPopup){
-							sb.setPopup("Когда будешь готов, жми СТАРТ и игра начнётся!", -100, new PopupGroup(figuresTool, basketTool,  paletteTool, rTool, bTool, uTool,world.getStartButton()), 5);
+							sb.setPopup("Молодец! Когда сделаешь иллюстрацию,\n жми СТАРТ и игра начнётся!", -100, new PopupGroup(figuresTool, basketTool,  paletteTool, rTool, bTool, uTool,world.getStartButton()), 5);
 							startHasEverBeenClickedOnPopup = true;
 						}
 					}
@@ -454,6 +460,10 @@ ColorTool paletteTool;
 					if(!saveTool.hasEverBeenClickedOnPopup()){
 						saveTool.setPopup("Можешь прислать  сохраненные игровые поля на\n страничку НИКОЛЬ И ЕЁ ДРУЗЬЯ  в  фейсбук.", 100, new PopupGroup(saveTool), 0);
 						ng.getContext().setProperty(ContextProperty.POPUP, null);
+						
+						Preferences prefs = Gdx.app.getPreferences(NetaGame.class.getName());
+						prefs.putBoolean("showPopup", false);
+						prefs.flush();
 					}
 				}
 				
@@ -500,6 +510,7 @@ ColorTool paletteTool;
 					if(!settingTool.hasEverBeenClickedOnPopup()){
 						settingTool.setPopup("Спроси взрослого, который будет тебе помогать,\nвнимательно ли он прочитал короткую записку\nдля взрослых.",160,new PopupGroup(settingTool), 0);
 					}
+
 				}
 				
 				if(event instanceof AdultsCloseEvent){
@@ -558,23 +569,40 @@ ColorTool paletteTool;
 //////////////////////////////////////////////////
 			//////// NIKOL LETTER //////////
 /////////////////////////////////////////////////////		
-		final TextureRegion nikolTexture = ng.getManager().getMiscAtlas().findRegion("nikol");
-		Image nikolActor = new Image(nikolTexture);
-		nikolActor.addListener(new InputListener(){
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				if(x>445 && x<518 && y>162 && y<231){
-					event.getTarget().remove();
-					instructionPanel.setVisible(true);
+		
+		boolean showNikolLetter= Gdx.app.getPreferences(NetaGame.class.getName()).getBoolean("showNikole");
+		if(showNikolLetter){
+			final TextureRegion nikolTexture = ng.getManager().getMiscAtlas().findRegion("nikol");
+			Image nikolActor = new Image(nikolTexture);
+			nikolActor.addListener(new InputListener(){
+				public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+					if(x>445 && x<518 && y>162 && y<231){
+						event.getTarget().remove();
+						//instructionPanel.setVisible(true);
+						ng.getContext().setProperty(ContextProperty.HALT, null);
+						ng.getContext().setProperty(ContextProperty.PREPARED, Boolean.TRUE);
+						if(!qTool.hasEverBeenClickedOnPopup()){
+							qTool.setPopup("Сначала изучи инструкцию", 50, new PopupGroup(qTool), 00, true);
+						}
+					}
+					return false;
 				}
-				return false;
-			}
-		});
+			});
+	
+			nikolActor.setBounds(20,150, 980, 500);		
+			this.addActorAfter(Workspace.this.findActor(bottomActorName), nikolActor);
+		}
 
-		nikolActor.setBounds(20,150, 980, 500);		
-		this.addActorAfter(Workspace.this.findActor(bottomActorName), nikolActor);
-		
 
-		
+		///////////////////////////////
+		//////// SETTINGS EDITOR //////////
+		//////////////////////////////
+		final SettingsEditor settingsEditorPanel = new SettingsEditor(ng);		
+		settingsEditorPanel.setVisible(false);
+		this.addActorAfter(Workspace.this.findActor(bottomActorName), settingsEditorPanel);
+		settingsPanel.setSettingsEditor(settingsEditorPanel);
+		Util.center(settingsEditorPanel);
+	
 		///////////////////////////////
 		//////// AUTHORS //////////
 		//////////////////////////////
@@ -649,16 +677,6 @@ ColorTool paletteTool;
 		
 		
 
-/*		Image splash = new Image(new TextureRegion(new Texture(Gdx.files.internal("data/zastavka.jpg")), 0,0,1024, 600));
-		splash.setBounds(0,0,1024, 768);
-		splash.addAction(sequence(delay(3),alpha(0, 3), visible(false), Actions.removeActor()));
-		splash.addListener(new InputListener(){
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				event.getTarget().remove();
-				return false;
-			}
-		});
-		addActor(splash);*/
 		
 		this.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -692,8 +710,13 @@ ColorTool paletteTool;
 		
 		//popup("Выбери игровое поле", 100, 80, "popupChooseWorld").setVisible(false);
 		
-
-		
+		if(!showNikolLetter){
+			ng.getContext().setProperty(ContextProperty.HALT, null);
+			ng.getContext().setProperty(ContextProperty.PREPARED, Boolean.TRUE);
+			if(!qTool.hasEverBeenClickedOnPopup()){
+				qTool.setPopup("Прочитай инструкцию", 50, new PopupGroup(qTool), 00, true);
+			}
+		}
 	}
 	
 	Sound errorSnd;
@@ -839,102 +862,12 @@ ColorTool paletteTool;
     	return sequence(Actions.parallel(Actions.scaleTo(0, 0, abandonTime), Actions.rotateBy(-500, abandonTime), Actions.moveBy(1000, 0, abandonTime)) ,Actions.removeActor());
      }
     
-     
 
-/*     
-     public Label popup(String message, float x, float y, String name){
-   
-    
-    	Label popup = new Label(message, ng.getManager().getSkin(), "popup");
-    	popup.setName(name!=null ? name : "popup");
-    	this.addActor(popup);
-
-		popup.setPosition(x, y);
-		popup.toFront();
-		//popup.getColor().a= 0;
-		//popup.addAction(sequence(alpha(1, 0.3f)));
-		return popup;
-     }*/
-
-     
-	@Override
-	public void contextChanged(Context ctx) {/*
-		if(ctx.getProperty(ContextProperty.PREPARED)!=null ){
-			if(!worldsTool.hasEverBeenClickedOnPopup()){
-				Actor popup = findActor("popupChooseWorld");
-				if(popup!=null){
-					popup.addAction(sequence(visible(true)));
-				}
-			}
-			else{
-				Actor popup = findActor("popupChooseWorld");
-				if(popup!=null){
-					popup.addAction(sequence(Actions.removeActor()));
-				}	
-			}
-		}
-		if(ctx.getProperty(ContextProperty.WORKING)!=null){
-			if(passportTool.hasEverBeenClickedOnPopup()){
-				Actor popup = findActor("popupPassport");
-				if(popup!=null){
-					popup.addAction(sequence(Actions.removeActor()));
-				}
-			}
-
-		}
-		if(ctx.getProperty(ContextProperty.WORKING)!=null){
-			if(lyricsTool.hasEverBeenClickedOnPopup()){
-				Actor popup = findActor("popupLyrics");
-				if(popup!=null){
-					popup.addAction(sequence(Actions.removeActor()));
-				}
-			}
-
-		}
-		if(ctx.getProperty(ContextProperty.CELLARS)!=null){
-			if(flowerTool.hasEverBeenClickedOnPopup()){
-				Actor popup = findActor("popupFlowers");
-				if(popup!=null){
-					popup.addAction(sequence(Actions.removeActor()));
-				}
-			}
-
-		}	
-		
-		if(ctx.getProperty(ContextProperty.GAME_END)!=null){
-			if(figuresTool.hasEverBeenClickedOnPopup()){
-				Actor popup = findActor("popupFigures");
-				if(popup!=null){
-					popup.addAction(sequence(Actions.removeActor()));
-				}
-			}
-			else{
-				Actor popup = findActor("popupFigures");
-				if(popup==null){
-					//popup = popup("Теперь выбери фигуры\nи создай иллюстрацию", 390, 80, "popupFigures");
-				}				
-			}
-
-		}	
-		
-		if(ctx.getProperty(ContextProperty.GAME_END)!=null){
-			if(paletteTool.hasEverBeenClickedOnPopup()){
-				Actor popup = findActor("popupPalette");
-				if(popup!=null){
-					popup.addAction(sequence(Actions.removeActor()));
-				}
-			}
-			else{
-				Actor popup = findActor("popupPalette");
-				if(popup!=null){
-					popup.addAction(sequence(Actions.removeActor()));
-				}				
-			}
-
-		}	
-	*/}
-	
-	
+ 
+ 	
+ 	void initContext(Context context){
+ 		context.setProperty(ContextProperty.HALT, Boolean.TRUE);
+ 	}
      
 }
 
