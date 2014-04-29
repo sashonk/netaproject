@@ -10,11 +10,13 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -60,6 +62,10 @@ public class NetaGame implements ApplicationListener {
 	public Context getContext(){
 		return context;
 	}
+	
+	public ShaderProgram getCustomShader(){
+		return sp;
+	}
 
 	Texture splash;
 	ShaderProgram sp;
@@ -75,13 +81,9 @@ public class NetaGame implements ApplicationListener {
 	
 		 splash = new Texture(Gdx.files.internal("data/zastavka.jpg"));
 		 splashBatch = new SpriteBatch();
-/*			 sp = new ShaderProgram(Gdx.files.internal("data/vertexShader.txt"), Gdx.files.internal("data/fragmentShader.txt"));
-			if(!sp.isCompiled()){
-				Gdx.app.log("Problem loading shader:", sp.getLog());
-				
-			}
 
-			splashBatch.setShader(sp);*/
+
+		 splashBatch.setShader(sp);
 
 		texManager = new TextureManager();
 		texManager.loadResources();
@@ -145,26 +147,9 @@ public class NetaGame implements ApplicationListener {
 				}				
 				else{
 					texManager.init();				
+
+
 					stage= new Stage(1024,768, false);
-/*					PerspectiveCamera  cam = new PerspectiveCamera(90, 1024, 768);
-				       cam.position.set(1024/2,368/2, 400f);
-				       cam.lookAt(1024/2,768/2,0);
-				       cam.near = 0.1f;
-				       cam.far = 1500f;
-	
-				       cam.update();
-					stage.setCamera(cam);*/
-
-
-					
-/*					 sp = new ShaderProgram(Gdx.files.internal("data/vertexShader.txt"), Gdx.files.internal("data/fragmentShader.txt"));
-					if(!sp.isCompiled()){
-						Gdx.app.log("Problem loading shader:", sp.getLog());						
-					}*/
-					
-				//	stage.getSpriteBatch().setShader(sp);
-				//	sp.setUniformf("u_myvar", 1f);
-					
 					space= new Workspace(this, 0, 0, stage.getWidth(), stage.getHeight());
 					Gdx.app.debug(this.getClass().getName(), "initializing workspace");
 

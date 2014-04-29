@@ -35,6 +35,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -54,6 +55,7 @@ import com.me.neta.tools.AbstractTool;
 import com.me.neta.tools.BasketTool;
 import com.me.neta.tools.BrushTool;
 import com.me.neta.tools.FlowerTool;
+import com.me.neta.tools.KubikTool;
 import com.me.neta.tools.ShopTool;
 import com.me.neta.tools.StartButton;
 import com.me.neta.tools.UnfillTool;
@@ -84,12 +86,17 @@ public class Workspace extends Group {
 	QuestionTool qTool;
 	 FlowerTool flowerTool;
 	 UnfillTool uTool;	
+	 KubikTool kTool;
 
 	 
 	static final float pad = 15;
 	PanelToolGroup ptGroup;
 	public PanelToolGroup getPtGroup(){
 		return ptGroup;
+	}
+	
+	public Pinch2ZoomListener2 getPinch2Zoom(){
+		return pinch2Zoom;
 	}
 	
 	private Pinch2ZoomListener2 pinch2Zoom;
@@ -121,7 +128,7 @@ ColorTool paletteTool;
 		initContext(ng.getContext());
 		
 		
-		startHasEverBeenClickedOnPopup= false;
+		startHasEverBeenClickedOnPopup= !Gdx.app.getPreferences(NetaGame.class.getName()).getBoolean("showPopup", true);
 		populateWorldFactories(ng);
 		passport = new Passport();
 		pinch2Zoom = new Pinch2ZoomListener2();
@@ -256,13 +263,16 @@ ColorTool paletteTool;
 		 uTool = new UnfillTool(ng);
 		 bTool = new BrushTool(ng);
 		qTool = new QuestionTool(ng);
+		kTool = new KubikTool(ng);
 		
 		float topPad = 2;
 
-		topButtons.add(rTool).padRight(topPad);
-		topButtons.add(bTool).padRight(topPad);
-		topButtons.add(uTool).padRight(topPad);
-		topButtons.add(qTool).padRight(topPad);
+		topButtons.defaults().padRight(topPad);
+		topButtons.add(kTool);
+		topButtons.add(rTool);
+		topButtons.add(bTool);
+		topButtons.add(uTool);
+		topButtons.add(qTool);
 		topButtons.pack();
 		topButtons.setPosition(800, 700);
 		
@@ -378,6 +388,7 @@ ColorTool paletteTool;
 					ng.getContext().setProperty(ContextProperty.GAME_END, null);
 
 					lettersPanel.setVariants(world.getLetters());
+
 				}
 				
 				
@@ -427,10 +438,7 @@ ColorTool paletteTool;
 					LogicLabelClickEvent lEvent = (LogicLabelClickEvent) event;
 					String c = lEvent.getChar().toLowerCase();
 					
-					Character activeLetter = (Character) ng.getContext().getProperty(ContextProperty.ACTIVE_LETTER);
-					System.out.println("LT="+activeLetter+"; CUR="+c);
-					
-					
+					Character activeLetter = (Character) ng.getContext().getProperty(ContextProperty.ACTIVE_LETTER);										
 					if(c.contains(new String(new char[]{activeLetter.charValue()})) && ng.getContext().getProperty(ContextProperty.BETWEEN_CELLARS)==null){
 						lEvent.getContext().get(activeLetter).setStyle(ng.getManager().getSkin().get("small-"+world.getTitle()+"-hit", LabelStyle.class));
 						world.step();
@@ -456,6 +464,7 @@ ColorTool paletteTool;
 					
 					ng.getContext().setProperty(ContextProperty.GAME_END, new Object());
 					ng.getContext().setProperty(ContextProperty.HALT, null);
+					ng.getContext().setProperty(ContextProperty.INGAME, null);
 					
 					if(!saveTool.hasEverBeenClickedOnPopup()){
 						saveTool.setPopup("Можешь прислать  сохраненные игровые поля на\n страничку НИКОЛЬ И ЕЁ ДРУЗЬЯ  в  фейсбук.", 100, new PopupGroup(saveTool), 0);
@@ -570,7 +579,7 @@ ColorTool paletteTool;
 			//////// NIKOL LETTER //////////
 /////////////////////////////////////////////////////		
 		
-		boolean showNikolLetter= Gdx.app.getPreferences(NetaGame.class.getName()).getBoolean("showNikole");
+		boolean showNikolLetter= Gdx.app.getPreferences(NetaGame.class.getName()).getBoolean("showNikole", true);
 		if(showNikolLetter){
 			final TextureRegion nikolTexture = ng.getManager().getMiscAtlas().findRegion("nikol");
 			Image nikolActor = new Image(nikolTexture);
@@ -674,8 +683,8 @@ ColorTool paletteTool;
 		registerStateListener(uTool);
 		registerStateListener(rTool);
 		registerStateListener(zTool);
-		
-		
+		registerStateListener(kTool);
+		registerStateListener(pinch2Zoom);
 
 		
 		this.addListener(new InputListener(){
@@ -717,7 +726,32 @@ ColorTool paletteTool;
 				qTool.setPopup("Прочитай инструкцию", 50, new PopupGroup(qTool), 00, true);
 			}
 		}
+		
+		
+
+		
+		this.addAction(Actions.forever(Actions.sequence(new TemporalAction(5) {
+			
+			@Override
+			protected void update(float percent) {
+				// TODO Auto-generated method stub
+				var = percent;
+			}
+		}, new TemporalAction(5) {
+			
+			@Override
+			protected void update(float percent) {
+				// TODO Auto-generated method stub
+				var = 1- percent;
+			}
+		})));
 	}
+
+	public float getVar(){
+		return var;
+	}
+	
+	float var;
 	
 	Sound errorSnd;
 	

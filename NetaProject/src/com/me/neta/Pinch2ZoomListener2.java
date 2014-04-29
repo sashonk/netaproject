@@ -17,8 +17,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.Timer;
+import com.me.neta.Context.ContextProperty;
 
-public class Pinch2ZoomListener2 extends InputListener{
+public class Pinch2ZoomListener2 extends InputListener implements ContextListener{
 
 	
 	public Pinch2ZoomListener2(){
@@ -309,5 +310,11 @@ public class Pinch2ZoomListener2 extends InputListener{
 			if (numSamples == 0) return 0;
 			return sum;
 		}
+	}
+
+
+	@Override
+	public void contextChanged(Context ctx) {
+		setCanPan(ctx.getProperty(ContextProperty.LETTERS)!=null && ctx.getProperty(ContextProperty.INGAME)==null );
 	}
 }

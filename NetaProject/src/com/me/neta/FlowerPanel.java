@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.me.neta.Context.ContextProperty;
 import com.me.neta.events.LetterVariantEvent;
 
 public class FlowerPanel extends Group{
@@ -98,6 +99,8 @@ public class FlowerPanel extends Group{
 		back.setSize(table.getWidth()+60, table.getHeight()+60);
 
 		Util.center(this);
+		
+
 	}
 	
 	Label variantLabel(String text, final int variantID, NetaGame ng){

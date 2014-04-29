@@ -34,7 +34,7 @@ public class FiguresTool extends PanelTool{
 
 	@Override
 	public boolean accept(Context ctx) {
-		return ctx.getProperty(ContextProperty.HALT)==null &&ctx.getProperty(ContextProperty.WORKING)!=null&&
+		return ctx.getProperty(ContextProperty.HALT)==null &&ctx.getProperty(ContextProperty.WORKING)!=null&&ctx.getProperty(ContextProperty.CELLARS)!=null&&
 				popupAccepted( ctx);	
 	}
 }

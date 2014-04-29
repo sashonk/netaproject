@@ -99,6 +99,12 @@ public class TextureManager {
 		return "Загрузка...";
 		//BigDecimal bd = BigDecimal.valueOf(100* manager.getProgress()).setScale(0, RoundingMode.HALF_UP);
 		//return new StringBuilder("Загрузка ").append(bd.toString()).append("%").toString();
+		
+		
+	}
+	
+	public AssetManager getAssetManager(){
+		return manager;
 	}
 	
 	public void loadResources(){
@@ -133,6 +139,7 @@ public class TextureManager {
 		manager.load("data/errnp.png", Texture.class);
 		
 
+		
 	}
 	
 	public void init(){

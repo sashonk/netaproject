@@ -210,7 +210,7 @@ public abstract class World extends Group{
 						new Popup(ng, World.this, "Молодец!\n Теперь стихи для тебя\n прочитает Вадим Левин", x, y, 5).addAction(sequence(delay(5), Actions.removeActor()));
 
 						
-						final Music speech = World.this.playLevin();
+						 final Music speech = World.this.playLevin();
 						World.this.addAction(Util.onEvent(Actions.run(new Runnable() {
 							
 							@Override
@@ -445,11 +445,8 @@ public abstract class World extends Group{
 		 }
 
 		
-		ng.getContext().setProperty(ContextProperty.LETTERS, new Object());
-		/*	AbstractTool startButton =  (AbstractTool) findActor("startButton");
-		if(!startButton.hasEverBeenClickedOnPopup()){
-			startButton.setPopup("Нажми на кнопку СТАРТ. Игра началась!", -100);
-		}*/
+			ng.getContext().setProperty(ContextProperty.LETTERS, new Object());
+
 	}
 
 	protected void createCellars(){

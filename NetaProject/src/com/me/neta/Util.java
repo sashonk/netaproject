@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.me.neta.Util.OnEventAction.Predicate;
+import com.me.neta.tools.KubikTool;
 import com.sun.org.apache.bcel.internal.generic.GETFIELD;
 
 public class Util {
@@ -40,14 +41,46 @@ public class Util {
 		}
 		 
 	 }
+	 
+	 
+		
+
+	 
+		public static Action trigger(Action triggerAction, TriggerAction.Predicate p){
+			TriggerAction a = new TriggerAction(triggerAction, p);
+			return a;
+		}
+		
+		public static class TriggerAction extends Action{
+			Predicate predicate;
+			Action eventAction;
+			public TriggerAction(Action runnable, Predicate predicate){
+				this.eventAction = runnable;
+				this.predicate = predicate;
+			}
+			
+			public  static  interface Predicate{
+				boolean accept();
+			}
+
+			@Override
+			public boolean act(float delta) {
+				if(predicate.accept()){
+					getActor().addAction(eventAction);
+					return true;
+				}
+				return false;
+			}
+
+
+		}
 	
 	public static Action onEvent(Action eventAction, Predicate p){
 		OnEventAction a = new OnEventAction(eventAction, p);
 		return a;
 	}
 	
-
-	 static class OnEventAction extends Action{
+	public static class OnEventAction extends Action{
 		Predicate predicate;
 		Action eventAction;
 		public OnEventAction(Action runnable, Predicate predicate){

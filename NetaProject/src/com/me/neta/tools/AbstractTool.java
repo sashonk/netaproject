@@ -28,6 +28,7 @@ public abstract class AbstractTool extends Group implements ContextListener{
 	
 	
 	
+	protected float disabledAlphaValue = 0.4f;
 	TextureRegion region;
 	
 	protected boolean blink;
@@ -69,16 +70,20 @@ public abstract class AbstractTool extends Group implements ContextListener{
 		}
 	}
 	
+	public void oldFashionedDraw(SpriteBatch batch, float parentAlpha){
+		super.draw(batch, parentAlpha);
+	}
+	
 	public AbstractTool(final NetaGame ng){
 		this.ng = ng;
 		enabled = false;
 		blink = true;
-		everClicked= !Gdx.app.getPreferences(NetaGame.class.getName()).getBoolean("showPopup");
+		everClicked= !Gdx.app.getPreferences(NetaGame.class.getName()).getBoolean("showPopup", true);
 			
 		AtlasRegion reg = ng.getManager().getAtlas().findRegion(getImagePath());
 		Texture tex = reg.getTexture();
 		
-		 region = new TextureRegion(tex, reg.getRegionX(), reg.getRegionY(), reg.getRegionWidth(), reg.getRegionHeight());
+		region = new TextureRegion(tex, reg.getRegionX(), reg.getRegionY(), reg.getRegionWidth(), reg.getRegionHeight());
 				
 
 		this.addListener(new InputListener(){
@@ -131,17 +136,15 @@ public abstract class AbstractTool extends Group implements ContextListener{
 	@Override
 	public void draw(SpriteBatch batch, float parentAlfa){
 		super.draw(batch, parentAlfa);
-		if(enabled()){
-			Color c = getColor();
-			batch.setColor(c.r, c.g, c.b, c.a*parentAlfa);
-			batch.draw(region, this.getX(), this.getY(), this.getWidth(), this.getHeight());
-		}else{
-			Color c = getColor();
-			batch.setColor(c.r, c.g, c.b, c.a*.4f*parentAlfa);
-			batch.draw(region, this.getX(), this.getY(), this.getWidth(), this.getHeight());
-		}
+		
+		float alphaMul = enabled() ? 1 : disabledAlphaValue;
+		Color c = getColor();
+		batch.setColor(1, 1, 1, c.a*alphaMul*parentAlfa);
+		batch.draw(region, this.getX(), this.getY(), this.getWidth(), this.getHeight());
+	
 	
 	}
+	
 	
 	public void setEnabled(boolean value){
 		enabled = value;
