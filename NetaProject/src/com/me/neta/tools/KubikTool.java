@@ -45,7 +45,7 @@ public class KubikTool extends TopTool{
 
 	@Override
 	public boolean accept(Context ctx) {
-		return ctx.getProperty(ContextProperty.WORKING)!=null&& ctx.getProperty(ContextProperty.INGAME)!=null&& popupAccepted(ctx);
+		return ctx.getProperty(ContextProperty.WORKING)!=null&& ctx.getProperty(ContextProperty.BETWEEN_CELLARS)!=null&& popupAccepted(ctx);
 	}
 
 	@Override

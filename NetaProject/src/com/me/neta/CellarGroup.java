@@ -90,12 +90,12 @@ public class CellarGroup extends Group{
 			
 			addListener(new InputListener(){
 				public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-					if(ng.getContext().getProperty(ContextProperty.INGAME)==null){
-						return false;
-					}
+					if(ng.getContext().getProperty(ContextProperty.PLAY)!=null){
+						event.getListenerActor().fire(new LogicLabelClickEvent(text, context));
+						event.stop();
+
+					}		
 					
-					event.getListenerActor().fire(new LogicLabelClickEvent(text, context));
-										
 					return true;
 				}
 			});

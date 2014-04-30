@@ -142,9 +142,11 @@ ColorTool paletteTool;
 		Image img = new Image(ng.getManager().getSkin().getPatch("panelNP"));
 		img.setWidth(getWidth());
 		toolbarTable = new Table();
+		toolbarTable.setName("toolBar");
 		
-		toolbarTable.debug();
-		toolbarTable.debugTable();
+		//toolbarTable.debug();
+	//	toolbarTable.debugTable();
+		
 		final ExitTool linkTool = new ExitTool(ng);
 		toolbarTable.add(linkTool).padRight(pad).padLeft(pad);
 		

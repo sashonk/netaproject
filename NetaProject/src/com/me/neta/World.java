@@ -129,6 +129,25 @@ public abstract class World extends Group{
 	
 	private LogicFlower activeFlower;
 	
+/*	public void next(CellarGroup cg){
+		
+		
+		Util.moveCameraTo(cg.getGroupOrigin().x, cg.getGroupOrigin().y, 1f, null), 
+		Util.zoomTo(cg.getZoom(), 1f, cg.getGroupOrigin().x, cg.getGroupOrigin().y, null), run(new Runnable() {
+			
+			@Override
+			public void run() {
+				activeFlower.getLetter().animateSelected();
+				Letter letter =  activeFlower.getLetter();
+			
+				char ch = letter.getCharacter();
+				ng.getContext().setProperty(ContextProperty.ACTIVE_LETTER, Character.valueOf(ch));
+				ng.getContext().setProperty(ContextProperty.BETWEEN_CELLARS, null);
+
+			}
+		});
+	}*/
+	
 	public void step(){
 
 		activeFlower.getLetter().playSound(); //activeFlower must not be null
@@ -146,8 +165,10 @@ public abstract class World extends Group{
 		
 		
 		if(activeFlower.isDone()){
-			ng.getContext().setProperty(ContextProperty.BETWEEN_CELLARS, Boolean.TRUE);
+			ng.getContext().setProperty(ContextProperty.PLAY,null);
+
 			//TODO no more flowers! go to next group;
+			activeCG.setDone(true);
 			Actor actor = findActor("cg"+(activeCG.getOrder()+1));
 			if(actor!=null){
 				final CellarGroup cg = (CellarGroup)actor;
@@ -162,27 +183,41 @@ public abstract class World extends Group{
 						barrier.open(0.35f);	
 					
 					}
-				}), delay(1), run(new Runnable() {
+				}), delay(1), Util.moveCameraTo(activeCG.getGroupOrigin().x, activeCG.getGroupOrigin().y, 0, null), Util.zoomTo(1, 1,activeCG.getGroupOrigin().x, activeCG.getGroupOrigin().y, null) , run(new Runnable() {
 					
 					@Override
 					public void run() {
-						cg.setEnabled(true);						
-					}
-				}),
-					Util.moveCameraTo(cg.getGroupOrigin().x, cg.getGroupOrigin().y, 1f, null), 
-					Util.zoomTo(cg.getZoom(), 1f, cg.getGroupOrigin().x, cg.getGroupOrigin().y, null), run(new Runnable() {
-						
-						@Override
-						public void run() {
-							activeFlower.getLetter().animateSelected();
-							Letter letter =  activeFlower.getLetter();
-						
-							char ch = letter.getCharacter();
-							ng.getContext().setProperty(ContextProperty.ACTIVE_LETTER, Character.valueOf(ch));
-							ng.getContext().setProperty(ContextProperty.BETWEEN_CELLARS, null);
+						cg.setEnabled(true);	
+						ng.getContext().setProperty(ContextProperty.BETWEEN_CELLARS, Boolean.TRUE);
+						cg.addListener(new InputListener(){
+							public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+								CellarGroup cellarGroup = (CellarGroup) event.getListenerActor();
+								
+							if(!cellarGroup.isDone() && ng.getContext().getProperty(ContextProperty.BETWEEN_CELLARS)!=null){
 
-						}
-					})));
+								activeFlower = (LogicFlower) cellarGroup.findActor("firstFlower");
+								ng.getContext().setProperty(ContextProperty.ACTIVE_LETTER, Character.valueOf(activeFlower.getLetter().getCharacter()));
+							
+								
+								addAction(sequence(Util.zoomTo(cellarGroup.getZoom(), 1, cellarGroup.getGroupOrigin().x, cellarGroup.getGroupOrigin().y, null), Actions.run(new Runnable() {			
+									@Override
+									public void run() {
+										activeFlower.getLetter().animateSelected();
+										ng.getContext().setProperty(ContextProperty.PLAY, Boolean.TRUE);
+									
+									}
+								})));
+
+								ng.getContext().setProperty(ContextProperty.BETWEEN_CELLARS, null);
+								ng.getWorkspace().getPtGroup().onShow(null);
+							}
+								return true;
+							}
+						});
+						
+					}
+				})
+						));
 				
 			}
 			else{
@@ -232,6 +267,8 @@ public abstract class World extends Group{
 				
 
 			}
+			
+
 		}
 		else{
 			//go to next flower
@@ -310,8 +347,59 @@ public abstract class World extends Group{
 			}
 			
 			public void touchDragged (InputEvent event, float x, float y, int pointer) {
-				if( actor!=null){
-					actor.setPosition(startPosition.x+x-mouseXY.x,  startPosition.y +y- mouseXY.y );
+
+				if( actor!=null){					
+					List<Rectangle> rects = new LinkedList<Rectangle>();
+					Actor passportActor = findActor("passport");
+					Rectangle passportRect= new Rectangle(passportActor.getX(), passportActor.getY(), passportActor.getWidth(), passportActor.getHeight());
+					rects.add(passportRect);
+					
+					Actor toolBar = ng.getWorkspace().findActor("toolBar");
+					Rectangle toolBarRect= new Rectangle(toolBar.getX(), toolBar.getY(), toolBar.getWidth(), toolBar.getHeight());
+					rects.add(toolBarRect);
+					
+					Actor toolButtons = ng.getWorkspace().findActor("topButtons");
+					Rectangle toolButtonsRect= new Rectangle(toolButtons.getX(), toolButtons.getY(), toolButtons.getWidth(), toolButtons.getHeight());
+					rects.add(toolButtonsRect);
+
+
+					Rectangle worldRect = new Rectangle(0,0, World.this.getWidth(), World.this.getHeight());
+/*					int c = 1;
+					while(true){
+						Actor cg = findActor("cg"+c++);
+						if(cg==null){
+							break;
+						}						
+						rects.add(new Rectangle(cg.getX(), cg.getY(), cg.getWidth(), cg.getHeight()));
+					}*/
+					
+					Rectangle selfX = new Rectangle(startPosition.x+x-mouseXY.x,actor.getY(), actor.getWidth(), actor.getHeight());
+					Rectangle selfY = new Rectangle(actor.getX(), startPosition.y +y- mouseXY.y, actor.getWidth(), actor.getHeight());
+
+					boolean overlapsX = false;
+					boolean overlapsY = false;
+
+					for(Rectangle r : rects){
+						if(selfX.overlaps(r)){
+							overlapsX = true;
+						}
+						if(selfY.overlaps(r)){
+							overlapsY = true;
+						}						
+					}
+					if(!worldRect.contains(selfX)){
+						overlapsX = true;
+					}
+					if(!worldRect.contains(selfY)){
+						overlapsY = true;
+					}
+					
+					
+					if(!overlapsX)
+					actor.setPosition(startPosition.x+x-mouseXY.x,  actor.getY());
+					if(!overlapsY)
+					actor.setPosition(actor.getX(), startPosition.y +y- mouseXY.y);
+
 				}
 				
 			}
@@ -391,6 +479,7 @@ public abstract class World extends Group{
 			@Override
 			public void run() {
 				activeFlower.getLetter().animateSelected();
+				ng.getContext().setProperty(ContextProperty.PLAY, Boolean.TRUE);
 			}
 		})));
 
@@ -488,6 +577,8 @@ public abstract class World extends Group{
 				cg.addAction((scaleTo(1, 1, 1)));
 				addActor(cg);
 				
+				Rectangle bounds = new Rectangle(gInfo.getOrigin().x, gInfo.getOrigin().y, 1, 1);
+
 				//Map<Integer, LogicFlower> flowers = new HashMap<Integer, CellarGroup.LogicFlower>();
 				for(DummyInfo info : gInfo.getFlowers()){
 					
@@ -523,9 +614,12 @@ public abstract class World extends Group{
 						if(info.getType().contains("DOM")){
 							dummy.setGroupOrigin(gInfo.getOrigin());
 							dummy.setZoom(gInfo.getZoom());
-							dummy.addListener(new MetricListener());
+							//dummy.addListener(new MetricListener());
+							//cg.setSize(info.getWidth(), info.getHeight());
+							
 						}
 						dummy.setSize(info.getWidth(), info.getHeight());
+						bounds.merge(new Rectangle(info.getX(), info.getY(), info.getWidth(), info.getHeight()));
 						dummy.setPosition(info.getX()-cg.getX(), info.getY()-cg.getY());
 						dummy.setName(info.getName());
 						dummy.setGroup(gInfo.getOrder());
@@ -537,7 +631,10 @@ public abstract class World extends Group{
 					}
 				}
 			
-		
+/*				cg.setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
+				for(Actor a : cg.getChildren()){
+					a.translate(gInfo.getOrigin().x - bounds.x, gInfo.getOrigin().y - bounds.y);
+				}*/
 			}
 			
 
@@ -722,7 +819,7 @@ public abstract class World extends Group{
 		
 
 		
-		table.setPosition(20, ng.getWorkspace().getHeight()-table.getHeight()-20);
+		table.setPosition(20, this.getHeight()-table.getHeight()-20);
 		addActor(table);
 		
 		table.addListener(new MetricListener());

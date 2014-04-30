@@ -10,8 +10,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.me.neta.NetaGame;
 import com.me.neta.TextureManager;
+import com.me.neta.Util;
 import com.me.neta.util.ColorHelper;
 
 
@@ -110,7 +113,7 @@ public class Letter extends AbstractFigure{
 	public static char lookupChar(int id){
 		for(Character ch : characterToIdMap.keySet() ){
 			if(characterToIdMap.get(ch).equals(Integer.valueOf(id))){
-				return ch.charValue();
+				return ch;
 			}
 		}
 		
@@ -121,7 +124,11 @@ public class Letter extends AbstractFigure{
 		Sound sound = tm.letterSound(ch);
 		sound.play();
 	}
-	
+	 Label lb;
+	 Label lbWhite;
+	 Image circleImg;
+	 Image fillCircle;
+	 
 	public Letter(NetaGame ng, int id){
 		this.setSize(30, 30);
 		this.setOrigin(15, 15);
@@ -131,13 +138,64 @@ public class Letter extends AbstractFigure{
 		 char1 = a.findRegion(String.format("CHAR%dW", id));
 		 char2 = a.findRegion(String.format("CHAR%dB", id));
 		 ch = lookupChar(id);
+		 
+		  lb = new Label(new String(new char[]{Character.toUpperCase(ch)}), ng.getManager().getSkin(), "letter");
+		  lbWhite = new Label(new String(new char[]{Character.toUpperCase(ch)}), ng.getManager().getSkin(), "letterWhite");
+		 // float tx = 15;
+		 // float ty = 15;
+		//  lb.translate(tx, ty);
+		//  lbWhite.translate(tx, ty);
+		 this.addActor(lb);
+		 this.addActor(lbWhite);
+		 Util.center(lb);
+		 Util.center(lbWhite);
+		 
+
+		 circleImg = new Image(a.findRegion("FIGURA2W"));
+		 circleImg.setSize(getWidth(), getHeight());
+		 this.addActor(circleImg);
+		 fillCircle = new Image(tm.getCircle(Color.WHITE, getWidth()));
+		 fillCircle.setSize(getWidth(), getHeight());
+		 this.addActor(fillCircle);
+		 
+		 lb.toFront();
+		 lbWhite.toFront();
+		 
+		 unfill();
 	}
 	
 	public char getCharacter(){
 		return ch;
 	}
-
-
+	public void fill(Color c){
+		super.setColor(c);
+		filled = true;	
+		
+		circleImg.setVisible(false);
+		fillCircle.setColor(c);
+		fillCircle.setVisible(true);
+		if(ColorHelper.isDark(c)){
+			lb.setVisible(false);
+			lbWhite.setVisible(true);
+		}
+		else{
+			lbWhite.setVisible(false);
+			lb.setVisible(true);
+		}
+	}
+	
+	public void unfill(){
+		filled = false;
+		circleImg.setVisible(true);
+		fillCircle.setVisible(false);
+		lb.setVisible(true);
+		lbWhite.setVisible(false);
+	}
+	
+	public void draw(SpriteBatch batch, float parentAlpha){
+		super.oldFashionedDraw(batch, parentAlpha);
+	}
+	
 
 	@Override
 	public void drawFilled(SpriteBatch batch, float parentAlpha) {

@@ -185,6 +185,8 @@ wondGenerator.dispose();
 	//	skin.add("calibri16", calibri16);
 	//	skin.add("calibri18", calibri18);
 		skin.add("36", calibri36);
+		
+		letterFont.setScale(0.28f);
 		skin.add("letter", letterFont);
 
 
@@ -629,7 +631,14 @@ wondGenerator.dispose();
 		lStyleLetter.font = skin.getFont("letter");
 		lStyleLetter.fontColor = Color.BLACK;
 	//	lStyleLetter.background = skin.getDrawable("circle");
-		skin.add("letter", lStyleLetter);		
+		skin.add("letter", lStyleLetter);	
+		
+		
+		LabelStyle lStyleLetterWhite = new LabelStyle();
+		lStyleLetterWhite.font = skin.getFont("letter");
+		lStyleLetterWhite.fontColor = Color.WHITE;
+	//	lStyleLetter.background = skin.getDrawable("circle");
+		skin.add("letterWhite", lStyleLetterWhite);	
 		
 		TextureRegion checkedRegion =  atlas.findRegion("checked2");
 		TextureRegion uncheckedRegion = atlas.findRegion("unchecked2");
