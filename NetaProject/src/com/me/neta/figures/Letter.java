@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.me.neta.NetaGame;
@@ -139,8 +140,12 @@ public class Letter extends AbstractFigure{
 		 char2 = a.findRegion(String.format("CHAR%dB", id));
 		 ch = lookupChar(id);
 		 
+		// this.setTouchable(Touchable.disabled);
 		  lb = new Label(new String(new char[]{Character.toUpperCase(ch)}), ng.getManager().getSkin(), "letter");
+		  lb.setTouchable(Touchable.disabled);
 		  lbWhite = new Label(new String(new char[]{Character.toUpperCase(ch)}), ng.getManager().getSkin(), "letterWhite");
+		  lbWhite.setTouchable(Touchable.disabled);
+
 		 // float tx = 15;
 		 // float ty = 15;
 		//  lb.translate(tx, ty);
@@ -152,12 +157,15 @@ public class Letter extends AbstractFigure{
 		 
 
 		 circleImg = new Image(a.findRegion("FIGURA2W"));
+		 circleImg.setTouchable(Touchable.disabled);
+
 		 circleImg.setSize(getWidth(), getHeight());
 		 this.addActor(circleImg);
 		 fillCircle = new Image(tm.getCircle(Color.WHITE, getWidth()));
 		 fillCircle.setSize(getWidth(), getHeight());
 		 this.addActor(fillCircle);
-		 
+		 fillCircle.setTouchable(Touchable.disabled);
+
 		 lb.toFront();
 		 lbWhite.toFront();
 		 

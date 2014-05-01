@@ -12,6 +12,7 @@ public class Hero extends Actor implements Moveable{
 	TextureRegion tr;
 
 	public Hero(NetaGame ng, String assetName){
+		this.setName("hero"+System.currentTimeMillis());
 		AtlasRegion ar = ng.getManager().getAtlas().findRegion(assetName);
 		Texture tex = ar.getTexture();
 		tr = new TextureRegion(tex, ar.getRegionX(), ar.getRegionY(), ar.getRegionWidth(), ar.getRegionHeight());

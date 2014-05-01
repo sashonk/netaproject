@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.me.neta.Context;
 import com.me.neta.Context.ContextProperty;
 import com.me.neta.NetaGame;
+import com.me.neta.Popup.PopupGroup;
 import com.me.neta.Size;
 import com.me.neta.Util;
 import com.me.neta.Util.OnEventAction.Predicate;
@@ -36,12 +37,17 @@ public class KubikTool extends TopTool{
 	boolean rotating ;
 	public KubikTool(NetaGame ng) {
 		super(ng);
-		
+		setName("kTool");
 
 		rotating = false;
 	}
 	
+/*	@Override
+	public void contextChanged(Context ctx){
+		setEnabled(accept(ctx));
+		
 	
+	}*/
 
 	@Override
 	public boolean accept(Context ctx) {
@@ -128,6 +134,8 @@ public class KubikTool extends TopTool{
 
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha){
+		super.oldFashionedDraw(batch, parentAlpha);
+		
 		float alphaMul = enabled() ? 1 : disabledAlphaValue;
 		Color c = getColor();
 		batch.setColor(1, 1, 1, c.a*alphaMul*parentAlpha);

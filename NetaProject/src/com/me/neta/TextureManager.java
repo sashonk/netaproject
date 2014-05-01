@@ -154,6 +154,7 @@ public class TextureManager {
 //////////////////////////////////////////////
 FreeTypeFontGenerator wondGenerator = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/wonderland.ttf"));
 BitmapFont wond36 = wondGenerator.generateFont(36,DEFAULT_CHARS, false);
+BitmapFont wond72 = wondGenerator.generateFont(72,DEFAULT_CHARS, false);
 
 wondGenerator.dispose();
 
@@ -165,6 +166,7 @@ wondGenerator.dispose();
 	skin.add("wond28", wond28);
 	skin.add("wond36", wond36);*/
 	skin.add("title", wond36);
+	skin.add("order", wond72);
 
 ///////////////////////////////////////////////
 ///////////	 CALIBRI 	/////////////
@@ -398,6 +400,12 @@ wondGenerator.dispose();
  		titleYellow.fontColor = Color.YELLOW;
  		skin.add("title_yellow", titleYellow);	
  		
+ 		
+ 		LabelStyle titleWhite = new LabelStyle();
+ 		titleWhite.font = skin.getFont("title");
+ 		titleWhite.fontColor = Color.WHITE;
+ 		skin.add("title_white", titleWhite);
+ 		
  		LabelStyle titleGray = new LabelStyle();
  		titleGray.font = skin.getFont("title");
  		titleGray.fontColor = Color.GRAY;
@@ -407,6 +415,28 @@ wondGenerator.dispose();
  		titleViolet.font = skin.getFont("title");
  		titleViolet.fontColor = Colors.Violet;
  		skin.add("title_violet", titleViolet);	
+ 		
+ 		
+ 		LabelStyle orderYellow = new LabelStyle();
+ 		orderYellow.font = skin.getFont("order");
+ 		orderYellow.fontColor = Color.YELLOW;
+ 		skin.add("order_yellow", orderYellow);	
+ 		
+ 		
+ 		LabelStyle orderRed = new LabelStyle();
+ 		orderRed.font = skin.getFont("order");
+ 		orderRed.fontColor = Color.RED;
+ 		skin.add("order_red", orderRed);
+ 		
+ 		LabelStyle orderBlue = new LabelStyle();
+ 		orderBlue.font = skin.getFont("order");
+ 		orderBlue.fontColor = Color.BLUE;
+ 		skin.add("order_blue", orderBlue);
+ 		
+ 		LabelStyle orderViolet = new LabelStyle();
+ 		orderViolet.font = skin.getFont("order");
+ 		orderViolet.fontColor = Colors.Violet;
+ 		skin.add("order_violet", orderViolet);	
  		
 ///////////////////////////////////////////////
 ///////////	 LABELs 	/////////////

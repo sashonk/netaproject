@@ -282,4 +282,10 @@ public class TigerWorld extends World{
 
 	}
 
+	
+	@Override
+	public String getOrderLabelStyleDef() {
+		// TODO Auto-generated method stub
+		return "red";
+	}
 }

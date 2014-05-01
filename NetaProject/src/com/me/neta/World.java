@@ -50,6 +50,7 @@ import com.badlogic.gdx.utils.StringBuilder;
 import com.me.neta.CellarGroup.LogicFlower;
 import com.me.neta.CellarGroup.LogicLabel;
 import com.me.neta.Context.ContextProperty;
+import com.me.neta.Popup.PopupGroup;
 import com.me.neta.Util.OnEventAction.Predicate;
 import com.me.neta.dummy.Dummy;
 import com.me.neta.dummy.DummyContext;
@@ -129,25 +130,27 @@ public abstract class World extends Group{
 	
 	private LogicFlower activeFlower;
 	
-/*	public void next(CellarGroup cg){
-		
-		
-		Util.moveCameraTo(cg.getGroupOrigin().x, cg.getGroupOrigin().y, 1f, null), 
-		Util.zoomTo(cg.getZoom(), 1f, cg.getGroupOrigin().x, cg.getGroupOrigin().y, null), run(new Runnable() {
-			
-			@Override
-			public void run() {
-				activeFlower.getLetter().animateSelected();
-				Letter letter =  activeFlower.getLetter();
-			
-				char ch = letter.getCharacter();
-				ng.getContext().setProperty(ContextProperty.ACTIVE_LETTER, Character.valueOf(ch));
-				ng.getContext().setProperty(ContextProperty.BETWEEN_CELLARS, null);
-
+	public void blinkOrders(){
+		for(Actor actor : getChildren()){
+			if(actor.getName()!=null && actor.getName().startsWith("order")){
+				actor.addAction(sequence(delay(.3f), repeat(3, sequence(visible(false), delay(0.3f), visible(true), delay(0.3f)))));
 			}
-		});
-	}*/
+		}
+	}
 	
+	
+	public void removeOrders(){
+		//List<Actor> rm = new LinkedList<Actor>();
+		for(Actor actor : getChildren()){
+			if(actor.getName()!=null && actor.getName().startsWith("order")){
+				actor.addAction(Actions.removeActor());
+			}
+		}
+		
+		/*for(Actor a : rm){
+			a.remove();
+		}*/
+	}
 	public void step(){
 
 		activeFlower.getLetter().playSound(); //activeFlower must not be null
@@ -214,6 +217,16 @@ public abstract class World extends Group{
 								return true;
 							}
 						});
+						
+						
+						Group topBtns = (Group)ng.getWorkspace().findActor("topButtons");
+						AbstractTool kTool =  (AbstractTool) topBtns.findActor("kTool");
+						if(!kTool.hasEverBeenClickedOnPopup()){
+							kTool.setPopup("Прикоснись к кубику и передвигай  своего героя\n по дорожке  на столько камешков,  сколько\n точек выпало на кубике. Если вы играете\n вдвоем, то шагать  надо по очереди-каждому\n со своим героем. ", 50, new PopupGroup(kTool), 0, true);
+					//		kTool.setPopup("Прикоснись к кубику и  н надо по\n очереди-каждому со своим героем. ", 50, new PopupGroup(kTool), 0, true);
+
+						}
+						
 						
 					}
 				})
@@ -324,7 +337,7 @@ public abstract class World extends Group{
 			
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				Actor actor = hit(x, y, true);
-				if(actor instanceof Moveable && ng.getContext().getProperty(ContextProperty.HALT)==null){
+				if(actor instanceof Moveable && (ng.getContext().getProperty(ContextProperty.HALT)==null || ng.getContext().getProperty(ContextProperty.BETWEEN_CELLARS)!=null)){
 					if(actor instanceof AbstractFigure){
 						if(selectedActor!=actor || selectedActor.isFilled()){
 							return false;
@@ -473,6 +486,7 @@ public abstract class World extends Group{
 		cg1.setEnabled(true);
 		activeFlower = (LogicFlower) cg1.findActor("firstFlower");
 		ng.getContext().setProperty(ContextProperty.ACTIVE_LETTER, Character.valueOf(activeFlower.getLetter().getCharacter()));
+		ng.getContext().setProperty(ContextProperty.POPUP, null);
 	
 		
 		addAction(sequence(Util.zoomTo(cg1.getZoom(), 1, cg1.getGroupOrigin().x, cg1.getGroupOrigin().y, null), run(new Runnable() {			
@@ -483,8 +497,14 @@ public abstract class World extends Group{
 			}
 		})));
 
-		
+		removeOrders();
 		ng.getWorkspace().getPtGroup().onShow(null);
+		
+		for(Actor a : getChildren()){
+			if(a.getName()!=null && a.getName().contains("hero")){
+				a.toFront();
+			}
+		}
 	}
 	
 	protected void letters(int variant){
@@ -562,19 +582,31 @@ public abstract class World extends Group{
 				a.remove();
 			}
 			
-			for(GroupInfo gInfo : dummyContext.getGroups()){
-				CellarGroup cg = new CellarGroup(ng, gInfo.getOrder());				
+			for(final GroupInfo gInfo : dummyContext.getGroups()){
+				final CellarGroup cg = new CellarGroup(ng, gInfo.getOrder());				
 				cg.setGroupOrigin(gInfo.getOrigin());
 				//cg.setOrigin(gInfo.getOrigin().x, gInfo.getOrigin().y);
 				cg.setZoom(gInfo.getZoom());
 				cg.setDone(false);
 				cg.setEnabled(false);
 				cg.setName("cg"+gInfo.getOrder());
+				
+
 				cg.setPosition(gInfo.getOrigin().x, gInfo.getOrigin().y);
+				
 				
 				cg.setScale(0.1f);
 				//cg.setRotation(180);
-				cg.addAction((scaleTo(1, 1, 1)));
+				cg.addAction(sequence(scaleTo(1, 1, 1), run(new Runnable() {
+					
+					@Override
+					public void run() {
+						Label orderLabel = new Label(Integer.toString(gInfo.getOrder()), ng.getManager().getSkin(), "order_"+getOrderLabelStyleDef());
+						orderLabel.setName("order"+cg.getOrder());
+						orderLabel.translate(0+cg.getX(), 100+cg.getY());
+						addActor(orderLabel);
+					}
+				})));
 				addActor(cg);
 				
 				Rectangle bounds = new Rectangle(gInfo.getOrigin().x, gInfo.getOrigin().y, 1, 1);
@@ -635,6 +667,10 @@ public abstract class World extends Group{
 				for(Actor a : cg.getChildren()){
 					a.translate(gInfo.getOrigin().x - bounds.x, gInfo.getOrigin().y - bounds.y);
 				}*/
+/*				Label orderLabel = new Label(Integer.toString(gInfo.getOrder()), ng.getManager().getSkin(), "title_"+getOrderLabelStyleDef());
+				orderLabel.setName("order");
+				orderLabel.translate(0+cg.getX(), 50+cg.getY());
+				addActor(orderLabel);*/
 			}
 			
 
@@ -873,6 +909,8 @@ public abstract class World extends Group{
 		//table.add
 		return table;
 	}
+	
+	public abstract String getOrderLabelStyleDef();
 	
 	public void showLyrics(){
 		//LyricsFrame frame= new LyricsFrame(ng,lyricsForFrame());

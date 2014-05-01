@@ -127,8 +127,8 @@ ColorTool paletteTool;
 		
 		initContext(ng.getContext());
 		
-		
-		startHasEverBeenClickedOnPopup= !Gdx.app.getPreferences(NetaGame.class.getName()).getBoolean("showPopup", true);
+		boolean showPopupPref = Gdx.app.getPreferences(NetaGame.class.getName()).getBoolean("showPopup", true);
+		startHasEverBeenClickedOnPopup= !showPopupPref;
 		populateWorldFactories(ng);
 		passport = new Passport();
 		pinch2Zoom = new Pinch2ZoomListener2();
@@ -264,6 +264,7 @@ ColorTool paletteTool;
 		 zTool = new ZIndexTool(ng);
 		 uTool = new UnfillTool(ng);
 		 bTool = new BrushTool(ng);
+		 bTool.setChecked(showPopupPref);
 		qTool = new QuestionTool(ng);
 		kTool = new KubikTool(ng);
 		
@@ -337,6 +338,10 @@ ColorTool paletteTool;
 					
 					if(!figuresTool.hasEverBeenClickedOnPopup()){
 						figuresTool.setPopup("Соедини СТАНЦИИ дорожкой из камешков.\nТолько не перепутай порядок СТАНЦИЙ!", 0, new PopupGroup(figuresTool,basketTool, paletteTool, rTool, bTool, uTool), 0);
+						
+						if(Gdx.app.getPreferences(NetaGame.class.getName()).getBoolean("showPopups", true)){
+							world.blinkOrders();
+						}
 					}
 				}
 				
@@ -418,7 +423,7 @@ ColorTool paletteTool;
 				
 				if(event instanceof SelectFigureEvent){
 					setSelectedFigure((AbstractFigure) event.getTarget());	
-					if(bTool.checked() && ng.getContext().getProperty(ContextProperty.HALT)==null){
+					if(bTool.isChecked() && ng.getContext().getProperty(ContextProperty.HALT)==null){
 						world.getSelected().fill(selectedColor);
 						
 						StartButton sb = world.getStartButton();

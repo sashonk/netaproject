@@ -23,7 +23,11 @@ public class BrushTool extends TopTool{
 	
 	private boolean checked;
 	
-	public boolean checked(){
+	public void setChecked(boolean value){
+		checked = value;
+	}
+	
+	public boolean isChecked(){
 		return checked;
 	}
 

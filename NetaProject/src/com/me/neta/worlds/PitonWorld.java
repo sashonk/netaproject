@@ -238,4 +238,10 @@ public class PitonWorld extends World{
 	 public Color letterColor(){
 		 return Color.RED;
 	 }
+	 
+		@Override
+		public String getOrderLabelStyleDef() {
+			// TODO Auto-generated method stub
+			return "blue";
+		}
 }

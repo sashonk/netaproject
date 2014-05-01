@@ -290,11 +290,19 @@ public class AntWorld extends World{
 		letters.put(Integer.valueOf(2), variant2);		
 //
 	}
+	
+	
 
 	//@Override
 	public String getLyricsAsString() {
 	//	String text = "Жил на свете муравей\nБез ресниц и без бровей\n Он терпеть не мог девиц\nБез"
 		return null;
+	}
+
+	@Override
+	public String getOrderLabelStyleDef() {
+		// TODO Auto-generated method stub
+		return "violet";
 	}
 
 

@@ -2,6 +2,7 @@ package com.me.neta;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -16,7 +17,7 @@ import com.me.neta.events.FigureDropEvent;
 import com.me.neta.events.SelectFigureEvent;
 import com.me.neta.figures.AbstractFigure;
 
-public abstract class Factory extends Actor{
+public abstract class Factory extends Group{
 	protected NetaGame ng;
 	
 	public Factory(NetaGame ng){
