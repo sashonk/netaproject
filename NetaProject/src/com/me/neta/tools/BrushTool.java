@@ -34,18 +34,19 @@ public class BrushTool extends TopTool{
 
 	@Override
 	public boolean accept(Context ctx) {
-		return ctx.getProperty(ContextProperty.HALT)==null &&ctx.getProperty(ContextProperty.WORKING)!=null&&ctx.getProperty(ContextProperty.CELLARS)!=null&&
+		return ctx.getProperty(ContextProperty.HALT)==null &&ctx.getProperty(ContextProperty.WORKING)!=null&&ctx.getProperty(ContextProperty.INGAME)==null&&ctx.getProperty(ContextProperty.CELLARS)!=null&&
 				popupAccepted( ctx);	}
 
-	@Override
+	@Override 
 	public void doAction() {
+
 		if(checked){
 			checked = false;
 		}
 		else{
 			checked = true;
 		}
-		
+		fire(new BrushToolChangeEvent(checked));
 	}
 	
 	@Override
@@ -55,14 +56,20 @@ public class BrushTool extends TopTool{
 		opaque.a = 1;
 		Texture tx = tm.getCircle(opaque, Math.max(getWidth(), getHeight()));	
 		
-		float k = checked ? 1 : 0.5f;
 		if(enabled()){
-			batch.setColor(1, 1, 1, c.a*parentAlfa*k);
-			batch.draw(tx, this.getX()+4, this.getY()+4, this.getWidth()-8, this.getHeight()-8);
-		}else{
-			batch.setColor(1, 1, 1, c.a*.4f*parentAlfa*k);
+			batch.setColor(1, 1, 1, c.a*parentAlfa);
+			if(checked){
+				batch.draw(tx, this.getX()+4, this.getY()+4, this.getWidth()-8, this.getHeight()-8);
+			}
+		
+			batch.draw(region, this.getX(), this.getY(), this.getWidth(), this.getHeight());
+			
 		}
-		batch.draw(region, this.getX(), this.getY(), this.getWidth(), this.getHeight());
+		else{
+			batch.setColor(1, 1, 1, c.a*.4f*parentAlfa);
+			batch.draw(region, this.getX(), this.getY(), this.getWidth(), this.getHeight());
+		}
+	
 	}
 
 	@Override

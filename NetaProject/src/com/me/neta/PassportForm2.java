@@ -18,90 +18,105 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldFilter;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.me.neta.events.PassportEvent;
 
-public class PassportForm extends Group{
+public class PassportForm2 extends Window{
 	
 	static final String TEXT_FIELD_STYLE = "system2";
 	static final float PADX = 22;
 	static final float H = 22;
-	TextureRegion tr;
 	
 	TextField tfAge;
 	TextField tfName;
 	TextField tfState;
 	TextField tfCity;
 	TextField tfYear;
-	public PassportForm(NetaGame ng){
+	public PassportForm2(NetaGame ng){
+		super("", ng.getManager().getSkin());
+		this.setClip(false);
+
 		
 
-		setSize(275, 275);
 		this.setOrigin(getWidth()/2, getHeight()/2);
 		TextureManager tm = ng.getManager();
-		tr = tm.getAtlas().findRegion("passform");			
-		
-		Image panel = new Image(tr);
-		panel.setBounds(0,0, getWidth(), getHeight());
-		this.addActor(panel);
-		Skin skin= tm.getSkin();
+		Skin skin = tm.getSkin();
+
 		
 		tfName = new TextField("", skin, TEXT_FIELD_STYLE);
+		tfName.setWidth(250);
 		tfName.setMessageText("Имя ребёнка");
-		tfName.setBounds(PADX, 240, 228, H);
+		//tfName.setBounds(PADX, 240, 228, H);
 		tfName.addListener(hideKeyBoard());
 		tfName.setFocusTraversal(true);
 	//	tfName.setFocusTraversal(focusTraversal)
 
-		addActor(tfName);
+		add(tfName).row();
 				
 		 tfAge = new TextField("", skin, TEXT_FIELD_STYLE);
 		 tfAge.addListener(hideKeyBoard());
 		tfAge.setMessageText("Возраст");
-		tfAge.setBounds(PADX, 205, 228, H);
+		//tfAge.setBounds(PADX, 205, 228, H);
 		tfAge.setMaxLength(2);
 		tfAge.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
-		addActor(tfAge);
+		add(tfAge).row();
 				
 		 tfCity = new TextField("", skin, TEXT_FIELD_STYLE);
 		tfCity.setMessageText("Город (село)");
-		tfCity.setBounds(PADX, 170, 228, H);
+		//tfCity.setBounds(PADX, 170, 228, H);
 		tfCity.addListener(hideKeyBoard());
 
-		addActor(tfCity);
+		add(tfCity).row();
 		
 		 tfState = new TextField("", skin, TEXT_FIELD_STYLE);
 		tfState.setMessageText("Страна");
-		tfState.setBounds(PADX, 138, 228, H);
+		//tfState.setBounds(PADX, 138, 228, H);
 		tfState.addListener(hideKeyBoard());
 
-		addActor(tfState);
+		add(tfState).row();
 				
 		 tfYear = new TextField("", skin, TEXT_FIELD_STYLE);
 		tfYear.setMessageText("Год");
 		tfYear.setMaxLength(4);
-		tfYear.setBounds(PADX, 105, 228, H);
+		//tfYear.setBounds(PADX, 105, 228, H);
 		tfYear.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
-		tfYear.addListener(hideKeyBoard());
-		addActor(tfYear);
-		
-		final Label ok = new Label("OK", skin, "system2");
-		ok.setPosition(188, 74);
-		addActor(ok);
-		
-		addListener(new InputListener(){
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				
-				Rectangle r = new Rectangle(171,74, 220 -171, 91 - 74);
-				if(r.contains(x,y)||event.getTarget()==ok){ //touch!
-					
-					PassportForm.this.addAction(Util.zoomTo(1, 0, null));
+		tfYear.addListener(new InputListener(){
+			public boolean keyTyped (InputEvent event, char character) {
+				if(Keys.ENTER==event.getKeyCode()){
+					PassportForm2.this.addAction(Util.zoomTo(1, 0, null));
 					fire(new PassportEvent());
 				}
-				return false;
+				return true;
+				
+			}
+	 });
+		
+		add(tfYear).padBottom(5).row();
+		
+		final TextButton tbOk = new TextButton("OK", skin, "button");
+		add(tbOk);
+		tbOk.addListener(new InputListener(){
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				PassportForm2.this.addAction(Util.zoomTo(1, 0, null));
+				fire(new PassportEvent());
+				return true;
 			}
 		});
+		
+		
+		TextureRegion tailTr = new TextureRegion( ng.getManager().getAtlas().findRegion("frame-tail"));
+		Image tail = new Image(tailTr);
+		tail.setSize(52, 65);
+		tail.setPosition(80, -51);		
+		addActor(tail);
+		
+		pack();
+		
+		
+		
 	}
 	
 	EventListener hideKeyBoard(){
@@ -112,9 +127,12 @@ public class PassportForm extends Group{
 					Stage s = event.getStage();
 					OrthographicCamera cam =  (OrthographicCamera) s.getCamera();
 					cam.translate(new Vector2(0, -H));
+					
+					TextField listener =  (TextField) event.getListenerActor();
+					listener.next(false);
 					return true;
 				}
-				return false;
+				return true;
 				
 			}
 	 };

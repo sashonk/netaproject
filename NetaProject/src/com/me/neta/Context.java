@@ -27,7 +27,8 @@ public class Context {
 				new ContextProperty(ContextProperty.PLAY, null),
 				new ContextProperty(ContextProperty.ACTIVE_LETTER, null),
 				new ContextProperty(ContextProperty.BETWEEN_CELLARS, null),
-				new ContextProperty(ContextProperty.POPUP, null)
+				new ContextProperty(ContextProperty.POPUP, null),
+				new ContextProperty(ContextProperty.MOVE_TO_START, null)
 
 		
 		}));
@@ -111,7 +112,7 @@ public class Context {
 		public static String ACTIVE_LETTER ="active_letter";
 		public static String BETWEEN_CELLARS ="between_cellars";
 		public static String POPUP ="popup";
-
+		public static String MOVE_TO_START ="MOVE_TO_START";
 		
 
 		

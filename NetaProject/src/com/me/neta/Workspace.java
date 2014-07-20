@@ -17,16 +17,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
-
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
@@ -40,12 +37,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 
 
 
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.me.neta.Context.ContextProperty;
 import com.me.neta.Popup.PopupGroup;
 import com.me.neta.Util.OnEventAction.Predicate;
@@ -56,6 +55,9 @@ import com.me.neta.tools.BasketTool;
 import com.me.neta.tools.BrushTool;
 import com.me.neta.tools.FlowerTool;
 import com.me.neta.tools.KubikTool;
+import com.me.neta.tools.PanelTool;
+import com.me.neta.tools.PanelToolListener;
+import com.me.neta.tools.SaveTool.SavePanelHideEvent;
 import com.me.neta.tools.ShopTool;
 import com.me.neta.tools.StartButton;
 import com.me.neta.tools.UnfillTool;
@@ -70,13 +72,12 @@ import com.me.neta.tools.RotateTool;
 import com.me.neta.tools.SaveTool;
 import com.me.neta.tools.SettingsTool;
 import com.me.neta.tools.ZIndexTool;
-
 import com.me.neta.worlds.AntWorld;
 import com.me.neta.worlds.PitonWorld;
 import com.me.neta.worlds.SpiderWorld;
 import com.me.neta.worlds.TigerWorld;
 
-public class Workspace extends Group {
+public class Workspace extends Group  {
 
 
 
@@ -85,7 +86,7 @@ public class Workspace extends Group {
 	RotateTool rTool;
 	QuestionTool qTool;
 	 FlowerTool flowerTool;
-	 UnfillTool uTool;	
+	// UnfillTool uTool;	
 	 KubikTool kTool;
 
 	 
@@ -113,8 +114,16 @@ public class Workspace extends Group {
 ColorTool paletteTool;
 	SettingsTool settingTool	 ;
 	 BasketTool basketTool;	
+	 
 	boolean startHasEverBeenClickedOnPopup;
-			 
+	boolean checkBrushTool;
+	boolean makeIllustrationTipShown;
+	boolean makeRoamsTipShown;
+	boolean gameStartedTip;
+	int figureDropsTotal;
+	boolean welcomeToPaintingTipShown;
+	boolean notifiedOfColoredFigures;
+	boolean firstTouchAfterColoredFiguresNotification;
 		 
 	public Workspace(NetaGame ng, float x, float y, float width, float height){
 		this.ng = ng;
@@ -126,8 +135,16 @@ ColorTool paletteTool;
 	public void initialize(){
 		
 		initContext(ng.getContext());
+		checkBrushTool = false;
+		makeIllustrationTipShown = false;
+		makeRoamsTipShown = false;
+		gameStartedTip= false;
+		figureDropsTotal = 0;
+		welcomeToPaintingTipShown = false;
+		notifiedOfColoredFigures= false;
+		firstTouchAfterColoredFiguresNotification = false;
 		
-		boolean showPopupPref = Gdx.app.getPreferences(NetaGame.class.getName()).getBoolean("showPopup", true);
+		final boolean showPopupPref = Gdx.app.getPreferences(NetaGame.class.getName()).getBoolean("showPopup", true);
 		startHasEverBeenClickedOnPopup= !showPopupPref;
 		populateWorldFactories(ng);
 		passport = new Passport();
@@ -171,8 +188,8 @@ ColorTool paletteTool;
 		
 		
 		lyricsTool = new LyricsTool(ng);
-		final LyricsPanel lyricsPanel = new LyricsPanel(ng,800, 400);
-		lyricsPanel.setPosition(105, 75);
+		final LyricsPanel2 lyricsPanel = new LyricsPanel2(ng,800, 400);
+		lyricsPanel.setPosition(105, panelHeight);
 		lyricsPanel.setColor(c);
 		lyricsPanel.setVisible(false);
 		addActor(lyricsPanel);
@@ -180,8 +197,8 @@ ColorTool paletteTool;
 				
 		toolbarTable.add(lyricsTool).padRight(pad).padLeft(pad);
 		passportTool = new PassportTool(ng);
-		final PassportForm form = new PassportForm(ng);
-		form.setPosition(490-133, 75);
+		final PassportForm2 form = new PassportForm2(ng);
+		form.setPosition(490-113, panelHeight);
 		form.setColor(c);
 		form.setVisible(false);
 		addActor(form);
@@ -190,6 +207,8 @@ ColorTool paletteTool;
 		
 		
 	figuresTool = new FiguresTool(ng);
+	//figuresTool.registerListener(this);
+	
 		toolbarTable.add(figuresTool).padRight(pad).padLeft(pad);
 		FiguresPanel figPanel = new FiguresPanel(ng);
 		figPanel.setColor(c);
@@ -262,9 +281,9 @@ ColorTool paletteTool;
 		topButtons.setName("topButtons");
 		 rTool = new RotateTool(ng);
 		 zTool = new ZIndexTool(ng);
-		 uTool = new UnfillTool(ng);
+		// uTool = new UnfillTool(ng);
 		 bTool = new BrushTool(ng);
-		 bTool.setChecked(showPopupPref);
+		 bTool.setChecked(false);
 		qTool = new QuestionTool(ng);
 		kTool = new KubikTool(ng);
 		
@@ -274,7 +293,7 @@ ColorTool paletteTool;
 		topButtons.add(kTool);
 		topButtons.add(rTool);
 		topButtons.add(bTool);
-		topButtons.add(uTool);
+		//topButtons.add(uTool);
 		topButtons.add(qTool);
 		topButtons.pack();
 		topButtons.setPosition(800, 700);
@@ -320,14 +339,19 @@ ColorTool paletteTool;
 						ng.getContext().setProperty(ContextProperty.CELLARS, Boolean.TRUE);
 						lyricsPanel.addAction(sequence(fadeOut(0.4f), visible(false)));
 						
-						if(!flowerTool.hasEverBeenClickedOnPopup()){
-							//popup("Выбери буквы", 515, 80, "popupFlowers");
-							flowerTool.setPopup("Выбери буквы для цветочков", 0, new PopupGroup(flowerTool), 0);
+						
+						if(showPopupPref&&!makeRoamsTipShown){
+							makeRoamsTipShown = true;
+							figuresTool.setPopup("Соедини СТАНЦИИ дорожкой из камешков.\nТолько не перепутай порядок СТАНЦИЙ!", 0, new PopupGroup(figuresTool,basketTool,rTool, lyricsTool), 0);
+							
+					
 						}
 					}
 					else{
 						ng.getManager().getSound("error").play();
 					}
+					
+
 				}
 				
 				if(event instanceof LetterVariantEvent){
@@ -336,13 +360,14 @@ ColorTool paletteTool;
 					//world.start();
 					world.letters(((LetterVariantEvent)event).getLetterGroupID());
 					
-					if(!figuresTool.hasEverBeenClickedOnPopup()){
-						figuresTool.setPopup("Соедини СТАНЦИИ дорожкой из камешков.\nТолько не перепутай порядок СТАНЦИЙ!", 0, new PopupGroup(figuresTool,basketTool, paletteTool, rTool, bTool, uTool), 0);
-						
-						if(Gdx.app.getPreferences(NetaGame.class.getName()).getBoolean("showPopups", true)){
-							world.blinkOrders();
-						}
-					}
+					boolean showPopupPref = Gdx.app.getPreferences(NetaGame.class.getName()).getBoolean("showPopup", true);
+				if(!makeIllustrationTipShown&& showPopupPref){
+					//popup("Ты можешь выбрать цвет и\n раскрасить фигуры", 550, 80, "popupPalette");
+					figuresTool.setPopup("Сделай иллюстрацию к стихам", 00, new PopupGroup(figuresTool,basketTool, lyricsTool), 0);
+					makeIllustrationTipShown = true;
+				}
+					
+
 				}
 				
 				if(event instanceof WorldSelectionEvent){
@@ -402,10 +427,9 @@ ColorTool paletteTool;
 				
 				if(event instanceof FigureDropEvent){
 					event.setBubbles(false);
+					figureDropsTotal++;
 
-
-				
-					
+								
 					FigureDropEvent dropEvent = (FigureDropEvent) event; 
 					Actor letter= dropEvent.getActor();		
 					
@@ -414,9 +438,70 @@ ColorTool paletteTool;
 							
 					setSelectedFigure((AbstractFigure) letter);
 					
-					if(!paletteTool.hasEverBeenClickedOnPopup()&& findActor("popupPalette")==null){
-						//popup("Ты можешь выбрать цвет и\n раскрасить фигуры", 550, 80, "popupPalette");
-						paletteTool.setPopup("Ты можешь выбрать цвет и\n раскрасить фигуры", 00, new PopupGroup(figuresTool,basketTool, paletteTool, rTool, bTool, uTool), 0);
+					if(figureDropsTotal>4 && !rTool.hasEverBeenClickedOnPopup() && showPopupPref){
+						ptGroup.onShow(null);
+						rTool.setPopup("Обрати внимание:\nС помощью этой кнопки\n ты можешь вращать фигуры", 30, new PopupGroup(rTool), 0, true);
+					}
+					
+					if(makeIllustrationTipShown && !welcomeToPaintingTipShown){
+						
+						addAction(sequence(delay(10), Actions.run(new Runnable() {
+							
+							@Override
+							public void run() {
+
+
+								Cloud cloud = new Cloud("Когда будешь готов, нажми на стрелку", ng, new Cloud.Callback() {
+									
+									@Override
+									public void run(Cloud cloud) {
+										
+										
+										paletteTool.setPopup("Выбери цвета  и раскрась  свою картину", 0, new PopupGroup(figuresTool,basketTool, lyricsTool, paletteTool,bTool, rTool ), 0);
+										ptGroup.onShow(null);
+										
+										cloud.remove();
+									}
+								});
+								cloud.setName("whenReady");
+								cloud.setPosition(395, getHeight()-cloud.getHeight());
+								addActor(cloud);
+							
+								
+							
+							}
+						})));
+						
+						welcomeToPaintingTipShown = true;
+					}
+				}
+				
+				if(event instanceof GameBeginEvent){
+					event.setBubbles(false);
+					
+					Actor cp = Workspace.this.findActor("gameStartedCloud");
+					if(cp!=null){
+						cp.remove();
+					}
+				}
+				
+				if(event instanceof MovedToStartEvent){
+					event.setBubbles(false);					
+					if(!gameStartedTip){
+						
+				
+						Actor cp = Workspace.this.findActor("canPlay");
+						if(cp!=null){
+							cp.remove();
+						}
+						
+						Cloud cl = new Cloud("Нажми на кнопку СТАРТ. Игра началась!", ng);
+						cl.setName("gameStartedCloud");
+						cl.setPosition(400, getHeight()-cl.getHeight());
+						Workspace.this.addActor(cl);	
+						
+						ng.getContext().setProperty(ContextProperty.POPUP, new PopupGroup(world.getStartButton(), lyricsTool));
+						gameStartedTip = true;
 					}
 				}
 				
@@ -426,10 +511,108 @@ ColorTool paletteTool;
 					if(bTool.isChecked() && ng.getContext().getProperty(ContextProperty.HALT)==null){
 						world.getSelected().fill(selectedColor);
 						
-						StartButton sb = world.getStartButton();
-						if(sb!=null && !startHasEverBeenClickedOnPopup){
-							sb.setPopup("Молодец! Когда сделаешь иллюстрацию,\n жми СТАРТ и игра начнётся!", -100, new PopupGroup(figuresTool, basketTool,  paletteTool, rTool, bTool, uTool,world.getStartButton()), 5);
-							startHasEverBeenClickedOnPopup = true;
+						
+						
+						if(!startHasEverBeenClickedOnPopup && showPopupPref){
+							final StartButton sb = world.getStartButton();
+							boolean allFilled = true;
+							int filledCount = 0;
+							for(AbstractFigure af : world.getFigures()){
+								if(!af.isFilled()){
+									allFilled = false;									
+								}
+								else{
+									filledCount++;
+								}
+							}
+							
+							if(filledCount>1 &&  !notifiedOfColoredFigures){
+								//bTool.setPopup("Обрати внимание:\nкнопка \"кисточка\" полезна для раскрашивания фигур.\nКоснись фигуры ", tailPadX, pg, hideTimeout, upsideDown);
+								ptGroup.onShow(null);
+							//	bTool.setPopup("Обрати внимание:\nПока фигуры не раскрашены, их можно двигать.\nРаскрашенные фигуры прилипают к рабочему полю\nЕсли коснуться фигуры, когда \"кисточка\" окрашена,\n тогда фигура тоже окрасится", 30, new PopupGroup(bTool), 0, true);
+								
+								Cloud payAtt = new Cloud("Обрати внимание:\nПока фигуры не раскрашены, их можно двигать.\nРаскрашенные фигуры прилипают к рабочему полю\nФигуру можно удалить, нажав кнопку \"корзина\""
+										, ng, new Cloud.Callback(){
+
+											@Override
+											public void run(Cloud cloud) {
+												ng.getContext().setProperty(ContextProperty.POPUP, new PopupGroup(figuresTool, basketTool,  paletteTool, lyricsTool, rTool, bTool));
+												ptGroup.onShow(null);	
+												cloud.remove();
+												
+												Workspace.this.addAction(sequence(delay(1), Actions.run(new Runnable() {
+													
+													@Override
+													public void run() {
+														Cloud rest = new Cloud("Раскрась оставшиеся фигуры", ng);
+														rest.setName("rest");
+														rest.setPosition(400, Workspace.this.getHeight()- rest.getHeight());
+														Workspace.this.addActor(rest);
+														rest.addAction(sequence(delay(10), Actions.removeActor()));
+													}
+												})));
+
+											}
+											
+										});
+								payAtt.setPosition(400, getHeight()-payAtt.getHeight());
+								addActor(payAtt);
+								ng.getContext().setProperty(ContextProperty.POPUP, new PopupGroup(basketTool, rTool, bTool));
+							
+								
+								notifiedOfColoredFigures = true;
+							
+							}
+							
+							if(sb!=null &&allFilled && filledCount > 7){
+								//sb.setPopup("Молодец! Когда сделаешь иллюстрацию,\n жми СТАРТ и игра начнётся!", -100, new PopupGroup(figuresTool, basketTool,  paletteTool, rTool, bTool/*, uTool*/,world.getStartButton()), 5);
+								ptGroup.onShow(null);
+								addAction(sequence(Actions.run(new Runnable() {
+									
+									@Override
+									public void run() {
+										Actor rest = Workspace.this.findActor("rest");
+										if(rest!=null){
+											rest.remove();
+										}
+										Cloud g4u = new Cloud("Отлично! Игра-шагалка готова! Ты молодчина!  ", ng);
+										g4u.setName("goodForU");
+										g4u.setPosition(400, getHeight()-g4u.getHeight());
+										Workspace.this.addActor(g4u);									
+									}
+									
+								}), delay(5), Actions.run(new Runnable() {
+									
+									@Override
+									public void run() {
+										Actor g4u =  Workspace.this.findActor("goodForU");
+										g4u.remove();
+										
+										Cloud cloud = new Cloud("ВСЁ! Теперь в шагалку можно играть.\n Выбери себе на игровом поле\n героя и передвинь его на СТАРТ", ng, new Cloud.Callback() {
+											
+											@Override
+											public void run(Cloud cloud) {
+												fire(new MovedToStartEvent());
+											}
+										});
+										cloud.setName("canPlay");
+										cloud.setPosition(390, getHeight()-cloud.getHeight());
+										
+	
+										
+										Workspace.this.addActor(cloud);		
+										
+										ng.getContext().setProperty(ContextProperty.POPUP, new PopupGroup(figuresTool, basketTool,  paletteTool, lyricsTool, rTool, bTool));
+										ng.getContext().setProperty(ContextProperty.MOVE_TO_START, Boolean.TRUE);
+
+									}
+									
+								})));
+	
+								
+								
+								startHasEverBeenClickedOnPopup = true;
+							}
 						}
 					}
 					else{
@@ -443,10 +626,11 @@ ColorTool paletteTool;
 					event.setBubbles(false);
 					
 					LogicLabelClickEvent lEvent = (LogicLabelClickEvent) event;
-					String c = lEvent.getChar().toLowerCase();
+					String c = lEvent.getChar();
 					
-					Character activeLetter = (Character) ng.getContext().getProperty(ContextProperty.ACTIVE_LETTER);										
-					if(c.contains(new String(new char[]{activeLetter.charValue()})) && ng.getContext().getProperty(ContextProperty.BETWEEN_CELLARS)==null){
+					Character activeLetter = (Character) ng.getContext().getProperty(ContextProperty.ACTIVE_LETTER);
+					
+					if(c.contains(activeLetter.toString()) && ng.getContext().getProperty(ContextProperty.BETWEEN_CELLARS)==null){
 						lEvent.getContext().get(activeLetter).setStyle(ng.getManager().getSkin().get("small-"+world.getTitle()+"-hit", LabelStyle.class));
 						world.step();
 					}
@@ -469,24 +653,47 @@ ColorTool paletteTool;
 				if(event instanceof GameEndEvent){
 					event.setBubbles(false);
 					
-					ng.getContext().setProperty(ContextProperty.GAME_END, new Object());
+					ng.getContext().setProperty(ContextProperty.GAME_END, Boolean.TRUE);
 					ng.getContext().setProperty(ContextProperty.HALT, null);
 					ng.getContext().setProperty(ContextProperty.INGAME, null);
 					
-					if(!saveTool.hasEverBeenClickedOnPopup()){
+					
+					
+					Actor sb = world.getStartButton();					
+					Image refresh = new Image(ng.getManager().getAtlas().findRegion("refresh"));
+					refresh.setName("refresh");
+					refresh.setSize(130, 143);
+					refresh.setPosition(sb.getX(), sb.getY());
+					sb.remove();
+					
+					world.addActor(refresh);
+					refresh.addListener(new InputListener(){
+						public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+							world.refresh();
+							ng.getContext().setProperty(ContextProperty.POPUP, null);		
+							ng.getContext().setProperty(ContextProperty.GAME_END, null);
+							
+							return true;
+						}
+					});
+					
+					if(!saveTool.hasEverBeenClickedOnPopup()&&showPopupPref){
 						saveTool.setPopup("Можешь прислать  сохраненные игровые поля на\n страничку НИКОЛЬ И ЕЁ ДРУЗЬЯ  в  фейсбук.", 100, new PopupGroup(saveTool), 0);
-						ng.getContext().setProperty(ContextProperty.POPUP, null);
+						world.findActor("refresh").setVisible(false);
+						//ng.getContext().setProperty(ContextProperty.POPUP, null);
 						
-						Preferences prefs = Gdx.app.getPreferences(NetaGame.class.getName());
-						prefs.putBoolean("showPopup", false);
-						prefs.flush();
+						//Preferences prefs = Gdx.app.getPreferences(NetaGame.class.getName());
+						//prefs.putBoolean("showPopup", false);
+						//prefs.flush();
 					}
+					
+
+					
 				}
 				
 				if(event instanceof TrashButtonEvent){
 					event.setBubbles(false);
 
-					System.out.println("TrashButtonEvent::handle");
 					if(world.getSelected()!=null && ng.getContext().getProperty(ContextProperty.HALT)==null){
 						final Actor actor = world.getSelected();
 						actor.addAction(deleteFigureAction(actor));
@@ -501,9 +708,38 @@ ColorTool paletteTool;
 				
 				if(event instanceof RotationEvent){
 					event.setBubbles(false);
+					RotationEvent re = (RotationEvent)event;
 
 					if(world.getSelected()!=null&&ng.getContext().getProperty(ContextProperty.HALT)==null){
 						world.getSelected().rotate(((RotationEvent)event).getDegrees());
+					}
+					
+					if(showPopupPref && re.getId()==1){
+						ng.getContext().setProperty(ContextProperty.POPUP,new PopupGroup(figuresTool,basketTool,rTool, lyricsTool));
+						addAction(sequence(delay(10), Actions.run(new Runnable() {
+							
+							@Override
+							public void run() {
+
+								Cloud cloud = new Cloud("Когда будешь готов, нажми на стрелку", ng, new Cloud.Callback() {
+									
+									@Override
+									public void run(Cloud cloud) {
+										
+										
+										flowerTool.setPopup("Выбери буквы для игры", 0, new PopupGroup(flowerTool), 0);
+										ptGroup.onShow(null);//bTool.setChecked(true);
+										
+										cloud.remove();
+									}
+								});
+								cloud.setName("whenReady");
+								cloud.setPosition(395, getHeight()-cloud.getHeight());
+								addActor(cloud);
+							
+								
+							}
+						})));
 					}
 				}
 				
@@ -538,11 +774,18 @@ ColorTool paletteTool;
 				if(event instanceof QuestionEvent){													
 					ptGroup.onShow(null);					 					 
 				}
-/*				
+				
 				if(event instanceof BrushToolChangeEvent){
-					BrushToolChangeEvent btcEvent = (BrushToolChangeEvent)event;
-					 world.setColorizing(btcEvent.isChecked()) ;
-				}*/
+				//	BrushToolChangeEvent btcEvent = (BrushToolChangeEvent)event;
+				//	 world.setColorizing(btcEvent.isChecked()) ;
+					 boolean fls = false;
+					 if(notifiedOfColoredFigures &&!firstTouchAfterColoredFiguresNotification&&showPopupPref &&fls){
+						 
+						 ng.getContext().setProperty(ContextProperty.POPUP,  new PopupGroup(figuresTool, basketTool,  paletteTool, lyricsTool, rTool, bTool));
+						 firstTouchAfterColoredFiguresNotification= true;
+					 }
+					 
+				}
 				
 				if(event instanceof PassportEvent){
 					event.setBubbles(false);
@@ -567,6 +810,116 @@ ColorTool paletteTool;
 					return true;
 				}
 				
+				if(event instanceof FiguresShowEvent){
+					event.setBubbles(false);
+					FiguresShowEvent fEvent = (FiguresShowEvent)event;
+
+					boolean no = false;
+					if(no ){						
+						if(fEvent.getTimesFired()==1){
+							Cloud cloud = new Cloud("Когда будешь готов, нажми на стрелку", ng, new Cloud.Callback() {
+								
+								@Override
+								public void run(Cloud cloud) {
+									
+									
+									flowerTool.setPopup("Выбери буквы для игры", 0, new PopupGroup(flowerTool), 0);
+									ptGroup.onShow(null);
+									//bTool.setChecked(true);
+									
+									cloud.remove();
+								}
+							});
+							cloud.setName("whenReady");
+							cloud.setPosition(395, getHeight()-cloud.getHeight());
+							addActor(cloud);
+						}
+						else if(fEvent.getTimesFired()==2){
+							Actor wr = findActor("whenReady");
+							if(wr==null){
+								Cloud cloud = new Cloud("Когда будешь готов, нажми на стрелку", ng, new Cloud.Callback() {
+									
+									@Override
+									public void run(Cloud cloud) {
+										paletteTool.setPopup("Выбери цвета  и раскрась  свою картину", 0, new PopupGroup(figuresTool,basketTool, lyricsTool, paletteTool,bTool, rTool ), 0);
+										ptGroup.onShow(null);
+	
+										cloud.remove();
+									}
+								});
+								cloud.setName("whenReady");
+								cloud.setPosition(395, getHeight()-cloud.getHeight());
+								addActor(cloud);
+							}
+						}
+
+/*						if( fEvent.getTimesFired()==1){
+							flowerTool.setPopup("Выбери буквы для игры", 0, new PopupGroup(flowerTool), 0);
+						}
+						else if( fEvent.getTimesFired()==2){
+							paletteTool.setPopup("Выбери цвета  и раскрась  свою картину", 0, new PopupGroup(figuresTool,basketTool, lyricsTool, paletteTool,bTool, rTool ), 0);
+							bTool.setChecked(true);
+						}*/
+					}
+					
+					
+					
+/*					if(!paletteTool.hasEverBeenClickedOnPopup()&& findActor("popupPalette")==null){
+						//popup("Ты можешь выбрать цвет и\n раскрасить фигуры", 550, 80, "popupPalette");
+						paletteTool.setPopup("Ты можешь выбрать цвет и\n раскрасить фигуры", 00, new PopupGroup(figuresTool,basketTool, paletteTool, rTool, bTool, uTool), 0);
+					}*/
+				}
+				
+				if(event instanceof PaletteShowEvent){
+					event.setBubbles(false);
+					
+					
+					boolean showPopupPref = Gdx.app.getPreferences(NetaGame.class.getName()).getBoolean("showPopup", true);
+					if(showPopupPref&& !checkBrushTool){
+						bTool.setChecked(true);
+						checkBrushTool = true;
+						ng.getContext().notifyListeners();
+					}
+				}
+				
+				if(event instanceof SavePanelHideEvent){
+					event.setBubbles(false);
+					SavePanelHideEvent sEvent = (SavePanelHideEvent)event;
+					
+					
+					
+					boolean showPopupPref = Gdx.app.getPreferences(NetaGame.class.getName()).getBoolean("showPopup", true);
+					if(showPopupPref&& sEvent.getTimesFired()==1){
+						Cloud c = new Cloud("А теперь ты можешь сделать\n игру с другими полями\nили поиграть ещё раз на этом поле\n(для этого нажми кнопку \"заново\" и выбери полоску с буквами)", ng);
+						c.setName("restartCloud");
+						Actor rf = world.findActor("refresh");
+						if(rf!=null)
+						rf.setVisible(true);
+						ng.getContext().setProperty(ContextProperty.POPUP, null);		
+
+						c.setPosition(390, getHeight()-c.getHeight());
+						world.addActor(c);
+					}
+				}
+				
+				if(event instanceof KubikClickedEvent){
+					event.setBubbles(false);
+					KubikClickedEvent sEvent = (KubikClickedEvent)event;
+					
+					boolean showPopupPref = Gdx.app.getPreferences(NetaGame.class.getName()).getBoolean("showPopup", true);
+					if(showPopupPref&& sEvent.getTimesFired()==1){/*
+						Cloud c = new Cloud("К", ng);
+						c.setName("restartCloud");
+						Actor rf = world.findActor("refresh");
+						if(rf!=null)
+						rf.setVisible(true);
+						ng.getContext().setProperty(ContextProperty.POPUP, null);		
+
+						c.setPosition(390, getHeight()-c.getHeight());
+						world.addActor(c);
+					*/}
+				}
+				
 				
 				return true;
 			}
@@ -589,8 +942,24 @@ ColorTool paletteTool;
 		boolean showNikolLetter= Gdx.app.getPreferences(NetaGame.class.getName()).getBoolean("showNikole", true);
 		if(showNikolLetter){
 			final TextureRegion nikolTexture = ng.getManager().getMiscAtlas().findRegion("nikol");
-			Image nikolActor = new Image(nikolTexture);
-			nikolActor.addListener(new InputListener(){
+			final TextureRegion fbTex = ng.getManager().getAtlas().findRegion("FB");
+			Window nikWin = new Window("", ng.getManager().getSkin());
+			nikWin.setClip(false);
+			Image fb= new Image(fbTex);
+			fb.setPosition(857, 213);
+			fb.setSize(30, 30);				
+			
+			fb.addListener(new ClickListener(){
+				public void clicked (InputEvent event, float x, float y) {
+					ng.getNative().openWebPage("https://www.facebook.com/groups/nikoldruzya/");
+				}
+			});
+			
+			nikWin.setBackground(new TextureRegionDrawable(nikolTexture));
+		//	Image nikolActor = new Image(nikolTexture);
+		//	nikWin.addActor(nikolActor);
+			nikWin.addActor(fb);
+			nikWin.addListener(new InputListener(){
 				public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 					if(x>445 && x<518 && y>162 && y<231){
 						event.getTarget().remove();
@@ -604,9 +973,11 @@ ColorTool paletteTool;
 					return false;
 				}
 			});
-	
-			nikolActor.setBounds(20,150, 980, 500);		
-			this.addActorAfter(Workspace.this.findActor(bottomActorName), nikolActor);
+			
+			nikWin.pack();
+			//1360, 490-64
+			nikWin.setBounds(20,150, 980, 500);		
+			this.addActorAfter(Workspace.this.findActor(bottomActorName), nikWin);
 		}
 
 
@@ -638,7 +1009,7 @@ ColorTool paletteTool;
 		///////////////////////////////
 		//////// HINT PANEL //////////
 		//////////////////////////////		
-		final TextureRegion hintPanel =ng.getManager().getMiscAtlas().findRegion("hintPanel");
+		final TextureRegion hintPanel =ng.getManager().getMiscAtlas().findRegion("hintPanel2");
 		Image hintPanelAct = new Image(hintPanel);
 		hintPanelAct.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -687,7 +1058,7 @@ ColorTool paletteTool;
 		registerStateListener(settingTool);		
 		registerStateListener(qTool);
 		registerStateListener(bTool);
-		registerStateListener(uTool);
+		//registerStateListener(uTool);
 		registerStateListener(rTool);
 		registerStateListener(zTool);
 		registerStateListener(kTool);
@@ -735,7 +1106,9 @@ ColorTool paletteTool;
 		}
 		
 		
-
+/*		Cloud cl = new Cloud("Привет, морриконе", ng);
+		addActor(cl);
+		cl.setPosition(300, 300);*/
 		
 		this.addAction(Actions.forever(Actions.sequence(new TemporalAction(5) {
 			
@@ -752,6 +1125,10 @@ ColorTool paletteTool;
 				var = 1- percent;
 			}
 		})));
+		
+
+		
+
 	}
 
 	public float getVar(){
@@ -777,7 +1154,6 @@ ColorTool paletteTool;
 	
 	
 	private World world;
-
 
 	
 	void setSelectedFigure(AbstractFigure figure){
@@ -909,6 +1285,7 @@ ColorTool paletteTool;
  	void initContext(Context context){
  		context.setProperty(ContextProperty.HALT, Boolean.TRUE);
  	}
-     
+
+
 }
 

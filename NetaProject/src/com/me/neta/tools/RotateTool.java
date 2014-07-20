@@ -8,15 +8,16 @@ import com.me.neta.Context.ContextProperty;
 import com.me.neta.events.RotationEvent;
 
 public class RotateTool extends TopTool{
-
+	int timesFired;
 	public RotateTool(NetaGame ng) {
 		super(ng);
+		timesFired = 0;
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void doAction() {
-		fire(new RotationEvent(-45));
+		fire(new RotationEvent(-45, ++timesFired));
 	}
 
 	@Override
@@ -27,7 +28,7 @@ public class RotateTool extends TopTool{
 
 	@Override
 	public boolean accept(Context ctx) {
-		return ctx.getProperty(ContextProperty.HALT)==null &&ctx.getProperty(ContextProperty.WORKING)!=null &&ctx.getProperty(ContextProperty.CELLARS)!=null&&
+		return ctx.getProperty(ContextProperty.HALT)==null&&ctx.getProperty(ContextProperty.INGAME)==null &&ctx.getProperty(ContextProperty.WORKING)!=null &&ctx.getProperty(ContextProperty.CELLARS)!=null&&
 				popupAccepted( ctx);	
 	}
 

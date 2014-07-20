@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.me.neta.Context.ContextProperty;
 import com.me.neta.events.QuestionEvent;
  
@@ -43,8 +44,22 @@ public  class Frame extends Group{
 				}
 			});
 			addActor(decalArrow);
+			
+			Image lj = new Image(ng.getManager().getAtlas().findRegion("LJ"));
+			lj.setSize(30, 30);
+			lj.setPosition(238, 268);
+			addActor(lj);
+			lj.addListener(new ClickListener(){
+
+				public void clicked (InputEvent event, float x, float y) {
+					ng.getNative().openWebPage("http://vadimlevin.livejournal.com/");
+				}
+			});
 		 
 			content(ng);
+			
+			addListener(new MetricListener());
+
 	}
 
 	public String abandonTextureName(){

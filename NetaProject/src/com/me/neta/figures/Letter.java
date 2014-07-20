@@ -41,6 +41,11 @@ public class Letter extends AbstractFigure{
 		translit.put(Character.valueOf('п'),"p");
 		translit.put(Character.valueOf('р'), "r");
 		translit.put(Character.valueOf('с'), "s");
+		
+		translit.put(Character.valueOf('С'), "S");
+		translit.put(Character.valueOf('Б'), "B");
+		translit.put(Character.valueOf('Ж'), "Zh");
+		
 		translit.put(Character.valueOf('т'), "t");
 		translit.put(Character.valueOf('у'), "u");
 		translit.put(Character.valueOf('ф'), "f");		
@@ -96,19 +101,19 @@ public class Letter extends AbstractFigure{
 		characterToIdMap.put(Character.valueOf('ъ'), Integer.valueOf(31));
 		characterToIdMap.put(Character.valueOf('ь'), Integer.valueOf(30));
 
+		characterToIdMap.put(Character.valueOf('С'), Integer.valueOf(19));
+		characterToIdMap.put(Character.valueOf('Ж'), Integer.valueOf(27));
+		characterToIdMap.put(Character.valueOf('Б'), Integer.valueOf(9));
 
 	}
 	
 
-	
+	@Deprecated
 	public static Integer getCharId(Character ch){
 		return characterToIdMap.get(ch);
 	}
 
 	TextureManager tm;
-	TextureRegion circle;
-	TextureRegion char1;
-	TextureRegion char2;
 	char ch;
 	
 	public static char lookupChar(int id){
@@ -121,23 +126,61 @@ public class Letter extends AbstractFigure{
 		throw new IllegalArgumentException();
 	}
 	
-	public void playSound(){
-		Sound sound = tm.letterSound(ch);
-		sound.play();
+	public Sound getSound(){
+		return tm.letterSound(ch);
 	}
+	
+
 	 Label lb;
 	 Label lbWhite;
 	 Image circleImg;
 	 Image fillCircle;
 	 
+		public Letter(NetaGame ng, char c){
+			this.setSize(30, 30);
+			this.setOrigin(15, 15);
+			tm = ng.getManager();
+			TextureAtlas a = tm.getAtlas();	
+			 ch = c;
+			 
+			// this.setTouchable(Touchable.disabled);
+			  lb = new Label(new String(new char[]{ch}), ng.getManager().getSkin(), "letter");
+			  lb.setTouchable(Touchable.disabled);
+			  lbWhite = new Label(new String(new char[]{ch}), ng.getManager().getSkin(), "letterWhite");
+			  lbWhite.setTouchable(Touchable.disabled);
+
+			 // float tx = 15;
+			 // float ty = 15;
+			//  lb.translate(tx, ty);
+			//  lbWhite.translate(tx, ty);
+			 this.addActor(lb);
+			 this.addActor(lbWhite);
+			 Util.center(lb);
+			 Util.center(lbWhite);
+			 
+
+			 circleImg = new Image(a.findRegion("FIGURA2W"));
+			 circleImg.setTouchable(Touchable.disabled);
+
+			 circleImg.setSize(getWidth(), getHeight());
+			 this.addActor(circleImg);
+			 fillCircle = new Image(tm.getCircle(Color.WHITE, getWidth()));
+			 fillCircle.setSize(getWidth(), getHeight());
+			 this.addActor(fillCircle);
+			 fillCircle.setTouchable(Touchable.disabled);
+
+			 lb.toFront();
+			 lbWhite.toFront();
+			 
+			 unfill();
+		}
+
+	 @Deprecated
 	public Letter(NetaGame ng, int id){
 		this.setSize(30, 30);
 		this.setOrigin(15, 15);
 		tm = ng.getManager();
 		TextureAtlas a = tm.getAtlas();	
-		 circle = a.findRegion("FIGURA2W");
-		 char1 = a.findRegion(String.format("CHAR%dW", id));
-		 char2 = a.findRegion(String.format("CHAR%dB", id));
 		 ch = lookupChar(id);
 		 
 		// this.setTouchable(Touchable.disabled);
@@ -207,34 +250,14 @@ public class Letter extends AbstractFigure{
 
 	@Override
 	public void drawFilled(SpriteBatch batch, float parentAlpha) {
-		Color c = getColor();
-		Color opaque = c.cpy();	
-		opaque.a = 1;
-		Texture coloredCircle = tm.getCircle(opaque, getWidth());
-		
-		batch.setColor(1,1,1,c.a*parentAlpha);
-		
-		batch.draw(coloredCircle, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation(), 0, 0, coloredCircle.getWidth(), coloredCircle.getHeight(), false, false);			
-		
-		if(ColorHelper.isDark(opaque)){
-			batch.draw(char2, getX()+6, getY()+6, 9, 9, char1.getRegionWidth(), char1.getRegionHeight(), getScaleX(), getScaleY(), getRotation());
-		}
-		else{
-			batch.draw(char1, getX()+6, getY()+6, 9, 9, char1.getRegionWidth(), char1.getRegionHeight(), getScaleX(), getScaleY(), getRotation());
-
-		}
-		
+		//no-op
 	}
 
 
 
 	@Override
 	public void drawEmpty(SpriteBatch batch, float parentAlpha) {
-		Color c = getColor();
-		batch.setColor(c.r,c.g,c.b,c.a*parentAlpha);
-		batch.draw(circle, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());			
-		batch.draw(char1, getX()+6, getY()+6, 9, 9, char1.getRegionWidth(), char1.getRegionHeight(), getScaleX(), getScaleY(), getRotation());			
-		
+		//no-op
 	}
 	
 

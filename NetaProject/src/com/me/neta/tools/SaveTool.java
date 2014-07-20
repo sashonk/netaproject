@@ -6,8 +6,10 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.visible;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Event;
 import com.me.neta.Context;
 import com.me.neta.NetaGame;
+import com.me.neta.SavePanel;
 import com.me.neta.Size;
 import com.me.neta.Context.ContextProperty;
 
@@ -19,8 +21,7 @@ public class SaveTool extends PanelTool{
 
 	public SaveTool(NetaGame ng) {
 		super(ng);
-		// TODO Auto-generated constructor stub
-	}
+		timesFired=0;	}
 
 	@Override
 	public String getImagePath() {
@@ -34,7 +35,33 @@ public class SaveTool extends PanelTool{
 
 	@Override
 	public boolean accept(Context ctx) {
-		return ctx.getProperty(ContextProperty.HALT)==null &&ctx.getProperty(ContextProperty.WORKING)!=null&&
+		return ctx.getProperty(ContextProperty.HALT)==null&&ctx.getProperty(ContextProperty.INGAME)==null &&ctx.getProperty(ContextProperty.WORKING)!=null&&
 				popupAccepted( ctx);	
+	}
+	
+
+	public void hide(){
+		if(panel.isVisible()){
+			SavePanel sp = (SavePanel) panel;
+			int timesHidden = sp.getTimesHidden();
+			fire(new SavePanelHideEvent(timesHidden+1));
+			sp.setTimesHidden(timesHidden+1);
+		}
+		panel.addAction(sequence(fadeOut(FADE_INTERVAL), visible(false)));				
+
+
+	}
+	
+	int timesFired;
+	
+	public static final class SavePanelHideEvent extends Event{
+		public SavePanelHideEvent(int timesFired){
+			this.tf = timesFired;
+		}
+		
+		public int getTimesFired(){
+			return tf;
+		}
+		int tf;
 	}
 }

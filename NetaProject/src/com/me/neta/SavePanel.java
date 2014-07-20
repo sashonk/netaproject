@@ -28,6 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.me.neta.events.ScreenshotEvent;
+import com.me.neta.tools.SaveTool.SavePanelHideEvent;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
@@ -36,8 +37,20 @@ public class SavePanel extends Window{
 	String ALBUM_NAME="Nikole&CO";
 	NetaGame ng;
 	TextureRegion treg;
+	int timesHiden ;
+	
+	public int getTimesHidden(){
+		return timesHiden;
+	}
+	
+	public void setTimesHidden(int th){
+		timesHiden = th;
+	}
+	
 	public SavePanel(final NetaGame ng){
+		
 		super("", ng.getManager().getSkin());
+		timesHiden = 0;
 		this.ng = ng;
 		//treg= ng.getManager().getMiscAtlas().findRegion("savePanel");
 		this.setClip(false);
@@ -72,6 +85,7 @@ public class SavePanel extends Window{
 					event.setBubbles(false);
 					saveAction();
 					
+					fire(new SavePanelHideEvent(++SavePanel.this.timesHiden));
 					SavePanel.this.addAction(sequence(fadeOut(0.4f), visible(false)));
 
 					return true;
@@ -83,6 +97,8 @@ public class SavePanel extends Window{
 					event.setBubbles(false);
 
 					emailAction();
+					fire(new SavePanelHideEvent(++SavePanel.this.timesHiden));
+
 					SavePanel.this.addAction(sequence(fadeOut(0.4f), visible(false)));
 
 					return true;
@@ -92,6 +108,8 @@ public class SavePanel extends Window{
 				){	public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 					event.setBubbles(false);
 					facebookAction();
+					fire(new SavePanelHideEvent(++SavePanel.this.timesHiden));
+
 					SavePanel.this.addAction(sequence(fadeOut(0.4f), visible(false)));
 
 					return true;

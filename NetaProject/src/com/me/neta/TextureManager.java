@@ -70,7 +70,7 @@ public class TextureManager {
 	//Map<String, Sound> sounds = new HashMap<String, Sound>();
 	
 	public Sound letterSound(Character c){
-		return manager.get(new StringBuilder("data/sound/").append(Letter.translit.get(Character.valueOf(c))).append(".mp3").toString(), Sound.class);
+		return manager.get(new StringBuilder("data/sound/").append(Letter.translit.get(Character.toLowerCase(c))).append(".mp3").toString(), Sound.class);
 	}
 	
 	public Music getMusic(String name){
@@ -115,7 +115,9 @@ public class TextureManager {
 		manager.load("data/sound/error.ogg", Sound.class);
 
 		for(Character c :  Letter.characterToIdMap.keySet()){
-			manager.load(new StringBuilder("data/sound/").append(Letter.translit.get(Character.valueOf(c))).append(".mp3").toString(), Sound.class);
+			if(Character.isLowerCase(c.charValue())){
+				manager.load(new StringBuilder("data/sound/").append(Letter.translit.get(Character.valueOf(c))).append(".mp3").toString(), Sound.class);
+			}
 		}
 		
 		String[] worldNames = {"ant", "spider", "piton", "tiger"};
@@ -172,21 +174,22 @@ wondGenerator.dispose();
 ///////////	 CALIBRI 	/////////////
 //////////////////////////////////////////////	
         FreeTypeFontGenerator generatorCalibri = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/arialbd.ttf"));
-		BitmapFont calibri12 = generatorCalibri.generateFont(12,DEFAULT_CHARS, false);
-		BitmapFont calibri14 = generatorCalibri.generateFont(14,DEFAULT_CHARS, false);
-		BitmapFont calibri36 = generatorCalibri.generateFont(36,DEFAULT_CHARS, false);
+		BitmapFont f10 = generatorCalibri.generateFont(10,DEFAULT_CHARS, false);
+		BitmapFont f12 = generatorCalibri.generateFont(12,DEFAULT_CHARS, false);
+		BitmapFont f14 = generatorCalibri.generateFont(14,DEFAULT_CHARS, false);
+		BitmapFont f36 = generatorCalibri.generateFont(36,DEFAULT_CHARS, false);
 		BitmapFont letterFont = generatorCalibri.generateFont(68,DEFAULT_CHARS, false);
 
 
 		generatorCalibri.dispose();
 		
-	//	skin.add("small", calibri6);
-	//	skin.add("calibri12", calibri12);
-		skin.add("calibri14", calibri14);
-		skin.add("default", calibri14);
+		skin.add("10", f10);
+		skin.add("12", f12);
+		skin.add("14", f14);
+		skin.add("default", f14);
 	//	skin.add("calibri16", calibri16);
 	//	skin.add("calibri18", calibri18);
-		skin.add("36", calibri36);
+		skin.add("36", f36);
 		
 		letterFont.setScale(0.28f);
 		skin.add("letter", letterFont);
@@ -235,6 +238,10 @@ wondGenerator.dispose();
          skin.add("debugTable", new NinePatch(new Texture(debugTable), 1, 1, 1, 1));
          
          
+         
+         
+         
+         
          TextFieldStyle blueCalibri = new TextFieldStyle();
          blueCalibri.fontColor = new Color(.4f, .57f, .74f,1);
         //textFieldStyle.background = skin.newDrawable("white", new Color(.4f, .57f, .74f,1));               
@@ -276,55 +283,74 @@ wondGenerator.dispose();
          NinePatchDrawable npdError = new NinePatchDrawable(skin.getPatch("error"));
          skin.add("npdError", npd, Drawable.class);
          
-       
+ 		TextureRegion checkedRegion =  atlas.findRegion("checked2");
+ 		TextureRegion uncheckedRegion = atlas.findRegion("unchecked2");
+ 		NinePatch checkedNP = new NinePatch(checkedRegion, 7, 7, 7, 7);
+ 		NinePatch uncheckedNP = new NinePatch(uncheckedRegion, 7, 7, 7, 7);
+ 		skin.add("checked", checkedNP);
+ 		skin.add("unchecked", uncheckedNP);
+
+ 		
+ 		CheckBoxStyle cbs = new CheckBoxStyle();			
+ 		cbs.checkboxOn = skin.getDrawable("checked") ;
+ 		cbs.checkboxOff= skin.getDrawable("unchecked") ;
+ 		cbs.font = skin.getFont("default");
+ 		cbs.fontColor = Color.BLACK;
+ 		skin.add("default", cbs);
+ 		
+ 		
+		TextureRegion buttonRegion =  atlas.findRegion("button");
+		NinePatch buttonNP = new NinePatch(buttonRegion, 10, 17, 1, 8);
+		skin.add("button", buttonNP);
  		
  		
         TextButtonStyle tbStyleSystem = new TextButtonStyle();
-        tbStyleSystem.font = calibri12;
+        tbStyleSystem.font = f12;
         tbStyleSystem.fontColor = Color.BLACK;
         tbStyleSystem.up = npd;
         skin.add("system", tbStyleSystem);
 
         
         TextButtonStyle tbStyleError = new TextButtonStyle();
-        tbStyleError.font = calibri12;
+        tbStyleError.font = f12;
         tbStyleError.fontColor = Color.BLACK;
         tbStyleError.up = npdError;
         skin.add("error", tbStyleError);
         
  		
  		LabelStyle lStyleSystem = new LabelStyle();
- 		lStyleSystem.font = calibri12;
+ 		lStyleSystem.font = f12;
  		lStyleSystem.fontColor = Color.BLACK;
  		//lStyleSystem.background = skin.getDrawable("npd");
  		skin.add("system", lStyleSystem);
  		
         TextFieldStyle tfStyleSystem = new TextFieldStyle();
-        tfStyleSystem.font = calibri12;
+        tfStyleSystem.font = f12;
         tfStyleSystem.fontColor = Color.BLACK;
        // tfStyleSystem.background = skin.getDrawable("gray");
         tfStyleSystem.selection = skin.getDrawable("blue");
         tfStyleSystem.cursor = skin.getDrawable("black");	 	
-        tfStyleSystem.messageFont = calibri12;
+        tfStyleSystem.messageFont = f12;
         tfStyleSystem.messageFontColor = Color.GRAY;
         skin.add("system", tfStyleSystem);
  		
    	
  		
         TextFieldStyle tfStyleSystem2 = new TextFieldStyle();
-        tfStyleSystem2.font = calibri14;
+        tfStyleSystem2.font = f14;
         tfStyleSystem2.fontColor = Color.BLACK;
-       // tfStyleSystem.background = skin.getDrawable("gray");
+       tfStyleSystem2.background = skin.getDrawable("unchecked");
+       
         tfStyleSystem2.selection = skin.getDrawable("blue");
         tfStyleSystem2.cursor = skin.getDrawable("black");	 	
-        tfStyleSystem2.messageFont = calibri14;
+        tfStyleSystem2.messageFont = f14;
         tfStyleSystem2.messageFontColor = Color.GRAY;
         skin.add("system2", tfStyleSystem2);      
         skin.add("default", tfStyleSystem2);      
 
  		
        LabelStyle lStyleSystem2 = new LabelStyle();
-        lStyleSystem2.font = calibri14;
+        lStyleSystem2.font = f14;
         lStyleSystem2.fontColor = Color.BLACK;
         skin.add("system2", lStyleSystem2);   
         
@@ -441,6 +467,19 @@ wondGenerator.dispose();
 ///////////////////////////////////////////////
 ///////////	 LABELs 	/////////////
 //////////////////////////////////////////////
+ 		LabelStyle lsFlower = new LabelStyle();
+ 		lsFlower.background = skin.getDrawable("unchecked");
+ 		lsFlower.font = skin.getFont("36");
+ 		lsFlower.fontColor = Color.RED;
+ 		skin.add("flower", lsFlower);
+ 		
+ 		LabelStyle lsFlower2 = new LabelStyle();
+ 		lsFlower2.background = skin.getDrawable("unchecked");
+ 		lsFlower2.font = skin.getFont("36");
+ 		lsFlower2.fontColor = Color.BLUE;
+ 		skin.add("flower2", lsFlower2);
+ 		
+ 		
 		LabelStyle orange = new LabelStyle();
 		orange.font = skin.getFont("default");
 		orange.fontColor = Color.ORANGE;
@@ -492,6 +531,9 @@ wondGenerator.dispose();
 		lightBlue.fontColor = Colors.LightBlue;
 		skin.add("lightBlue", lightBlue);	 
 		
+		
+
+		
 ///////////////////////////////////////////////
        ///////////	 POPUP 	/////////////
 //////////////////////////////////////////////
@@ -501,7 +543,7 @@ wondGenerator.dispose();
  		skin.add("popup", lyricsNpd, Drawable.class); 		
  		LabelStyle lStylePopup = new LabelStyle();
  		lStylePopup.background =skin.getDrawable("popup");
- 		lStylePopup.font = calibri14;
+ 		lStylePopup.font = f14;
  		lStylePopup.fontColor = Color.BLACK.cpy();
  		skin.add("popup", lStylePopup);
 
@@ -511,29 +553,73 @@ wondGenerator.dispose();
  		skin.add("popup2", popup2NPD, Drawable.class); 		
  		LabelStyle lStylePopup2 = new LabelStyle();
  		lStylePopup2.background =skin.getDrawable("popup2");
- 		lStylePopup2.font = calibri14;
+ 		lStylePopup2.font = f14;
  		lStylePopup2.fontColor = Color.BLACK.cpy();
  		skin.add("popup2", lStylePopup2);   
+ 		
+		///////////////////////////////////////////////
+		///////////	 LYRICS 	/////////////
+		//////////////////////////////////////////////
+ 		
+ 		TextureRegion trLyricsBackground = new TextureRegion(atlas.findRegion("lyricsBackground2"));
+ 	
+ 		int npLyricsBackgroundL = 8;
+ 		NinePatch npLyricsBackground = new NinePatch(trLyricsBackground, npLyricsBackgroundL, npLyricsBackgroundL, npLyricsBackgroundL,npLyricsBackgroundL);
+ 		skin.add("lyricsBackgroundNP", npLyricsBackground);
+		
+ 		BitmapFont lyricsFont = skin.getFont("12");
+ 		BitmapFont lyricsTitleFont = skin.getFont("10");
+
+ 		LabelStyle lsLyricsAnt = new LabelStyle();
+ 		lsLyricsAnt.font = lyricsFont;
+ 		lsLyricsAnt.fontColor = Colors.LightBlue;
+ 		lsLyricsAnt.background = skin.getDrawable("lyricsBackgroundNP");
+ 		skin.add("lyrics_ant", lsLyricsAnt);
+ 		
+ 		LabelStyle lsLyricsSpider = new LabelStyle();
+ 		lsLyricsSpider.font = lyricsFont;
+ 		lsLyricsSpider.fontColor = Color.GREEN;
+ 		lsLyricsSpider.background = skin.getDrawable("lyricsBackgroundNP");
+ 		skin.add("lyrics_spider", lsLyricsSpider);
+ 		
+ 		LabelStyle lsLyricsPiton = new LabelStyle();
+ 		lsLyricsPiton.font = lyricsFont;
+ 		lsLyricsPiton.fontColor = Color.BLACK;
+ 		lsLyricsPiton.background = skin.getDrawable("lyricsBackgroundNP");
+ 		skin.add("lyrics_piton", lsLyricsPiton);
+ 		
+ 		LabelStyle lsLyricsTiger = new LabelStyle();
+ 		lsLyricsTiger.font = lyricsFont;
+ 		lsLyricsTiger.fontColor = Colors.Gold;
+ 		lsLyricsTiger.background = skin.getDrawable("lyricsBackgroundNP");
+ 		skin.add("lyrics_tiger", lsLyricsTiger);
+ 		
+ 		LabelStyle lsLyricsTitle = new LabelStyle();
+ 		lsLyricsTitle.font =lyricsTitleFont;
+ 		lsLyricsTitle.fontColor = Color.BLUE;
+ 		skin.add("lyrics_title", lsLyricsTitle);
+ 		
+ 		
 ///////////////////////////////////////////////
 ///////////	 INSTRUCTIONS / ADULTS 	/////////////
 //////////////////////////////////////////////
 		LabelStyle lStyleMarker = new LabelStyle();
-		lStyleMarker.font = calibri14;
+		lStyleMarker.font = f14;
 		lStyleMarker.fontColor = Color.BLUE;
 		skin.add("marker", lStyleMarker);	
 
 		LabelStyle lStyleInsruction = new LabelStyle();
-		lStyleInsruction.font = calibri14;
+		lStyleInsruction.font = f14;
 		lStyleInsruction.fontColor = Color.BLACK;
 		skin.add("instruction", lStyleInsruction);	
 				
 		LabelStyle lStyleInstructionTitle = new LabelStyle();
-		lStyleInstructionTitle.font = calibri14;
+		lStyleInstructionTitle.font = f14;
 		lStyleInstructionTitle.fontColor = Color.RED;
 		skin.add("instructionTitle", lStyleInstructionTitle);	
 		
 		LabelStyle lStyleInstruction2 = new LabelStyle();
-		lStyleInstruction2.font = calibri14;
+		lStyleInstruction2.font = f14;
 		lStyleInstruction2.fontColor = new Color(105 /255f , 160 /255f, 200 /255f, 1);
 		skin.add("instruction2", lStyleInstruction2);	
 
@@ -554,6 +640,8 @@ wondGenerator.dispose();
  		TextureRegion menuitem = atlas.findRegion("menuitem");
  		NinePatch menuitemNP = new NinePatch(menuitem, 10, 15, 10, 15);
  		skin.add("menuitem", menuitemNP);
+ 		
+
  		
  		TextButtonStyle tbsMenuItem = new TextButtonStyle();
  		tbsMenuItem.up = skin.getDrawable("menuitem");
@@ -582,7 +670,7 @@ wondGenerator.dispose();
  		
  		
  		ListStyle listStyle = new ListStyle();
- 		listStyle.font = calibri14;
+ 		listStyle.font = f14;
  		listStyle.selection = skin.getDrawable("white"); 		
  		listStyle.fontColorSelected = Color.RED;
  		listStyle.fontColorUnselected = Color.BLUE;
@@ -670,26 +758,9 @@ wondGenerator.dispose();
 	//	lStyleLetter.background = skin.getDrawable("circle");
 		skin.add("letterWhite", lStyleLetterWhite);	
 		
-		TextureRegion checkedRegion =  atlas.findRegion("checked2");
-		TextureRegion uncheckedRegion = atlas.findRegion("unchecked2");
-		NinePatch checkedNP = new NinePatch(checkedRegion, 7, 7, 7, 7);
-		NinePatch uncheckedNP = new NinePatch(uncheckedRegion, 7, 7, 7, 7);
-		skin.add("checked", checkedNP);
-		skin.add("unchecked", uncheckedNP);
 
 		
-		CheckBoxStyle cbs = new CheckBoxStyle();
-	
-		
-		cbs.checkboxOn = skin.getDrawable("checked") ;
-		cbs.checkboxOff= skin.getDrawable("unchecked") ;
-		cbs.font = skin.getFont("default");
-		cbs.fontColor = Color.BLACK;
-		skin.add("default", cbs);
-		
-		TextureRegion buttonRegion =  atlas.findRegion("button");
-		NinePatch buttonNP = new NinePatch(buttonRegion, 10, 17, 1, 8);
-		skin.add("button", buttonNP);
+
 	
 		TextButtonStyle tbs = new TextButtonStyle();
 		tbs.pressedOffsetY = -1;
@@ -827,12 +898,7 @@ wondGenerator.dispose();
 	////////////// FONTS /////////////////
 	
 
-	
 
-	
-	public void showMessage(String msg){
-		System.out.println(msg);
-	}
 	
 
 	//private List<Texture> fields = new ArrayList<Texture>(4); 
@@ -861,7 +927,7 @@ wondGenerator.dispose();
 
 		
 
-		
+		if(skin!=null)
 		skin.dispose();
 		//nickolLetter.dispose();
 		//instructScreen.dispose();
@@ -890,7 +956,10 @@ wondGenerator.dispose();
 			snd.dispose();
 		}*/
 
-		manager.dispose();
+		if(manager!=null){
+			manager.dispose();
+
+		}
 	}
 	
 

@@ -94,7 +94,9 @@ public class AntWorld extends World{
 
 	
 	public void lyrics(){
-		
+		float scale = 0.11f;
+		int dx = 55;
+		int dy = 32;
 		{
 			Table block1 = block();			
 			
@@ -103,30 +105,30 @@ public class AntWorld extends World{
 			line1.add(label("на"));
 			line1.add(label("свете"));
 			
-			Table line2 = line();
-			line2.add(label("муравей"));
+			//Table line2 = line();
+			line1.add(label("муравей"));
 			
-			Table line3 = line();		
-			line3.add(label("Без"));
-			line3.add(label("ресниц"));
+			Table line2 = line();		
+			line2.add(label("Без"));
+			line2.add(label("ресниц"));
 			
-			Table line4 =line();			
-			line4.add(label("и"));
-			line4.add(label("без"));
-			line4.add(label("бровей."));
+			//Table line2 =line();			
+			line2.add(label("и"));
+			line2.add(label("без"));
+			line2.add(label("бровей."));
 			
 			block1.add(line1).row();
+			//block1.add(line2).row();
 			block1.add(line2).row();
-			block1.add(line3).row();
-			block1.add(line4).row();
+			//block1.add(line4).row();
 			block1.pack();
 			
 			Group wrap = new Group();
 			wrap.addActor(block1);
-			wrap.setScale(0.16f);
+			wrap.setScale(scale);
 			Group cg1 = (Group) findActor("cg1");
 			Actor dom1 = cg1.findActor("dom1");
-			wrap.setPosition(dom1.getX()+55, dom1.getY()+22);		
+			wrap.setPosition(dom1.getX()+dx, dom1.getY()+dy);		
 			cg1.addActor(wrap);
 		}
 		
@@ -137,32 +139,32 @@ public class AntWorld extends World{
 			line1.add(label("Он"));
 			line1.add(label("терпеть"));
 			
-			Table line2 = line();
-			line2.add(label("не"));
-			line2.add(label("мог"));
-			line2.add(label("девиц -"));
+			//Table line2 = line();
+			line1.add(label("не"));
+			line1.add(label("мог"));
+			line1.add(label("девиц -"));
 			
-			Table line3 = line();		
-			line3.add(label("Без"));
-			line3.add(label("бровей"));
+			Table line2 = line();		
+			line2.add(label("Без"));
+			line2.add(label("бровей"));
 			
-			Table line4 =line();			
-			line4.add(label("и"));
-			line4.add(label("без"));
-			line4.add(label("ресниц."));
+			//Table line4 =line();			
+			line2.add(label("и"));
+			line2.add(label("без"));
+			line2.add(label("ресниц."));
 			
 			block1.add(line1).row();
 			block1.add(line2).row();
-			block1.add(line3).row();
-			block1.add(line4).row();
+			//block1.add(line3).row();
+			//block1.add(line4).row();
 			block1.pack();
 			
 			Group wrap = new Group();
 			wrap.addActor(block1);
-			wrap.setScale(0.16f);
+			wrap.setScale(scale);
 			Group cg1 = (Group) findActor("cg2");
 			Actor dom1 = cg1.findActor("dom2");
-			wrap.setPosition(dom1.getX()+55, dom1.getY()+22);		
+			wrap.setPosition(dom1.getX()+dx, dom1.getY()+dy);		
 			cg1.addActor(wrap);
 		}
 		
@@ -173,28 +175,28 @@ public class AntWorld extends World{
 			line1.add(label("Потому"));
 			line1.add(label("у"));
 			
-			Table line2 = line();
-			line2.add(label("муравья"));
+			//Table line2 = line();
+			line1.add(label("муравья"));
 			
-			Table line3 = line();		
-			line3.add(label("Были"));
-			line3.add(label("только"));
+			Table line2 = line();		
+			line2.add(label("Были"));
+			line2.add(label("только"));
 			
-			Table line4 =line();			
-			line4.add(label("сыновья:"));
+			//Table line4 =line();			
+			line2.add(label("сыновья:"));
 			
 			block1.add(line1).row();
 			block1.add(line2).row();
-			block1.add(line3).row();
-			block1.add(line4).row();
+			//block1.add(line3).row();
+			//block1.add(line4).row();
 			block1.pack();
 			
 			Group wrap = new Group();
 			wrap.addActor(block1);
-			wrap.setScale(0.16f);
+			wrap.setScale(scale);
 			Group cg1 = (Group) findActor("cg3");
 			Actor dom1 = cg1.findActor("dom3");
-			wrap.setPosition(dom1.getX()+55, dom1.getY()+22);		
+			wrap.setPosition(dom1.getX()+dx, dom1.getY()+dy);		
 			cg1.addActor(wrap);
 		}
 		
@@ -206,30 +208,30 @@ public class AntWorld extends World{
 			line1.add(label("Сорок"));
 			line1.add(label("восемь"));
 			
-			Table line2 = line();
-			line2.add(label("сыновей -"));
+			//Table line2 = line();
+			line1.add(label("сыновей -"));
 			
-			Table line3 = line();		
-			line3.add(label("Без"));
-			line3.add(label("ресниц"));
+			Table line2 = line();		
+			line2.add(label("Без"));
+			line2.add(label("ресниц"));
 			
-			Table line4 =line();			
-			line4.add(label("и"));
-			line4.add(label("без"));
-			line4.add(label("бровей."));
+			//Table line4 =line();			
+			line2.add(label("и"));
+			line2.add(label("без"));
+			line2.add(label("бровей."));
 			
 			block1.add(line1).row();
 			block1.add(line2).row();
-			block1.add(line3).row();
-			block1.add(line4).row();
+			//block1.add(line3).row();
+			//block1.add(line4).row();
 			block1.pack();
 			
 			Group wrap = new Group();
 			wrap.addActor(block1);
-			wrap.setScale(0.16f);
+			wrap.setScale(scale);
 			Group cg1 = (Group) findActor("cg4");
 			Actor dom1 = cg1.findActor("dom4");
-			wrap.setPosition(dom1.getX()+55, dom1.getY()+22);		
+			wrap.setPosition(dom1.getX()+dx, dom1.getY()+dy);		
 			cg1.addActor(wrap);
 		}
 	}
@@ -238,7 +240,7 @@ public class AntWorld extends World{
 	public void populateLetters(){
 		Map<Integer, List<Character>> variant1 = new HashMap<Integer, List<Character>>();
 		List<Character> charGroup11 = new ArrayList<Character>(3);				
-		charGroup11.add(Character.valueOf('ж'));
+		charGroup11.add(Character.valueOf('Ж'));
 		charGroup11.add(Character.valueOf('а'));
 		charGroup11.add(Character.valueOf('е'));
 		variant1.put(Integer.valueOf(1),charGroup11);		
@@ -256,7 +258,7 @@ public class AntWorld extends World{
 		variant1.put(Integer.valueOf(3),charGroup13);	
 		
 		List<Character> charGroup14 = new ArrayList<Character>(3);				
-		charGroup14.add(Character.valueOf('с'));
+		charGroup14.add(Character.valueOf('С'));
 		charGroup14.add(Character.valueOf('ы'));
 		charGroup14.add(Character.valueOf('й'));
 		variant1.put(Integer.valueOf(4),charGroup14);		
@@ -265,7 +267,7 @@ public class AntWorld extends World{
 		
 		Map<Integer, List<Character>> variant2 = new HashMap<Integer, List<Character>>();
 		List<Character> charGroup21 = new ArrayList<Character>(3);				
-		charGroup21.add(Character.valueOf('б'));
+		charGroup21.add(Character.valueOf('Б'));
 		charGroup21.add(Character.valueOf('з'));
 		charGroup21.add(Character.valueOf('в'));
 		variant2.put(Integer.valueOf(1),charGroup21);		

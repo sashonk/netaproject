@@ -27,8 +27,8 @@ public class FlowerPanel extends Group{
 	public FlowerPanel(NetaGame ng){
 	
 		 table = new Table();		
-		 variant1 = variantLabel("Вариант 1", 1,  ng);				
-		 variant2 = variantLabel("Вариант 2", 2,  ng);
+		 variant1 = variantLabel("Вариант 1", 1,  ng, false);				
+		 variant2 = variantLabel("Вариант 2", 2,  ng, true);
 
 		table.defaults().align(Align.left);
 		table.add(variant1).row();
@@ -103,8 +103,8 @@ public class FlowerPanel extends Group{
 
 	}
 	
-	Label variantLabel(String text, final int variantID, NetaGame ng){
-		final Label variant1 = new Label(text, ng.getManager().getSkin(), "title_red");
+	Label variantLabel(String text, final int variantID, NetaGame ng, boolean second){
+		final Label variant1 = new Label(text, ng.getManager().getSkin(), "flower"+(second ? "2" :""));
 		variant1.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				event.getTarget().fire(new LetterVariantEvent(variantID));

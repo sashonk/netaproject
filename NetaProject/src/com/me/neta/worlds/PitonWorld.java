@@ -71,30 +71,30 @@ public class PitonWorld extends World{
 
 	public void lyrics(){
 		float dx = 70;
-		float dy = 33;
-		float scale = 0.22f;
+		float dy = 45;
+		float scale = 0.16f;
 		{
 			Table block1 = block();			
 			
 			Table line1 = line();
 			line1.add(label("Плачет"));
 
-			Table line2 = line();
-			line2.add(label("маленький"));
-			line2.add(label("питон:"));
+			//Table line2 = line();
+			line1.add(label("маленький"));
+			line1.add(label("питон:"));
 			
 			Table line3 = line();
 			line3.add(label("Сам"));
 			line3.add(label("себя"));
 			
-			Table line4 = line();
-			line4.add(label("запутал"));
-			line4.add(label("он."));
+			//Table line4 = line();
+			line3.add(label("запутал"));
+			line3.add(label("он."));
 			
 			block1.add(line1).row();
-			block1.add(line2).row();
+			//block1.add(line2).row();
 			block1.add(line3).row();
-			block1.add(line4).row();
+			//block1.add(line4).row();
 			block1.pack();
 			
 			Group wrap = new Group();
@@ -112,21 +112,21 @@ public class PitonWorld extends World{
 			line1.add(label("Сам"));
 			line1.add(label("себя"));
 			
-			Table line2 =line();			
-			line2.add(label("переползал"));
+			//Table line2 =line();			
+			line1.add(label("переползал"));
 			
 			Table line3 = line();		
 			line3.add(label("И"));
 			line3.add(label("себя"));
 			line3.add(label("узлом"));
 			
-			Table line4 =line();			
-			line4.add(label("связал."));
+			//Table line4 =line();			
+			line3.add(label("связал."));
 		
 			block1.add(line1).row();
-			block1.add(line2).row();
+			//block1.add(line2).row();
 			block1.add(line3).row();
-			block1.add(line4).row();
+			//block1.add(line4).row();
 			block1.pack();
 			
 			Group wrap = new Group();
@@ -144,12 +144,11 @@ public class PitonWorld extends World{
 			Table line1 = line();
 			line1.add(label("Кто"));
 			line1.add(label("теперь"));
-
-
 			
-			Table line2 = line();
-			line2.add(label("ему"));
-			line2.add(label("поможет:"));
+			
+			//Table line2 = line();
+			line1.add(label("ему"));
+			line1.add(label("поможет:"));
 			
 			
 			Table line3 = line();
@@ -158,15 +157,15 @@ public class PitonWorld extends World{
 			line3.add(label("найти"));
 
 			
-			Table line4 = line();
-			line4.add(label("не"));
-			line4.add(label("может!"));
+			//Table line4 = line();
+			line3.add(label("не"));
+			line3.add(label("может!"));
 		
 			
 			block1.add(line1).row();
-			block1.add(line2).row();
+			//block1.add(line2).row();
 			block1.add(line3).row();
-			block1.add(line4).row();
+			//block1.add(line4).row();
 			block1.pack();
 			
 			Group wrap = new Group();

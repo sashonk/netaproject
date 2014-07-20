@@ -1,10 +1,12 @@
 package com.me.neta.factories;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
@@ -25,14 +27,51 @@ public class LetterFactory extends Factory {
 	TextureManager tm;
 	TextureRegion circle;
 	TextureRegion char1;
-	int id;
 	
 	int padx;
 	int pady;
+	char _ch;
 	
+	
+	 Label lb;
+	 Image circleImg;
+	 Image fillCircle;
+	public LetterFactory(char ch, NetaGame ng){
+		super(ng);
+		
+		this.setSize(30, 30);
+
+		_ch = ch;
+		tm = ng.getManager();
+		TextureAtlas a = tm.getAtlas();	
+		
+		// this.setTouchable(Touchable.disabled);
+		  lb = new Label(new String(new char[]{ch}), ng.getManager().getSkin(), "letter");
+		  lb.setTouchable(Touchable.disabled);
+
+
+		 // float tx = 15;
+		 // float ty = 15;
+		//  lb.translate(tx, ty);
+		//  lbWhite.translate(tx, ty);
+		 this.addActor(lb);
+		 Util.center(lb);
+		 
+
+		 circleImg = new Image(a.findRegion("FIGURA2W"));
+		 circleImg.setTouchable(Touchable.disabled);
+		 circleImg.setSize(getWidth(), getHeight());
+		 this.addActor(circleImg);
+		 lb.toFront();
+		 Util.center(circleImg);
+
+	}
+	
+
+	@Deprecated
 	public LetterFactory(int id, NetaGame ng){
 		super(ng);
-		this.id = id;
+	//	this.id = id;
 		this.setSize(30, 30);
 		 tm = ng.getManager();
 		TextureAtlas a = tm.getAtlas();
@@ -66,7 +105,7 @@ public class LetterFactory extends Factory {
 
 	@Override
 	public Actor createDragActor() {
-		Actor drag =new Letter(ng, id);
+		Actor drag =new Letter(ng, _ch);
 		
 		drag.setWidth(30);
 		drag.setHeight(30);
@@ -75,17 +114,9 @@ public class LetterFactory extends Factory {
 
 	@Override
 	public Actor createActor() {
-/*		char c = Letter.lookupChar(id);
-		
-		if(c=='к'){
-			Letter2 l2 = new Letter2(ng, Letter.lookupChar(id));
-			//l2.setScale(0.5f*.8f);
-			return l2;
 
-		}*/
-		return new Letter(ng, id);
+		return new Letter(ng, _ch);
 
-		//return new Letter(ng, id);
 	}
 
 	@Override

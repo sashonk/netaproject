@@ -67,21 +67,10 @@ public class CellarGroup extends Group{
 			for(int i=0; i<text.length();i++){
 				final char c = text.charAt(i);
 				final Label lab = new Label(new String(new char[]{c}), ng.getManager().getSkin(), "small-"+styleSuff);
-				
-/*				lab.addListener(new InputListener(){
-					public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-						if(ng.getContext().getProperty(ContextProperty.INGAME)==null){
-							return false;
-						}
-						
-						event.getListenerActor().fire(new LogicLabelClickEvent(c));
-											
-						return true;
-					}
-				});*/
+
 				
 				if(!context.containsKey(Character.toLowerCase(c))){
-					context.put(Character.valueOf(Character.toLowerCase(c)), lab);
+					context.put(Character.valueOf(c), lab);
 				}
 				add(lab);
 				
@@ -90,7 +79,7 @@ public class CellarGroup extends Group{
 			
 			addListener(new InputListener(){
 				public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-					if(ng.getContext().getProperty(ContextProperty.PLAY)!=null){
+					if(ng.getContext().getProperty(ContextProperty.PLAY)!=null&& ng.getContext().getProperty(ContextProperty.HALT)==null){
 						event.getListenerActor().fire(new LogicLabelClickEvent(text, context));
 						event.stop();
 
@@ -141,6 +130,8 @@ public class CellarGroup extends Group{
 			if(letter!=null){
 				removeActor(letter);
 			}
+			
+			if(lt!=null)
 			addActor(lt);
 			
 		}

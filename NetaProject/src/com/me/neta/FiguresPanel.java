@@ -1,5 +1,8 @@
 package com.me.neta;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.me.neta.events.DragEvent;
 import com.me.neta.events.DragStartEvent;
 import com.me.neta.events.DragStopEvent;
@@ -28,19 +32,86 @@ public class FiguresPanel extends Group{
 	static float dy = 40;
 	Workspace workspace;
 	
+	LinkedList<Character> chars;
+	
 	public FiguresPanel(NetaGame ng){
+		chars = new LinkedList<Character>();
+		chars.add(Character.valueOf('о'));
+		chars.add(Character.valueOf('у'));
+		chars.add(Character.valueOf('ы'));
+		chars.add(Character.valueOf('э'));
+		chars.add(Character.valueOf('я'));
+		chars.add(Character.valueOf('ё'));
+		chars.add(Character.valueOf('и'));
+		chars.add(Character.valueOf('е'));
+		chars.add(Character.valueOf('б'));
+		chars.add(Character.valueOf('в'));
+		chars.add(Character.valueOf('г'));
+		chars.add(Character.valueOf('д'));
+		chars.add(Character.valueOf('з'));
+		chars.add(Character.valueOf('к'));
+		chars.add(Character.valueOf('л'));
+		chars.add(Character.valueOf('м'));
+		chars.add(Character.valueOf('н'));
+		chars.add(Character.valueOf('п'));
+		chars.add(Character.valueOf('с'));
+		chars.add(Character.valueOf('т'));
+		chars.add(Character.valueOf('ф'));
+		chars.add(Character.valueOf('х'));
+		chars.add(Character.valueOf('ц'));
+		chars.add(Character.valueOf('ш'));
+		chars.add(Character.valueOf('а'));
+		chars.add(Character.valueOf('ю'));
+		chars.add(Character.valueOf('ж'));
+		chars.add(Character.valueOf('р'));
+		chars.add(Character.valueOf('щ'));
+		chars.add(Character.valueOf('ь'));
+		chars.add(Character.valueOf('ъ'));
+		chars.add(Character.valueOf('ч'));
+		chars.add(Character.valueOf('й'));
+
+		
+		
+		
 		workspace = ng.getWorkspace();
 		treg= ng.getManager().getMiscAtlas().findRegion("figuresPanel2");
 		this.addListener(new MetricListener());
 		
 
 		float d =38;
-		int columns = 7;
-		int rows = 5;
-		int letterCount = 33;
-		for(int i =1 ; i<=rows; i++){
+		Iterator<Character> iter = chars.iterator();
+		
+		Table t = new Table();
+		t.defaults().pad(3);
+		int len = 0;
+		Actor firstCh = null;
+		while(iter.hasNext()){
+			len++;
+			Character ch = iter.next();
+			
+	
+			LetterFactory factory = new LetterFactory(ch, ng);
+			t.add(factory);
+			if(firstCh==null){
+				firstCh = factory;
+			}
+			
+			if(len>6){
+				t.row();
+				len = 0;
+			}
+			
+
+		}
+		
+		t.pack();
+		t.setPosition(220+d-firstCh.getX(), 435-d-firstCh.getY());
+
+		addActor(t);
+		
+/*		for(int i =1 ; i<=rows; i++){
 			for(int j=1; j<=columns; j++){				
-				LetterFactory factory = new LetterFactory(j+(i-1)*columns, ng);
+				LetterFactory factory = new LetterFactory(iter.next(), ng);
 				factory.setPosition(220+j*d, 435-i*d);
 				addActor(factory);
 				
@@ -48,7 +119,7 @@ public class FiguresPanel extends Group{
 					break;
 				}
 			}
-		}
+		}*/
 
 		
 		{

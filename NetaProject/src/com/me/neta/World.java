@@ -60,6 +60,7 @@ import com.me.neta.dummy.DummyContext.DummyInfo;
 import com.me.neta.dummy.DummyContext.GroupInfo;
 import com.me.neta.events.CreateCellarsEvent;
 import com.me.neta.events.GameEndEvent;
+import com.me.neta.events.MovedToStartEvent;
 import com.me.neta.events.ZIndexEvent;
 import com.me.neta.factories.LetterFactory;
 import com.me.neta.figures.AbstractFigure;
@@ -69,6 +70,7 @@ import com.me.neta.tools.BrushTool;
 import com.me.neta.tools.RotateTool;
 import com.me.neta.tools.StartButton;
 import com.me.neta.tools.ZIndexTool;
+
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 public abstract class World extends Group{
@@ -85,6 +87,20 @@ public abstract class World extends Group{
 	DummyHelper dummyHelper;
 	DummyContext baseDummyContext;
 	StartButton startButton;
+	
+
+	public List<AbstractFigure> getFigures(){
+		List<AbstractFigure> result = new LinkedList<AbstractFigure>();
+		for(Actor a : getChildren()){
+			if(a instanceof AbstractFigure){
+				AbstractFigure f = (AbstractFigure)a;
+				result.add(f);
+			}
+		}
+		
+		return result;
+	}
+	
 	
 	public StartButton getStartButton(){
 		return startButton;
@@ -126,6 +142,8 @@ public abstract class World extends Group{
 		return letters;
 	}
 	
+	
+	
 	public abstract void populateLetters();
 	
 	private LogicFlower activeFlower;
@@ -152,148 +170,187 @@ public abstract class World extends Group{
 		}*/
 	}
 	public void step(){
-
-		activeFlower.getLetter().playSound(); //activeFlower must not be null
-			activeFlower.setDone(true);
-			activeFlower.getLetter().animateVacant();
-			final CellarGroup activeCG =activeFlower.getGroup();		
-			for(Actor child : activeCG.getChildren()){
-				if(child instanceof LogicFlower){
-					LogicFlower flower = (LogicFlower)child;
-					if(!flower.isDone() && flower!=activeFlower){
-						activeFlower = activeFlower.isDone()? flower : ((activeFlower.getOrder() > flower.getOrder() ? flower : activeFlower));
-					}
-				}
-			}
 		
 		
-		if(activeFlower.isDone()){
-			ng.getContext().setProperty(ContextProperty.PLAY,null);
 
-			//TODO no more flowers! go to next group;
-			activeCG.setDone(true);
-			Actor actor = findActor("cg"+(activeCG.getOrder()+1));
-			if(actor!=null){
-				final CellarGroup cg = (CellarGroup)actor;
-				activeFlower = (LogicFlower) cg.findActor("firstFlower");
-				
-				this.addAction(sequence(delay(0.5f),Util.zoomTo(0.7f,1, activeCG.getGroupOrigin().x, activeCG.getGroupOrigin().y,  null), delay(0.5f),
-						run(new Runnable() {
-					
-					@Override
-					public void run() {
-						Barrier barrier = (Barrier) activeCG.findActor("barrier");
-						barrier.open(0.35f);	
-					
-					}
-				}), delay(1), Util.moveCameraTo(activeCG.getGroupOrigin().x, activeCG.getGroupOrigin().y, 0, null), Util.zoomTo(1, 1,activeCG.getGroupOrigin().x, activeCG.getGroupOrigin().y, null) , run(new Runnable() {
-					
-					@Override
-					public void run() {
-						cg.setEnabled(true);	
-						ng.getContext().setProperty(ContextProperty.BETWEEN_CELLARS, Boolean.TRUE);
-						cg.addListener(new InputListener(){
-							public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-								CellarGroup cellarGroup = (CellarGroup) event.getListenerActor();
-								
-							if(!cellarGroup.isDone() && ng.getContext().getProperty(ContextProperty.BETWEEN_CELLARS)!=null){
-
-								activeFlower = (LogicFlower) cellarGroup.findActor("firstFlower");
-								ng.getContext().setProperty(ContextProperty.ACTIVE_LETTER, Character.valueOf(activeFlower.getLetter().getCharacter()));
+		Sound snd = activeFlower.getLetter().getSound(); //activeFlower must not be null
+		snd.play();
+		
+		ng.getContext().setProperty(ContextProperty.HALT, Boolean.TRUE);
+		
+		addAction(sequence(delay(1), Actions.run(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
 							
+			
+						activeFlower.setDone(true);
+						activeFlower.getLetter().animateVacant();
+						final CellarGroup activeCG =activeFlower.getGroup();		
+						for(Actor child : activeCG.getChildren()){
+							if(child instanceof LogicFlower){
+								LogicFlower flower = (LogicFlower)child;
+								if(!flower.isDone() && flower!=activeFlower){
+									activeFlower = activeFlower.isDone()? flower : ((activeFlower.getOrder() > flower.getOrder() ? flower : activeFlower));
+								}
+							}
+						}
+					
+					
+					if(activeFlower.isDone()){
+						ng.getContext().setProperty(ContextProperty.PLAY,null);
+			
+						//TODO no more flowers! go to next group;
+						activeCG.setDone(true);
+						Actor actor = findActor("cg"+(activeCG.getOrder()+1));
+						if(actor!=null){
+							final CellarGroup cg = (CellarGroup)actor;
+							activeFlower = (LogicFlower) cg.findActor("firstFlower");
+							
+							World.this.addAction(sequence(delay(0.5f),Util.zoomTo(0.7f,1, activeCG.getGroupOrigin().x, activeCG.getGroupOrigin().y,  null), delay(0.5f),
+									Actions.run(new Runnable() {
 								
-								addAction(sequence(Util.zoomTo(cellarGroup.getZoom(), 1, cellarGroup.getGroupOrigin().x, cellarGroup.getGroupOrigin().y, null), Actions.run(new Runnable() {			
-									@Override
-									public void run() {
-										activeFlower.getLetter().animateSelected();
-										ng.getContext().setProperty(ContextProperty.PLAY, Boolean.TRUE);
+								@Override
+								public void run() {
+									Barrier barrier = (Barrier) activeCG.findActor("barrier");
+									barrier.open(0.35f);	
+								
+								}
+							}), delay(1), Util.moveCameraTo(activeCG.getGroupOrigin().x, activeCG.getGroupOrigin().y, 0, null), Util.zoomTo(1, 1,activeCG.getGroupOrigin().x, activeCG.getGroupOrigin().y, null) , Actions.run(new Runnable() {
+								
+								@Override
+								public void run() {
+									cg.setEnabled(true);	
+									ng.getContext().setProperty(ContextProperty.BETWEEN_CELLARS, Boolean.TRUE);
+									cg.addListener(new InputListener(){
+										public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+											Group topBtns = (Group)ng.getWorkspace().findActor("topButtons");
+											AbstractTool kTool =  (AbstractTool) topBtns.findActor("kTool");
+											if(kTool.findActor("popup")!=null){
+												return true;
+											}
+											
+											
+											CellarGroup cellarGroup = (CellarGroup) event.getListenerActor();
+											
+										if(!cellarGroup.isDone() && ng.getContext().getProperty(ContextProperty.BETWEEN_CELLARS)!=null){
+			
+											activeFlower = (LogicFlower) cellarGroup.findActor("firstFlower");
+											ng.getContext().setProperty(ContextProperty.ACTIVE_LETTER, Character.valueOf(activeFlower.getLetter().getCharacter()));
+										
+											
+											addAction(sequence(Util.zoomTo(cellarGroup.getZoom(), 1, cellarGroup.getGroupOrigin().x, cellarGroup.getGroupOrigin().y, null), Actions.run(new Runnable() {			
+												@Override
+												public void run() {
+													activeFlower.getLetter().animateSelected();
+													ng.getContext().setProperty(ContextProperty.PLAY, Boolean.TRUE);
+												
+												}
+											})));
+			
+											ng.getContext().setProperty(ContextProperty.BETWEEN_CELLARS, null);
+											ng.getWorkspace().getPtGroup().onShow(null);
+										}
+											return true;
+										}
+									});
 									
+									
+									Group topBtns = (Group)ng.getWorkspace().findActor("topButtons");
+									AbstractTool kTool =  (AbstractTool) topBtns.findActor("kTool");
+									if(!kTool.hasEverBeenClickedOnPopup()){
+										kTool.setPopup("Прикоснись к кубику и передвигай  своего героя\n по дорожке  на столько камешков,  сколько\n цифр выпало на кубике. Если вы играете\n вдвоем, то шагать  надо по очереди-каждому\n со своим героем", 50, new PopupGroup(kTool), 0, true);
+			
 									}
-								})));
+									
+									
+								}
+							})
+									));
+							
+						}
+						else{
+							//total WIN!!
+							System.out.println("WIN!");	
+			
+			
+							
+							Action seq = sequence(delay(0.5f),Util.zoomTo(0.7f,1, activeCG.getGroupOrigin().x, activeCG.getGroupOrigin().y,  null),delay(0.5f),Actions.run(new Runnable() {
+								
+								@Override
+								public void run() {
+									Barrier barrier = (Barrier) activeCG.findActor("barrier");
+									barrier.open(0.35f);							
+								}
+							}), delay(1), Util.zoomTo(1, 1,activeCG.getGroupOrigin().x, activeCG.getGroupOrigin().y, null), Actions.run(new Runnable() {
+								
+								@Override
+								public void run() {
 
-								ng.getContext().setProperty(ContextProperty.BETWEEN_CELLARS, null);
-								ng.getWorkspace().getPtGroup().onShow(null);
-							}
-								return true;
-							}
-						});
-						
-						
-						Group topBtns = (Group)ng.getWorkspace().findActor("topButtons");
-						AbstractTool kTool =  (AbstractTool) topBtns.findActor("kTool");
-						if(!kTool.hasEverBeenClickedOnPopup()){
-							kTool.setPopup("Прикоснись к кубику и передвигай  своего героя\n по дорожке  на столько камешков,  сколько\n точек выпало на кубике. Если вы играете\n вдвоем, то шагать  надо по очереди-каждому\n со своим героем. ", 50, new PopupGroup(kTool), 0, true);
-					//		kTool.setPopup("Прикоснись к кубику и  н надо по\n очереди-каждому со своим героем. ", 50, new PopupGroup(kTool), 0, true);
+									
+									Cloud g4u = new Cloud("Молодец! Хорошо играл! А теперь - сюрприз!", ng);
+									g4u.setPosition(370, getHeight()-g4u.getHeight()-50);
+									World.this.addActor(g4u);
+									g4u.addAction(sequence(delay(3), Actions.run(new Runnable(){
 
+										@Override
+										public void run() {
+											final Cloud levin = new Cloud("Для тебя читает стихи\nпоэт Вадим Левин", ng);
+											levin.setPosition(380, World.this.getHeight()-levin.getHeight());
+											addActor(levin);
+											 final Music speech = World.this.playLevin();
+												World.this.addAction(Util.onEvent(Actions.run(new Runnable() {
+													
+													@Override
+													public void run() {
+														/*ng.getContext().setProperty(ContextProperty.GAME_END, new Object());
+														ng.getContext().setProperty(ContextProperty.HALT, null);	*/
+														levin.remove();
+														fire(new GameEndEvent());
+													}
+												}), new Predicate() {
+													
+													@Override
+													public boolean accept() {
+														return !speech.isPlaying();
+													}
+												}));
+											
+										}
+										
+									}), Actions.removeActor()));
+									
+			
+									
+
+								}
+							}));
+							addAction(seq);
+							
+			
 						}
 						
-						
+			
 					}
-				})
-						));
-				
-			}
-			else{
-				//total WIN!!
-				System.out.println("WIN!");	
-
-
-				
-				Action seq = sequence(delay(0.5f),Util.zoomTo(0.7f,1, activeCG.getGroupOrigin().x, activeCG.getGroupOrigin().y,  null),delay(0.5f),run(new Runnable() {
+					else{
+						//go to next flower
+						
+						activeFlower.getLetter().animateSelected();
+						Letter letter =  activeFlower.getLetter();
+						
+						char ch = letter.getCharacter();
+						ng.getContext().setProperty(ContextProperty.ACTIVE_LETTER, Character.valueOf(ch));
+					}
 					
-					@Override
-					public void run() {
-						Barrier barrier = (Barrier) activeCG.findActor("barrier");
-						barrier.open(0.35f);							
-					}
-				}), delay(1), Util.zoomTo(1, 1,activeCG.getGroupOrigin().x, activeCG.getGroupOrigin().y, null), run(new Runnable() {
 					
-					@Override
-					public void run() {
-						Actor hero = World.this.findActor("hero");
-
-						
-						float x = hero.getX()+hero.getWidth()/2;
-						float y = hero.getY()+ hero.getHeight()+10;
-						new Popup(ng, World.this, "Молодец!\n Теперь стихи для тебя\n прочитает Вадим Левин", x, y, 5).addAction(sequence(delay(5), Actions.removeActor()));
-
-						
-						 final Music speech = World.this.playLevin();
-						World.this.addAction(Util.onEvent(Actions.run(new Runnable() {
-							
-							@Override
-							public void run() {
-								/*ng.getContext().setProperty(ContextProperty.GAME_END, new Object());
-								ng.getContext().setProperty(ContextProperty.HALT, null);	*/
-								fire(new GameEndEvent());
-							}
-						}), new Predicate() {
-							
-							@Override
-							public boolean accept() {
-								return !speech.isPlaying();
-							}
-						}));
-					}
-				}));
-				addAction(seq);
-				
-
-			}
+					ng.getContext().setProperty(ContextProperty.HALT, null);
+					
+						}
 			
-
-		}
-		else{
-			//go to next flower
 			
-			activeFlower.getLetter().animateSelected();
-			Letter letter =  activeFlower.getLetter();
 			
-			char ch = letter.getCharacter();
-			ng.getContext().setProperty(ContextProperty.ACTIVE_LETTER, Character.valueOf(ch));
-		}
-		
-
+		})));
 	}
 	
 	
@@ -343,6 +400,9 @@ public abstract class World extends Group{
 							return false;
 						}
 					}
+					
+
+					
 					this.pointer = pointer;
 					 startPosition = new Vector2(actor.getX(), actor.getY());
 					 mouseXY = new Vector2(x, y);
@@ -413,6 +473,25 @@ public abstract class World extends Group{
 					if(!overlapsY)
 					actor.setPosition(actor.getX(), startPosition.y +y- mouseXY.y);
 
+/*					if(startButton!=null){
+						Rectangle startBtnRect = new Rectangle(startButton.getX(), startButton.getY(), startButton.getWidth(), startButton.getHeight());
+						boolean over = false;
+						if(selfX.overlaps(startBtnRect)){
+							over = true;
+						}
+						if(selfY.overlaps(startBtnRect)){
+							over = true;
+						}	
+						
+						if(over){
+							fire(new MovedToStartEvent());
+						}
+					}*/
+
+					if(ng.getContext().getProperty(ContextProperty.MOVE_TO_START)!=null){
+						
+						ng.getContext().getProperty(ContextProperty.MOVE_TO_START);
+					}
 				}
 				
 			}
@@ -480,6 +559,20 @@ public abstract class World extends Group{
 	 public Color letterColor(){
 		 return Color.GREEN;
 	 }
+	 
+	 public void refresh(){
+			Actor cloud = findActor("restartCloud");
+			if(cloud!=null){
+				cloud.remove();
+			}
+			
+			Actor btn = findActor("refresh");
+			if(btn!=null){
+				btn.remove();
+			}
+	 
+		 createCellars();
+	 }
 	
 	public  void start(){
 		CellarGroup cg1 = (CellarGroup) findActor("cg1");
@@ -505,6 +598,18 @@ public abstract class World extends Group{
 				a.toFront();
 			}
 		}
+		
+		Actor cloud = findActor("restartCloud");
+		if(cloud!=null){
+			cloud.remove();
+		}
+		
+		Actor btn = findActor("refresh");
+		if(btn!=null){
+			btn.remove();
+		}
+	
+
 	}
 	
 	protected void letters(int variant){
@@ -528,8 +633,7 @@ public abstract class World extends Group{
 					CellarGroup.LogicFlower dummy = flowers.get(i);
 					dummy.addListener(new MetricListener());
 					
-					Integer letterID = Letter.getCharId(ch);
-					Letter letter = new Letter(ng, letterID.intValue());
+					Letter letter = new Letter(ng, ch);
 					letter.setName("letter");
 					if(dummy.getInfo().contains("1")){
 						letter.setPosition(20, 20);
@@ -560,6 +664,18 @@ public abstract class World extends Group{
 
 	protected void createCellars(){
 
+		Actor zactor = findActor("zactor");
+		Actor lower = null;
+		for(Actor a : getChildren()){
+			if(a instanceof AbstractFigure){
+				lower = lower == null ? a : (lower.getZIndex() > a.getZIndex() ? a : lower);
+			}
+		}
+		
+		if(lower == null){
+			lower = zactor;
+		}
+		
 		ObjectInputStream ois = null;
 		DummyContext dummyContext;
 		try{
@@ -597,7 +713,7 @@ public abstract class World extends Group{
 				
 				cg.setScale(0.1f);
 				//cg.setRotation(180);
-				cg.addAction(sequence(scaleTo(1, 1, 1), run(new Runnable() {
+				cg.addAction(sequence(scaleTo(1, 1, 1)/*, run(new Runnable() {
 					
 					@Override
 					public void run() {
@@ -606,8 +722,9 @@ public abstract class World extends Group{
 						orderLabel.translate(0+cg.getX(), 100+cg.getY());
 						addActor(orderLabel);
 					}
-				})));
-				addActor(cg);
+				})*/));
+				//addActor(cg);
+				addActorBefore(lower, cg);
 				
 				Rectangle bounds = new Rectangle(gInfo.getOrigin().x, gInfo.getOrigin().y, 1, 1);
 
@@ -615,12 +732,17 @@ public abstract class World extends Group{
 				for(DummyInfo info : gInfo.getFlowers()){
 					
 					if("start".equals(info.getType())){
-						startButton = new StartButton(ng, this);
-						startButton.setName("startButton");
-						ng.getContext().registerListener(startButton);
-						startButton.setPosition(info.getX(), info.getY());
 						
-						addActor(startButton);
+						if(findActor("startButton")==null){
+							startButton = new StartButton(ng, this);
+							startButton.setName("startButton");
+							ng.getContext().registerListener(startButton);
+							startButton.setPosition(info.getX(), info.getY());
+							
+							//addActor(startButton);
+							addActorBefore(lower, startButton);
+						}
+
 					}
 					else if("barrier".equals(info.getType())){
 						Barrier barrier = new Barrier(ng);
@@ -691,6 +813,8 @@ public abstract class World extends Group{
 		}
 	
 		lyrics();
+		ng.getContext().setProperty(ContextProperty.LETTERS, null);
+
 	}
 
 	public abstract void lyrics();

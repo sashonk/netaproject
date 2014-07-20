@@ -26,7 +26,7 @@ public class ShopTool extends PanelTool{
 
 	@Override
 	public boolean accept(Context ctx) {
-		return ctx.getProperty(ContextProperty.HALT)==null &&ctx.getProperty(ContextProperty.PREPARED)!=null&&
+		return ctx.getProperty(ContextProperty.HALT)==null&&ctx.getProperty(ContextProperty.INGAME)==null &&ctx.getProperty(ContextProperty.PREPARED)!=null&&
 				popupAccepted( ctx);	
 	}
 }

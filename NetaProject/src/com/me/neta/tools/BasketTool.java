@@ -32,7 +32,7 @@ public class BasketTool extends AbstractTool{
 
 	@Override
 	public boolean accept(Context ctx) {
-		return ctx.getProperty(ContextProperty.HALT)==null &&ctx.getProperty(ContextProperty.WORKING)!=null &&
+		return ctx.getProperty(ContextProperty.HALT)==null &&ctx.getProperty(ContextProperty.WORKING)!=null &&ctx.getProperty(ContextProperty.INGAME)==null &&
 				 popupAccepted( ctx);
 			
 	}

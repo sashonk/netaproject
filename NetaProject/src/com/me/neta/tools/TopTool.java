@@ -1,6 +1,5 @@
 package com.me.neta.tools;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.me.neta.NetaGame;
 import com.me.neta.Size;
 

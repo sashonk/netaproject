@@ -209,8 +209,8 @@ public class NetaGame implements ApplicationListener {
 	@Override
 	public void dispose() {
 
-		stage.dispose();
-		texManager.dispose();
+		if(stage!=null)stage.dispose();
+		if(texManager!=null)texManager.dispose();
 	}
 	
 

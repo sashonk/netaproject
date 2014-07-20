@@ -80,9 +80,9 @@ public class TigerWorld extends World{
 
 	
 	public void lyrics(){
-		float dx = 40;
-		float dy = 25;
-		float scale = 0.20f;
+		float dx = 30;
+		float dy = 40;
+		float scale = 0.16f;
 		{
 			Table block1 = block();			
 			
@@ -91,8 +91,8 @@ public class TigerWorld extends World{
 			line1.add(label("зебрам"));
 
 			
-			Table line2 = line();
-			line2.add(label("говорили"));
+			//Table line2 = line();
+			line1.add(label("говорили"));
 
 			
 			Table line3 = line();
@@ -100,15 +100,15 @@ public class TigerWorld extends World{
 			line3.add(label("один"));
 
 			
-			Table line4 = line();
-			line4.add(label("секрет"));
-			line4.add(label("открыли"));
+			//Table line4 = line();
+			line3.add(label("секрет"));
+			line3.add(label("открыли"));
 
 			
 			block1.add(line1).row();
-			block1.add(line2).row();
+		///	block1.add(line2).row();
 			block1.add(line3).row();
-			block1.add(line4).row();			
+		//	block1.add(line4).row();			
 			block1.pack();
 			
 			Group wrap = new Group();
@@ -125,22 +125,22 @@ public class TigerWorld extends World{
 			Table line1 = line();		
 			line1.add(label("Оказалось,"));
 			
-			Table line2 =line();			
-			line2.add(label("дорогие"));
+			//Table line2 =line();			
+			line1.add(label("дорогие"));
 			
 			Table line3 = line();		
 			line3.add(label("Вы"));
 			line3.add(label("нам"));
 			
-			Table line4 =line();			
-			line4.add(label("родичи"));
-			line4.add(label("прямые"));
+			//Table line4 =line();			
+			line3.add(label("родичи"));
+			line3.add(label("прямые"));
 
 			
 			block1.add(line1).row();
-			block1.add(line2).row();
+			//block1.add(line2).row();
 			block1.add(line3).row();
-			block1.add(line4).row();
+			//block1.add(line4).row();
 			block1.pack();
 			
 			Group wrap = new Group();
@@ -159,25 +159,25 @@ public class TigerWorld extends World{
 			line1.add(label("Гляньте,"));
 			line1.add(label("есть"));
 			
-			Table line2 = line();
-			line2.add(label("у"));
-			line2.add(label("нас"));
-			line2.add(label("полоски!"));
+			//Table line2 = line();
+			line1.add(label("у"));
+			line1.add(label("нас"));
+			line1.add(label("полоски!"));
 						
 			Table line3 = line();
 			line3.add(label("Есть"));
 			line3.add(label("они"));
 			line3.add(label("и"));
 			
-			Table line4= line();
-			line4.add(label("на"));
-			line4.add(label("матросске!"));
+			//Table line4= line();
+			line3.add(label("на"));
+			line3.add(label("матросске!"));
 		
 			
 			block1.add(line1).row();
-			block1.add(line2).row();
+			//block1.add(line2).row();
 			block1.add(line3).row();
-			block1.add(line4).row();
+		//	block1.add(line4).row();
 			block1.pack();
 			
 			Group wrap = new Group();
@@ -185,7 +185,7 @@ public class TigerWorld extends World{
 			wrap.setScale(scale);
 			Group cg1 = (Group) findActor("cg3");
 			Actor dom1 = cg1.findActor("dom3");
-			wrap.setPosition(dom1.getX()+dx, dom1.getY()+dy);		
+			wrap.setPosition(dom1.getX()+dx-5, dom1.getY()+dy);		
 			cg1.addActor(wrap);
 		}
 		
@@ -198,21 +198,21 @@ public class TigerWorld extends World{
 			line1.add(label("ни"));
 			line1.add(label("разу"));
 			
-			Table line2 = line();
-			line2.add(label("не"));
-			line2.add(label("бывала"));			
+			//Table line2 = line();
+			line1.add(label("не"));
+			line1.add(label("бывала"));			
 			
 			Table line3 = line();
 			line3.add(label("зебра"));
 			line3.add(label("тёткой"));
 			
-			Table line4 = line();
-			line4.add(label("адмирала!"));
+			//Table line4 = line();
+			line3.add(label("адмирала!"));
 			
 			block1.add(line1).row();
-			block1.add(line2).row();
+		//	block1.add(line2).row();
 			block1.add(line3).row();
-			block1.add(line4).row();
+		//	block1.add(line4).row();
 			block1.pack();
 			
 			Group wrap = new Group();
@@ -247,7 +247,7 @@ public class TigerWorld extends World{
 		variant1.put(Integer.valueOf(3),charGroup13);	
 		
 		List<Character> charGroup14 = new ArrayList<Character>(3);				
-		charGroup14.add(Character.valueOf('ь'));
+		charGroup14.add(Character.valueOf('в'));
 		charGroup14.add(Character.valueOf('м'));
 		charGroup14.add(Character.valueOf('р'));
 		variant1.put(Integer.valueOf(4),charGroup14);		

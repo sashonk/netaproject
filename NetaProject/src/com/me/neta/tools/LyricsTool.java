@@ -7,7 +7,6 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.visible;
 
 
 import com.me.neta.Context;
-import com.me.neta.LyricsPanel;
 import com.me.neta.NetaGame;
 import com.me.neta.Size;
 import com.me.neta.Context.ContextProperty;
@@ -15,7 +14,16 @@ import com.me.neta.Context.ContextProperty;
 
 public class LyricsTool extends PanelTool{
 	
+		@Override
+	public void hide(){
+		panel.addAction(sequence(fadeOut(FADE_INTERVAL), visible(false)));				
 
+	}
+	
+		@Override
+	public void show(){
+		panel.addAction(sequence(visible(true), fadeIn(FADE_INTERVAL)));
+	}
 
 	public LyricsTool(NetaGame ng) {
 		super(ng);
@@ -35,7 +43,7 @@ public class LyricsTool extends PanelTool{
 
 	@Override
 	public boolean accept(Context ctx) {
-		return ctx.getProperty(ContextProperty.HALT)==null &&ctx.getProperty(ContextProperty.WORKING)!=null && ctx.getProperty(ContextProperty.CELLARS)==null&&
+		return ctx.getProperty(ContextProperty.HALT)==null &&ctx.getProperty(ContextProperty.WORKING)!=null &&
 				popupAccepted( ctx);	
 	}
 

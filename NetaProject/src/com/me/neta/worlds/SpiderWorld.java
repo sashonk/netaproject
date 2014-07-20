@@ -203,7 +203,7 @@ public class SpiderWorld extends World{
 		variant1.put(Integer.valueOf(1),charGroup11);		
 		
 		List<Character> charGroup12 = new ArrayList<Character>(3);				
-		charGroup12.add(Character.valueOf('м'));
+		charGroup12.add(Character.valueOf('М'));
 		charGroup12.add(Character.valueOf('х'));
 		charGroup12.add(Character.valueOf('к'));
 		variant1.put(Integer.valueOf(2),charGroup12);	
@@ -236,7 +236,7 @@ public class SpiderWorld extends World{
 		variant2.put(Integer.valueOf(2),charGroup22);	
 		
 		List<Character> charGroup23 = new ArrayList<Character>(3);				
-		charGroup23.add(Character.valueOf('н'));
+		charGroup23.add(Character.valueOf('Н'));
 		charGroup23.add(Character.valueOf('с'));
 		charGroup23.add(Character.valueOf('л'));
 		variant2.put(Integer.valueOf(3),charGroup23);	

@@ -1,12 +1,13 @@
 package com.me.neta.tools;
 
-import java.sql.SQLException;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import javax.sql.RowSet;
+
+
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -26,19 +27,21 @@ import com.me.neta.Popup.PopupGroup;
 import com.me.neta.Size;
 import com.me.neta.Util;
 import com.me.neta.Util.OnEventAction.Predicate;
+import com.me.neta.events.KubikClickedEvent;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 public class KubikTool extends TopTool{
 
-
+	int timesFired;
 	int position;
-	int offset = 60;
+	final int offset = 60;
 	boolean rotating ;
 	public KubikTool(NetaGame ng) {
 		super(ng);
 		setName("kTool");
 
+		timesFired = 0;
 		rotating = false;
 	}
 	
@@ -89,6 +92,8 @@ public class KubikTool extends TopTool{
 			
 
 			rotating = true;
+			
+			fire(new KubikClickedEvent(++timesFired));
 		}
 		
 		
@@ -129,7 +134,7 @@ public class KubikTool extends TopTool{
 	
 	@Override
 	public String getImagePath() {
-		return "kubik";
+		return "kubik_red";
 	}
 
 	@Override

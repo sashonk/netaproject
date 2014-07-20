@@ -33,7 +33,7 @@ public class UnfillTool extends TopTool{
 
 	@Override
 	public boolean accept(Context ctx) {
-		return ctx.getProperty(ContextProperty.HALT)==null &&ctx.getProperty(ContextProperty.WORKING)!=null&& ctx.getProperty(ContextProperty.CELLARS)!=null&&
+		return ctx.getProperty(ContextProperty.HALT)==null&&ctx.getProperty(ContextProperty.INGAME)==null &&ctx.getProperty(ContextProperty.WORKING)!=null&& ctx.getProperty(ContextProperty.CELLARS)!=null&&
 				popupAccepted( ctx);	
 	}
 

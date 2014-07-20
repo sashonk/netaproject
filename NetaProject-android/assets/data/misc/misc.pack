@@ -5,42 +5,47 @@ filter: Nearest,Nearest
 repeat: none
 nikol
   rotate: false
-  xy: 1, 1175
+  xy: 1, 1198
   size: 1716, 800
   orig: 1716, 800
   offset: 0, 0
   index: -1
-hintPanel
+hintPanel2
   rotate: false
-  xy: 1, 741
-  size: 922, 432
-  orig: 922, 432
+  xy: 1, 400
+  size: 1713, 796
+  orig: 1713, 796
   offset: 0, 0
   index: -1
 lyricsPanel
   rotate: false
-  xy: 1, 400
+  xy: 1, 59
   size: 851, 339
   orig: 851, 339
   offset: 0, 0
   index: -1
 fieldsPanel
   rotate: false
-  xy: 925, 779
+  xy: 854, 4
   size: 575, 394
   orig: 575, 394
   offset: 0, 0
   index: -1
 figuresPanel2
   rotate: false
-  xy: 1, 1
+  xy: 1431, 1
   size: 431, 397
   orig: 431, 397
   offset: 0, 0
   index: -1
+
+misc2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
 colorPanel
   rotate: false
-  xy: 434, 9
+  xy: 1, 1
   size: 410, 389
   orig: 410, 389
   offset: 0, 0
