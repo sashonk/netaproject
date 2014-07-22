@@ -807,6 +807,7 @@ ColorTool paletteTool;
 				if(event instanceof InstructionCloseEvent){
 					if(!owTips.adultReadTip && showPopupPref){
 						settingTool.setPopup("Спроси взрослого, который будет тебе помогать,\nвнимательно ли он прочитал короткую записку\nдля взрослых.",160,new PopupGroup(settingTool), 0);
+						owTips.adultReadTip = true;
 					}
 
 				}
@@ -814,6 +815,7 @@ ColorTool paletteTool;
 				if(event instanceof AdultsCloseEvent){
 					if(!owTips.chooseWorldTip && showPopupPref){
 						worldsTool.setPopup("Выбери игровое поле",0 ,new PopupGroup(worldsTool), 0);
+						owTips.chooseWorldTip = true;
 					}
 				}
 				 
@@ -1147,8 +1149,9 @@ ColorTool paletteTool;
 		if(!showNikolLetter){
 			ng.getContext().setProperty(ContextProperty.HALT, null);
 			ng.getContext().setProperty(ContextProperty.PREPARED, Boolean.TRUE);
-			if(!qTool.hasEverBeenClickedOnPopup()){
+			if(!owTips.readInstructionTip && showPopupPref){
 				qTool.setPopup("Прочитай инструкцию", 50, new PopupGroup(qTool), 00, true);
+				owTips.readInstructionTip = true;
 			}
 		}
 		

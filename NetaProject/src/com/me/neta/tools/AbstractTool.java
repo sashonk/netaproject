@@ -32,13 +32,9 @@ public abstract class AbstractTool extends Group implements ContextListener{
 	TextureRegion region;
 	
 	protected boolean blink;
-	protected boolean everClicked;
 	protected NetaGame ng;
 	
-	@Deprecated
-	public boolean hasEverBeenClickedOnPopup(){
-		return everClicked;
-	}
+
 
 	public float getK(){
 		return .65f;
@@ -79,7 +75,6 @@ public abstract class AbstractTool extends Group implements ContextListener{
 		this.ng = ng;
 		enabled = false;
 		blink = true;
-		everClicked= !Gdx.app.getPreferences(NetaGame.class.getName()).getBoolean("showPopup", true);
 			
 		AtlasRegion reg = ng.getManager().getAtlas().findRegion(getImagePath());
 		Texture tex = reg.getTexture();
@@ -98,7 +93,6 @@ public abstract class AbstractTool extends Group implements ContextListener{
 					if(blink)event.getTarget().addAction(alpha(.4f));
 					Actor popup = AbstractTool.this.findActor("popup");
 					if(popup!=null){
-						everClicked = true;
 						popup.remove();
 					//	ng.getContext().setProperty(ContextProperty.POPUP,null);
 					}
