@@ -66,7 +66,7 @@ public class SpiderWorld extends World{
 		addActor(flower);
 		
 		
-		ng.getWorkspace().findActor("topButtons").addAction(Actions.moveBy(-350, 0, 0.5f, Interpolation.swingOut));
+		//ng.getWorkspace().findActor("topButtons").addAction(Actions.moveBy(-350, 0, 0.5f, Interpolation.swingOut));
 	}
 	public void populateForeground() {
 	
@@ -236,7 +236,7 @@ public class SpiderWorld extends World{
 		variant2.put(Integer.valueOf(2),charGroup22);	
 		
 		List<Character> charGroup23 = new ArrayList<Character>(3);				
-		charGroup23.add(Character.valueOf('Н'));
+		charGroup23.add(Character.valueOf('н'));
 		charGroup23.add(Character.valueOf('с'));
 		charGroup23.add(Character.valueOf('л'));
 		variant2.put(Integer.valueOf(3),charGroup23);	

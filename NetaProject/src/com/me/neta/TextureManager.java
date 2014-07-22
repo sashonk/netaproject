@@ -634,8 +634,13 @@ wondGenerator.dispose();
  		skin.add("vscroll", vscroll2NP);
 
  		TextureRegion frameTex = atlas.findRegion("frame");
+ 		TextureRegion frameTex_w = atlas.findRegion("frame_w");
+
  		NinePatch frameNP = new NinePatch(frameTex, 28, 30, 27, 33);
+ 		NinePatch frameTight = new NinePatch(frameTex_w, 10, 15, 10, 16);
  		skin.add("frame", frameNP);
+ 		skin.add("frameTight", frameTight);
+
  		
  		TextureRegion menuitem = atlas.findRegion("menuitem");
  		NinePatch menuitemNP = new NinePatch(menuitem, 10, 15, 10, 15);

@@ -115,15 +115,40 @@ ColorTool paletteTool;
 	SettingsTool settingTool	 ;
 	 BasketTool basketTool;	
 	 
-	boolean startHasEverBeenClickedOnPopup;
-	boolean checkBrushTool;
-	boolean makeIllustrationTipShown;
-	boolean makeRoamsTipShown;
-	boolean gameStartedTip;
-	int figureDropsTotal;
-	boolean welcomeToPaintingTipShown;
-	boolean notifiedOfColoredFigures;
-	boolean firstTouchAfterColoredFiguresNotification;
+	 
+	 static class Tips{
+			boolean startHasEverBeenClickedOnPopup;
+			boolean checkBrushTool;
+			boolean makeIllustrationTipShown;
+			boolean makeRoamsTipShown;
+			boolean gameStartedTip;
+			int figureDropsTotal;
+			boolean welcomeToPaintingTipShown;
+			boolean notifiedOfColoredFigures;
+			boolean firstTouchAfterColoredFiguresNotification;
+			boolean lyricsToolClicked;
+			boolean whenIllustrationTipShown;
+
+			boolean rotationTipShown;
+			boolean sendToFacebookTipShown;
+			boolean kubicTipShown;
+			boolean playAgainTip;
+	 }
+	 
+	 static class OneWayTips{
+			boolean readInstructionTip;
+			boolean chooseWorldTip;
+			boolean adultReadTip;
+			boolean passportDone;
+	 }
+	 
+	 Tips tips = new Tips();
+	 OneWayTips owTips = new OneWayTips();
+	 
+	 public Tips getTips(){
+		 return tips;
+	 }
+
 		 
 	public Workspace(NetaGame ng, float x, float y, float width, float height){
 		this.ng = ng;
@@ -135,17 +160,10 @@ ColorTool paletteTool;
 	public void initialize(){
 		
 		initContext(ng.getContext());
-		checkBrushTool = false;
-		makeIllustrationTipShown = false;
-		makeRoamsTipShown = false;
-		gameStartedTip= false;
-		figureDropsTotal = 0;
-		welcomeToPaintingTipShown = false;
-		notifiedOfColoredFigures= false;
-		firstTouchAfterColoredFiguresNotification = false;
+
 		
 		final boolean showPopupPref = Gdx.app.getPreferences(NetaGame.class.getName()).getBoolean("showPopup", true);
-		startHasEverBeenClickedOnPopup= !showPopupPref;
+		tips.startHasEverBeenClickedOnPopup= !showPopupPref;
 		populateWorldFactories(ng);
 		passport = new Passport();
 		pinch2Zoom = new Pinch2ZoomListener2();
@@ -278,6 +296,7 @@ ColorTool paletteTool;
 		
 		
 		Table topButtons = new Table();
+		topButtons.setBackground(ng.getManager().getSkin().getDrawable("frameTight"));
 		topButtons.setName("topButtons");
 		 rTool = new RotateTool(ng);
 		 zTool = new ZIndexTool(ng);
@@ -340,11 +359,12 @@ ColorTool paletteTool;
 						lyricsPanel.addAction(sequence(fadeOut(0.4f), visible(false)));
 						
 						
-						if(showPopupPref&&!makeRoamsTipShown){
-							makeRoamsTipShown = true;
+						if(showPopupPref&&!tips.makeRoamsTipShown){
+					
 							figuresTool.setPopup("Соедини СТАНЦИИ дорожкой из камешков.\nТолько не перепутай порядок СТАНЦИЙ!", 0, new PopupGroup(figuresTool,basketTool,rTool, lyricsTool), 0);
 							
-					
+							tips.makeRoamsTipShown = true;
+							
 						}
 					}
 					else{
@@ -361,10 +381,10 @@ ColorTool paletteTool;
 					world.letters(((LetterVariantEvent)event).getLetterGroupID());
 					
 					boolean showPopupPref = Gdx.app.getPreferences(NetaGame.class.getName()).getBoolean("showPopup", true);
-				if(!makeIllustrationTipShown&& showPopupPref){
+				if(!tips.makeIllustrationTipShown&& showPopupPref){
 					//popup("Ты можешь выбрать цвет и\n раскрасить фигуры", 550, 80, "popupPalette");
 					figuresTool.setPopup("Сделай иллюстрацию к стихам", 00, new PopupGroup(figuresTool,basketTool, lyricsTool), 0);
-					makeIllustrationTipShown = true;
+					tips.makeIllustrationTipShown = true;
 				}
 					
 
@@ -406,8 +426,13 @@ ColorTool paletteTool;
 						world.setId(desktopEvent.getId());
 						world.drawPassport(passport);
 	
-						if(!passportTool.hasEverBeenClickedOnPopup()){
-							passportTool.setPopup("Напиши своё имя, возраст\n и где ты живешь", 00, new PopupGroup(passportTool), 0);
+						if(showPopupPref){
+							if(!owTips.passportDone){
+								passportTool.setPopup("Напиши своё имя, возраст\n и где ты живешь", 00, new PopupGroup(passportTool), 0);
+								owTips.passportDone = true;
+							}else{
+								lyricsTool.setPopup("Выбери подходящие стихи ", 0, new PopupGroup(lyricsTool), 0);
+							}
 						}
 
 
@@ -421,13 +446,20 @@ ColorTool paletteTool;
 
 					lettersPanel.setVariants(world.getLetters());
 
+					/*tips.makeRoamsTipShown = false;
+					tips.whenIllustrationTipShown = false;
+					tips.welcomeToPaintingTipShown = false;
+					tips.lyricsToolClicked = false;*/
+					tips = new Tips();
+					
+					
 				}
 				
 				
 				
 				if(event instanceof FigureDropEvent){
 					event.setBubbles(false);
-					figureDropsTotal++;
+					tips.figureDropsTotal++;
 
 								
 					FigureDropEvent dropEvent = (FigureDropEvent) event; 
@@ -438,12 +470,13 @@ ColorTool paletteTool;
 							
 					setSelectedFigure((AbstractFigure) letter);
 					
-					if(figureDropsTotal>4 && !rTool.hasEverBeenClickedOnPopup() && showPopupPref){
+					if(tips.figureDropsTotal>4 && !tips.rotationTipShown && showPopupPref){
 						ptGroup.onShow(null);
 						rTool.setPopup("Обрати внимание:\nС помощью этой кнопки\n ты можешь вращать фигуры", 30, new PopupGroup(rTool), 0, true);
+						tips.rotationTipShown  = true;
 					}
 					
-					if(makeIllustrationTipShown && !welcomeToPaintingTipShown){
+					if(tips.makeIllustrationTipShown && !tips.welcomeToPaintingTipShown){
 						
 						addAction(sequence(delay(10), Actions.run(new Runnable() {
 							
@@ -451,7 +484,7 @@ ColorTool paletteTool;
 							public void run() {
 
 
-								Cloud cloud = new Cloud("Когда будешь готов, нажми на стрелку", ng, new Cloud.Callback() {
+								Cloud cloud = new Cloud("Когда дорожки будут готовы, нажми на стрелку", ng, new Cloud.Callback() {
 									
 									@Override
 									public void run(Cloud cloud) {
@@ -472,7 +505,7 @@ ColorTool paletteTool;
 							}
 						})));
 						
-						welcomeToPaintingTipShown = true;
+						tips.welcomeToPaintingTipShown = true;
 					}
 				}
 				
@@ -487,7 +520,7 @@ ColorTool paletteTool;
 				
 				if(event instanceof MovedToStartEvent){
 					event.setBubbles(false);					
-					if(!gameStartedTip){
+					if(!tips.gameStartedTip){
 						
 				
 						Actor cp = Workspace.this.findActor("canPlay");
@@ -501,7 +534,7 @@ ColorTool paletteTool;
 						Workspace.this.addActor(cl);	
 						
 						ng.getContext().setProperty(ContextProperty.POPUP, new PopupGroup(world.getStartButton(), lyricsTool));
-						gameStartedTip = true;
+						tips.gameStartedTip = true;
 					}
 				}
 				
@@ -513,7 +546,7 @@ ColorTool paletteTool;
 						
 						
 						
-						if(!startHasEverBeenClickedOnPopup && showPopupPref){
+						if(!tips.startHasEverBeenClickedOnPopup && showPopupPref){
 							final StartButton sb = world.getStartButton();
 							boolean allFilled = true;
 							int filledCount = 0;
@@ -526,10 +559,8 @@ ColorTool paletteTool;
 								}
 							}
 							
-							if(filledCount>1 &&  !notifiedOfColoredFigures){
-								//bTool.setPopup("Обрати внимание:\nкнопка \"кисточка\" полезна для раскрашивания фигур.\nКоснись фигуры ", tailPadX, pg, hideTimeout, upsideDown);
+							if(filledCount>1 &&  !tips.notifiedOfColoredFigures){
 								ptGroup.onShow(null);
-							//	bTool.setPopup("Обрати внимание:\nПока фигуры не раскрашены, их можно двигать.\nРаскрашенные фигуры прилипают к рабочему полю\nЕсли коснуться фигуры, когда \"кисточка\" окрашена,\n тогда фигура тоже окрасится", 30, new PopupGroup(bTool), 0, true);
 								
 								Cloud payAtt = new Cloud("Обрати внимание:\nПока фигуры не раскрашены, их можно двигать.\nРаскрашенные фигуры прилипают к рабочему полю\nФигуру можно удалить, нажав кнопку \"корзина\""
 										, ng, new Cloud.Callback(){
@@ -557,15 +588,21 @@ ColorTool paletteTool;
 										});
 								payAtt.setPosition(400, getHeight()-payAtt.getHeight());
 								addActor(payAtt);
+								payAtt.setName("payatt");
 								ng.getContext().setProperty(ContextProperty.POPUP, new PopupGroup(basketTool, rTool, bTool));
 							
 								
-								notifiedOfColoredFigures = true;
+								tips.notifiedOfColoredFigures = true;
 							
 							}
 							
 							if(sb!=null &&allFilled && filledCount > 7){
-								//sb.setPopup("Молодец! Когда сделаешь иллюстрацию,\n жми СТАРТ и игра начнётся!", -100, new PopupGroup(figuresTool, basketTool,  paletteTool, rTool, bTool/*, uTool*/,world.getStartButton()), 5);
+								Actor patt = findActor("payatt");
+								if(patt!=null){
+									patt.remove();
+								}
+								
+								
 								ptGroup.onShow(null);
 								addAction(sequence(Actions.run(new Runnable() {
 									
@@ -597,7 +634,7 @@ ColorTool paletteTool;
 										});
 										cloud.setName("canPlay");
 										cloud.setPosition(390, getHeight()-cloud.getHeight());
-										
+										bTool.setChecked(false);
 	
 										
 										Workspace.this.addActor(cloud);		
@@ -611,7 +648,7 @@ ColorTool paletteTool;
 	
 								
 								
-								startHasEverBeenClickedOnPopup = true;
+								tips.startHasEverBeenClickedOnPopup = true;
 							}
 						}
 					}
@@ -673,11 +710,17 @@ ColorTool paletteTool;
 							ng.getContext().setProperty(ContextProperty.POPUP, null);		
 							ng.getContext().setProperty(ContextProperty.GAME_END, null);
 							
+							
+							flowerTool.setPopup("Выбери буквы для игры", 0, new PopupGroup(flowerTool), 0);
+							ptGroup.onShow(null);//bTool.setChecked(true);
+							tips = new Tips();
+
+							
 							return true;
 						}
 					});
 					
-					if(!saveTool.hasEverBeenClickedOnPopup()&&showPopupPref){
+					if(!tips.sendToFacebookTipShown&&showPopupPref){
 						saveTool.setPopup("Можешь прислать  сохраненные игровые поля на\n страничку НИКОЛЬ И ЕЁ ДРУЗЬЯ  в  фейсбук.", 100, new PopupGroup(saveTool), 0);
 						world.findActor("refresh").setVisible(false);
 						//ng.getContext().setProperty(ContextProperty.POPUP, null);
@@ -685,6 +728,7 @@ ColorTool paletteTool;
 						//Preferences prefs = Gdx.app.getPreferences(NetaGame.class.getName());
 						//prefs.putBoolean("showPopup", false);
 						//prefs.flush();
+						tips.sendToFacebookTipShown = true;
 					}
 					
 
@@ -714,14 +758,14 @@ ColorTool paletteTool;
 						world.getSelected().rotate(((RotationEvent)event).getDegrees());
 					}
 					
-					if(showPopupPref && re.getId()==1){
+					if(showPopupPref && !tips.whenIllustrationTipShown){
 						ng.getContext().setProperty(ContextProperty.POPUP,new PopupGroup(figuresTool,basketTool,rTool, lyricsTool));
 						addAction(sequence(delay(10), Actions.run(new Runnable() {
 							
 							@Override
 							public void run() {
 
-								Cloud cloud = new Cloud("Когда будешь готов, нажми на стрелку", ng, new Cloud.Callback() {
+								Cloud cloud = new Cloud("Когда иллюстрация будет готова, нажми на стрелку", ng, new Cloud.Callback() {
 									
 									@Override
 									public void run(Cloud cloud) {
@@ -740,6 +784,8 @@ ColorTool paletteTool;
 								
 							}
 						})));
+						
+						tips.whenIllustrationTipShown = true;
 					}
 				}
 				
@@ -759,14 +805,14 @@ ColorTool paletteTool;
 				}
 				
 				if(event instanceof InstructionCloseEvent){
-					if(!settingTool.hasEverBeenClickedOnPopup()){
+					if(!owTips.adultReadTip && showPopupPref){
 						settingTool.setPopup("Спроси взрослого, который будет тебе помогать,\nвнимательно ли он прочитал короткую записку\nдля взрослых.",160,new PopupGroup(settingTool), 0);
 					}
 
 				}
 				
 				if(event instanceof AdultsCloseEvent){
-					if(!worldsTool.hasEverBeenClickedOnPopup()){
+					if(!owTips.chooseWorldTip && showPopupPref){
 						worldsTool.setPopup("Выбери игровое поле",0 ,new PopupGroup(worldsTool), 0);
 					}
 				}
@@ -779,10 +825,10 @@ ColorTool paletteTool;
 				//	BrushToolChangeEvent btcEvent = (BrushToolChangeEvent)event;
 				//	 world.setColorizing(btcEvent.isChecked()) ;
 					 boolean fls = false;
-					 if(notifiedOfColoredFigures &&!firstTouchAfterColoredFiguresNotification&&showPopupPref &&fls){
+					 if(tips.notifiedOfColoredFigures &&!tips.firstTouchAfterColoredFiguresNotification&&showPopupPref &&fls){
 						 
 						 ng.getContext().setProperty(ContextProperty.POPUP,  new PopupGroup(figuresTool, basketTool,  paletteTool, lyricsTool, rTool, bTool));
-						 firstTouchAfterColoredFiguresNotification= true;
+						 tips.firstTouchAfterColoredFiguresNotification= true;
 					 }
 					 
 				}
@@ -794,7 +840,7 @@ ColorTool paletteTool;
 					world.drawPassport(passport);
 					Workspace.this.ptGroup.onShow(null);
 
-					if(!lyricsTool.hasEverBeenClickedOnPopup() && findActor("popupLyrics")==null){
+					if(!tips.lyricsToolClicked && findActor("popupLyrics")==null && showPopupPref){
 						lyricsTool.setPopup("Выбери подходящие стихи ", 0, new PopupGroup(lyricsTool), 0);
 					}
 				}
@@ -875,21 +921,20 @@ ColorTool paletteTool;
 					
 					
 					boolean showPopupPref = Gdx.app.getPreferences(NetaGame.class.getName()).getBoolean("showPopup", true);
-					if(showPopupPref&& !checkBrushTool){
+					if(showPopupPref&& !tips.checkBrushTool){
 						bTool.setChecked(true);
-						checkBrushTool = true;
+						tips.checkBrushTool = true;
 						ng.getContext().notifyListeners();
 					}
 				}
 				
 				if(event instanceof SavePanelHideEvent){
 					event.setBubbles(false);
-					SavePanelHideEvent sEvent = (SavePanelHideEvent)event;
 					
 					
 					
 					boolean showPopupPref = Gdx.app.getPreferences(NetaGame.class.getName()).getBoolean("showPopup", true);
-					if(showPopupPref&& sEvent.getTimesFired()==1){
+					if(showPopupPref&& !tips.playAgainTip){
 						Cloud c = new Cloud("А теперь ты можешь сделать\n игру с другими полями\nили поиграть ещё раз на этом поле\n(для этого нажми кнопку \"заново\" и выбери полоску с буквами)", ng);
 						c.setName("restartCloud");
 						Actor rf = world.findActor("refresh");
@@ -899,6 +944,7 @@ ColorTool paletteTool;
 
 						c.setPosition(390, getHeight()-c.getHeight());
 						world.addActor(c);
+						tips.playAgainTip = true;
 					}
 				}
 				
@@ -966,8 +1012,9 @@ ColorTool paletteTool;
 						//instructionPanel.setVisible(true);
 						ng.getContext().setProperty(ContextProperty.HALT, null);
 						ng.getContext().setProperty(ContextProperty.PREPARED, Boolean.TRUE);
-						if(!qTool.hasEverBeenClickedOnPopup()){
+						if(!owTips.readInstructionTip && showPopupPref){
 							qTool.setPopup("Сначала изучи инструкцию", 50, new PopupGroup(qTool), 00, true);
+							owTips.readInstructionTip = true;
 						}
 					}
 					return false;

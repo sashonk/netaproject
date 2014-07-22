@@ -16,6 +16,7 @@ import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
@@ -256,12 +257,13 @@ public abstract class World extends Group{
 										}
 									});
 									
-									
+									final boolean showPopupPref = Gdx.app.getPreferences(NetaGame.class.getName()).getBoolean("showPopup", true);
+
 									Group topBtns = (Group)ng.getWorkspace().findActor("topButtons");
 									AbstractTool kTool =  (AbstractTool) topBtns.findActor("kTool");
-									if(!kTool.hasEverBeenClickedOnPopup()){
+									if(!ng.getWorkspace().getTips().kubicTipShown && showPopupPref){
 										kTool.setPopup("Прикоснись к кубику и передвигай  своего героя\n по дорожке  на столько камешков,  сколько\n цифр выпало на кубике. Если вы играете\n вдвоем, то шагать  надо по очереди-каждому\n со своим героем", 50, new PopupGroup(kTool), 0, true);
-			
+										ng.getWorkspace().getTips().kubicTipShown = true;
 									}
 									
 									

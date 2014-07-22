@@ -35,6 +35,7 @@ public abstract class AbstractTool extends Group implements ContextListener{
 	protected boolean everClicked;
 	protected NetaGame ng;
 	
+	@Deprecated
 	public boolean hasEverBeenClickedOnPopup(){
 		return everClicked;
 	}

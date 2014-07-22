@@ -72,7 +72,7 @@ public class NetaGame implements ApplicationListener {
 	@Override
 	public void create() {
 		
-
+		
 
 		
 		inited  = false;
