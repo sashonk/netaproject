@@ -41,7 +41,7 @@ public class NetaGame implements ApplicationListener {
 		this.natiff = platform;
 	}
 	
-	public static final boolean debug= true;
+	public static final boolean debug= false;
 	  Stage stage;
 	
 
@@ -72,9 +72,10 @@ public class NetaGame implements ApplicationListener {
 	@Override
 	public void create() {
 		
-		
 
 		
+		
+		Gdx.input.setCatchBackKey(true);
 		inited  = false;
 		lastSplashRenderCall = false;
 		context = new Context();
@@ -188,9 +189,7 @@ public class NetaGame implements ApplicationListener {
 		
 	
 		
-		if(Gdx.input.isKeyPressed(Keys.ESCAPE)){
-			Gdx.app.exit();
-		}
+
 
 	}
 

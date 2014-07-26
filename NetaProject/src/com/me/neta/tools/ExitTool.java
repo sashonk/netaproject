@@ -15,7 +15,7 @@ public class ExitTool extends AbstractTool{
 
 	@Override
 	public void doAction() {
-		Gdx.app.exit();
+		ng.getWorkspace().sureWantLeave();
 	}
 
 	@Override

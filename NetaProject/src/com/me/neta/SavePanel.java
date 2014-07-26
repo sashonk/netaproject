@@ -78,7 +78,8 @@ public class SavePanel extends Window{
 					saveAction();
 					
 					fire(new SavePanelHideEvent(++SavePanel.this.timesHiden));
-					SavePanel.this.addAction(sequence(fadeOut(0.4f), visible(false)));
+					//SavePanel.this.addAction(sequence(fadeOut(0.4f), visible(false)));
+					SavePanel.this.setVisible(false);
 
 					return true;
 				}});
@@ -91,7 +92,9 @@ public class SavePanel extends Window{
 					emailAction();
 					fire(new SavePanelHideEvent(++SavePanel.this.timesHiden));
 
-					SavePanel.this.addAction(sequence(fadeOut(0.4f), visible(false)));
+					//SavePanel.this.addAction(sequence(fadeOut(0.4f), visible(false)));
+					SavePanel.this.setVisible(false);
+
 
 					return true;
 				}});
@@ -102,7 +105,9 @@ public class SavePanel extends Window{
 					facebookAction();
 					fire(new SavePanelHideEvent(++SavePanel.this.timesHiden));
 
-					SavePanel.this.addAction(sequence(fadeOut(0.4f), visible(false)));
+					//SavePanel.this.addAction(sequence(fadeOut(0.4f), visible(false)));
+					SavePanel.this.setVisible(false);
+
 
 					return true;
 				}});

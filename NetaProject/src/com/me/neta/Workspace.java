@@ -15,6 +15,7 @@ import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
@@ -726,11 +727,7 @@ ColorTool paletteTool;
 					if(!tips.sendToFacebookTipShown&&showPopupPref){
 						saveTool.setPopup("Можешь прислать  сохраненные игровые поля на\n страничку НИКОЛЬ И ЕЁ ДРУЗЬЯ  в  фейсбук.", 100, new PopupGroup(saveTool), 0);
 						world.findActor("refresh").setVisible(false);
-						//ng.getContext().setProperty(ContextProperty.POPUP, null);
-						
-						//Preferences prefs = Gdx.app.getPreferences(NetaGame.class.getName());
-						//prefs.putBoolean("showPopup", false);
-						//prefs.flush();
+
 						tips.sendToFacebookTipShown = true;
 					}
 					
@@ -1162,7 +1159,7 @@ ColorTool paletteTool;
 			@Override
 			protected void update(float percent) {
 				// TODO Auto-generated method stub
-				var = 1- percent;
+				var = 1 - percent;
 			}
 		})));
 		
@@ -1324,5 +1321,10 @@ ColorTool paletteTool;
  	}
 
 
+ 	public void sureWantLeave(){
+ 		ExitCloud ex = new ExitCloud(ng, 0, 0, getWidth(), getHeight());
+ 		addActor(ex);
+ 		Util.center(ex); 		
+ 	}
 }
 
