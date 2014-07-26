@@ -27,7 +27,6 @@ import com.me.neta.Spider;
 import com.me.neta.TextureManager;
 import com.me.neta.Util;
 import com.me.neta.World;
-import com.me.neta.events.TextChanged;
 
 public class SpiderWorld extends World{
 

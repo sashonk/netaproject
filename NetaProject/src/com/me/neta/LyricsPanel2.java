@@ -4,7 +4,6 @@ package com.me.neta;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -45,10 +44,10 @@ public class LyricsPanel2 extends Window{
 			t.defaults().align(Align.left).pad(pad);
 			
 			Label title = new  Label("Вадим Левин и Рената Муха\nМуравей", skin, titleStyle);
-			Label l1 = new Label("Жил на свете муравей -\nБез ресниц и без бровей", skin, style);
+			Label l1 = new Label("Жил на свете муравей -\nБез ресниц и без бровей.", skin, style);
 			Label l2 = new Label("Он терпеть не мог девиц -\nБез бровей и без ресниц.", skin, style);
 			Label l3 = new Label("Потому у муравья\nБыли только сыновья", skin, style);
-			Label l4 = new Label("Сорок восемь сыновей -\nБез ресниц и без бровей", skin,style);
+			Label l4 = new Label("Сорок восемь сыновей -\nБез ресниц и без бровей.", skin,style);
 			
 			t.add(title).align(Align.center).padBottom(padBottomT).row();
 			t.add(l1).row();
@@ -71,7 +70,7 @@ public class LyricsPanel2 extends Window{
 			
 			
 			Label title = new  Label("Владимир Орлов\nПаучок", skin, titleStyle);
-			Label l1 = new Label("Паучок приезал\nНа базар:", skin, style);
+			Label l1 = new Label("Паучок приехал\nНа базар:", skin, style);
 			Label l2 = new Label("Мухам паучок\nПривёз товар.", skin, style);
 			Label l3 = new Label("Он его развесил\nНа осинке:", skin, style);
 			Label l4 = new Label("-Кто желает\nСвежей паутинки?", skin,style);
@@ -134,7 +133,7 @@ public class LyricsPanel2 extends Window{
 			Label l1 = new Label("ТИГРЫ зебрам говорили:\n-Мы один секрет открыли!", skin, style);
 			Label l2 = new Label("Оказалось, дорогие,\nВы нам родичи прямые!", skin, style);
 			Label l3 = new Label("Гляньте, есть у нас полоски!\n-Есть они и на матроске!", skin, style);
-			Label l4 = new Label("Но ни разу не бывала\nЗебра тёткой адмирала", skin,style);
+			Label l4 = new Label("Но ни разу не бывала\nЗебра тёткой адмирала.", skin,style);
 			
 			t.add(title).align(Align.center).padBottom(padBottomT).row();
 			t.add(l1).row();

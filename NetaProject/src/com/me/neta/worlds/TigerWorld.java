@@ -92,7 +92,7 @@ public class TigerWorld extends World{
 
 			
 			//Table line2 = line();
-			line1.add(label("говорили"));
+			line1.add(label("говорили:"));
 
 			
 			Table line3 = line();
@@ -102,7 +102,7 @@ public class TigerWorld extends World{
 			
 			//Table line4 = line();
 			line3.add(label("секрет"));
-			line3.add(label("открыли"));
+			line3.add(label("открыли."));
 
 			
 			block1.add(line1).row();
@@ -126,7 +126,7 @@ public class TigerWorld extends World{
 			line1.add(label("Оказалось,"));
 			
 			//Table line2 =line();			
-			line1.add(label("дорогие"));
+			line1.add(label("дорогие,"));
 			
 			Table line3 = line();		
 			line3.add(label("Вы"));
@@ -134,7 +134,7 @@ public class TigerWorld extends World{
 			
 			//Table line4 =line();			
 			line3.add(label("родичи"));
-			line3.add(label("прямые"));
+			line3.add(label("прямые."));
 
 			
 			block1.add(line1).row();
@@ -165,7 +165,7 @@ public class TigerWorld extends World{
 			line1.add(label("полоски!"));
 						
 			Table line3 = line();
-			line3.add(label("Есть"));
+			line3.add(label("- Есть"));
 			line3.add(label("они"));
 			line3.add(label("и"));
 			
@@ -203,7 +203,7 @@ public class TigerWorld extends World{
 			line1.add(label("бывала"));			
 			
 			Table line3 = line();
-			line3.add(label("зебра"));
+			line3.add(label("Зебра"));
 			line3.add(label("тёткой"));
 			
 			//Table line4 = line();

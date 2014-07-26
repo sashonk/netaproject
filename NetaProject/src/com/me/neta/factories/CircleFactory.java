@@ -3,12 +3,12 @@ package com.me.neta.factories;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.me.neta.Factory;
+import com.me.neta.FigureFactory;
 import com.me.neta.NetaGame;
 import com.me.neta.TextureManager;
 import com.me.neta.figures.Circle;
 
-public class CircleFactory extends Factory{
+public class CircleFactory extends FigureFactory{
 	private float width;
 	private float height;
 	private String assetName;

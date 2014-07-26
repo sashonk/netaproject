@@ -20,7 +20,9 @@ public class ShopPanel extends Window{
 
 		Map<String, String> mm = new LinkedHashMap<String, String>();
 		mm.put("shopZhilNaSvete", null);
-		mm.put("shopNaZabore", "https://play.google.com/store/apps/details?id=com.yablo4ko_demo.nkgames");
+		mm.put("yabloko", "https://play.google.com/store/apps/details?id=com.yablo4ko_demo.nkgames");
+		mm.put("yabloko2", "https://play.google.com/store/apps/details?id=com.yablo4ko.nkgames");
+
 	//	mm.put("shopZhilaLoshad", "https://play.google.com/store/apps/details?id=com.yablo4ko_demo.nkgames");
 	//	mm.put("shopChudoRybka", "https://play.google.com/store/apps/details?id=com.yablo4ko_demo.nkgames");
 	//	mm.put("shopKoshkiMyshki", "https://play.google.com/store/apps/details?id=com.yablo4ko_demo.nkgames");
@@ -51,7 +53,7 @@ public class ShopPanel extends Window{
 		tr.flip(true, false);
 		Image tail = new Image(tr);
 		tail.setSize(52, 65);
-		tail.setPosition(360-200, -51);
+		tail.setPosition(360-100, -51);
 		addActor(tail);
 	}
 

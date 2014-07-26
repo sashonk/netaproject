@@ -17,11 +17,12 @@ public class Cloud extends Window{
 	public Cloud(String text, NetaGame ng) {
 		this(text, ng, null);
 	}
+	
+	public Cloud(String text, NetaGame ng, final Callback r , int padl, int  padt, int padr, int padb){
 
-	public Cloud(String text, NetaGame ng, final Callback r ) {
 		super("", ng.getManager().getSkin());
 		setClip(false);
-		defaults().padLeft(30).padRight(30).padTop(35).padBottom(35);
+		defaults().padLeft(padl).padRight(padr).padTop(padt).padBottom(padb);
 		
 		
 		TextureRegion tr = new TextureRegion(ng.getManager().getAtlas().findRegion("cloud"));		
@@ -49,6 +50,11 @@ public class Cloud extends Window{
 		
 		
 		pack();
+	
+	}
+
+	public Cloud(String text, NetaGame ng, final Callback r ) {
+		this(text, ng, r, 30 , 35, 30 ,35);
 	}
 
 	public static interface Callback{

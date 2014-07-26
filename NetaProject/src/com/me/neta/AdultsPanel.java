@@ -41,11 +41,11 @@ public class AdultsPanel extends Frame{
 		 Label question = new Label("Читать научились все, а много ли читателей?", skin, "instruction2");
 		 question.setAlignment(Align.left);
 		 
-		 String lyricsString = "Сказать ли\n" +
+		 String lyricsString = "Сказать ли,\n" +
 		 		"О чем они втайне мечтают - \n" +
 		 		"Те, чьи книги охотно читают?\n" +
-		 		"Мечтают чтоб мы научились читать...\n" +
-		 		"Ах об этом\n" +
+		 		"Мечтают, чтоб мы научились читать...\n" +
+		 		"Ах, об этом\n" +
 		 		"Можно только мечтать\n" +
 		 		"Борис Заходер \"Мечты и звуки\"\n";
 		 Label lyrics = new Label(lyricsString, skin, "instruction");

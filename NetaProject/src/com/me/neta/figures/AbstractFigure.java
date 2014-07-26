@@ -14,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.me.neta.DoubleClickListener;
 import com.me.neta.Moveable;
 import com.me.neta.Util;
 import com.me.neta.events.SelectFigureEvent;

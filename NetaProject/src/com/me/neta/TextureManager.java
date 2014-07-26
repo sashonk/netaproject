@@ -129,10 +129,10 @@ public class TextureManager {
 		manager.load("data/main.pack", TextureAtlas.class);
 		manager.load("data/misc/misc.pack", TextureAtlas.class);
 
-		manager.load(("data/field1.jpg"), Texture.class);
-		manager.load(("data/field2.jpg"), Texture.class);
-		manager.load(("data/field3.jpg"), Texture.class);
-		manager.load(("data/field4.jpg"), Texture.class);
+		//manager.load(("data/field1.jpg"), Texture.class);
+		//manager.load(("data/field2.jpg"), Texture.class);
+		//manager.load(("data/field3.jpg"), Texture.class);
+		//manager.load(("data/field4.jpg"), Texture.class);
 		
 		
 		manager.load("data/nikol.jpg", Texture.class);

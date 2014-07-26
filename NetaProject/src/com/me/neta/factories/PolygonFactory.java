@@ -3,13 +3,13 @@ package com.me.neta.factories;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.me.neta.Factory;
+import com.me.neta.FigureFactory;
 import com.me.neta.NetaGame;
 import com.me.neta.Size;
 import com.me.neta.TextureManager;
 import com.me.neta.figures.PolygonFigure;
 
-public class PolygonFactory extends Factory{
+public class PolygonFactory extends FigureFactory{
 	TextureRegion tx;
 	Size size;
 	String assetName;

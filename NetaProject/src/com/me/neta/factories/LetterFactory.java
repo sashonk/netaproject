@@ -13,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Source;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
-import com.me.neta.Factory;
+import com.me.neta.FigureFactory;
 import com.me.neta.NetaGame;
 import com.me.neta.TextureManager;
 import com.me.neta.Util;
@@ -23,7 +23,7 @@ import com.me.neta.events.DragStopEvent;
 import com.me.neta.events.FigureDropEvent;
 import com.me.neta.figures.Letter;
 
-public class LetterFactory extends Factory {
+public class LetterFactory extends FigureFactory {
 	TextureManager tm;
 	TextureRegion circle;
 	TextureRegion char1;

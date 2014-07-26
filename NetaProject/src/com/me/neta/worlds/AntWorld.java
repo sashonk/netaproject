@@ -10,15 +10,10 @@ import javax.sound.midi.Sequence;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
+
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
+
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -28,7 +23,6 @@ import com.me.neta.CellarGroup;
 import com.me.neta.CellarGroup.LogicFlower;
 import com.me.neta.CellarGroup.LogicLabel;
 import com.me.neta.Barrier;
-import com.me.neta.CoorListener;
 import com.me.neta.Hero;
 import com.me.neta.MetricListener;
 import com.me.neta.NetaGame;
@@ -106,7 +100,7 @@ public class AntWorld extends World{
 			line1.add(label("свете"));
 			
 			//Table line2 = line();
-			line1.add(label("муравей"));
+			line1.add(label("муравей -"));
 			
 			Table line2 = line();		
 			line2.add(label("Без"));

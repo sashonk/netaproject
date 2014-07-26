@@ -70,7 +70,6 @@ import com.me.neta.tools.AbstractTool;
 import com.me.neta.tools.BrushTool;
 import com.me.neta.tools.RotateTool;
 import com.me.neta.tools.StartButton;
-import com.me.neta.tools.ZIndexTool;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
