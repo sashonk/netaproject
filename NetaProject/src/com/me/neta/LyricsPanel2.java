@@ -33,7 +33,7 @@ public class LyricsPanel2 extends Window{
 		defaults().minHeight(275);
 
 		
-		Map<Integer, Actor> mm = new HashMap<Integer, Actor>();
+		Map<String, Actor> mm = new HashMap<String, Actor>();
 		String titleStyle = "lyrics_title";
 		int padBottomT = 20;
 		int pad = 3;
@@ -59,7 +59,7 @@ public class LyricsPanel2 extends Window{
 			t.setBackground(skin.getDrawable("unchecked"));
 			
 			add(t);
-			mm.put(Integer.valueOf(1), t);
+			mm.put("ant", t);
 		}
 		
 		//spider
@@ -85,7 +85,7 @@ public class LyricsPanel2 extends Window{
 			t.setBackground(skin.getDrawable("unchecked"));
 			
 			add(t);
-			mm.put(Integer.valueOf(2), t);
+			mm.put("spider", t);
 
 		}
 		
@@ -118,7 +118,7 @@ public class LyricsPanel2 extends Window{
 			t.setBackground(skin.getDrawable("unchecked"));
 			
 			add(t);
-			mm.put(Integer.valueOf(3), t);
+			mm.put("piton", t);
 
 		}
 		
@@ -145,11 +145,11 @@ public class LyricsPanel2 extends Window{
 			t.setBackground(skin.getDrawable("unchecked"));
 			
 			add(t);
-			mm.put(Integer.valueOf(4), t);
+			mm.put("tiger", t);
 
 		}
 		
-		for(final Integer key : mm.keySet()){
+		for(final String key : mm.keySet()){
 			Actor table = mm.get(key);
 			table.addListener(new InputListener(){
 				public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {

@@ -43,7 +43,9 @@ public class NetaGame implements ApplicationListener {
 	
 	public static final boolean debug= false;
 	  Stage stage;
+	  
 	
+	public static String PAYED_RELEASE_URL = "https://www.google.com/";
 
 	
 	Workspace space;
@@ -66,14 +68,18 @@ public class NetaGame implements ApplicationListener {
 	public ShaderProgram getCustomShader(){
 		return sp;
 	}
+	
+
+	
+
 
 	Texture splash;
 	ShaderProgram sp;
 	@Override
 	public void create() {
 		
-
 		
+	
 		
 		Gdx.input.setCatchBackKey(true);
 		inited  = false;

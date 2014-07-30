@@ -2,6 +2,7 @@ package com.me.neta;
 
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.run;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.alpha;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.visible;
@@ -47,6 +48,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.me.neta.Context.ContextProperty;
+import com.me.neta.ExitCloud.Option;
 import com.me.neta.Popup.PopupGroup;
 import com.me.neta.Util.OnEventAction.Predicate;
 import com.me.neta.events.*;
@@ -101,7 +103,7 @@ public class Workspace extends Group  {
 	
 	private Pinch2ZoomListener2 pinch2Zoom;
 	Passport passport;
-	Map<Integer, WorldFactory> worldFactories = new HashMap<Integer, WorldFactory>();
+	Map<String, WorldFactory> worldFactories = new HashMap<String, WorldFactory>();
 	NetaGame ng;
 	String bottomActorName = "bottomActor";
 	Table toolbarTable;
@@ -349,9 +351,9 @@ ColorTool paletteTool;
 					event.setBubbles(false);
 					
 					CreateCellarsEvent cEvent = (CreateCellarsEvent)event;
-					int choice = cEvent.getChoice();
+					String choice = cEvent.getChoice();
 
-					if(choice==world.getId()){
+					if(world.getTitle().equals(choice)){
 						world.createCellars();
 						//world.addLyrics(lyricsEvent.getChoice());
 						
@@ -392,6 +394,23 @@ ColorTool paletteTool;
 
 				}
 				
+				if(event instanceof ForbiddenEvent){
+					event.setBubbles(false);
+					ForbiddenEvent fe = (ForbiddenEvent)event;
+					addActor( new ExitCloud(fe.getMessage(), ng, 0, 0, getWidth(), getHeight(), new ExitCloud.Callback() {
+						
+						@Override
+						public void doAction(ExitCloud instance, Option o) {
+							if(o == Option.YES){
+								ng.getNative().openWebPage(NetaGame.PAYED_RELEASE_URL);
+							}
+							instance.remove();
+						}
+					}));
+					
+				}
+			
+				
 				if(event instanceof WorldSelectionEvent){
 					for(Actor act : getChildren()){
 						if(act.getName()!=null && act.getName().contains("popup")){
@@ -403,9 +422,9 @@ ColorTool paletteTool;
 
 					WorldSelectionEvent desktopEvent = (WorldSelectionEvent) event;
 					
-					int deskId = desktopEvent.getId();
+					String deskId = desktopEvent.getId();
 					
-					if(deskId>=0){
+					if(deskId!=null){
 						Actor abandoningWorld = null;
 						if(world!=null && world.getParent()!=null){
 							 abandoningWorld = world;
@@ -414,7 +433,17 @@ ColorTool paletteTool;
 						}
 						
 						
-						world = worldFactories.get(desktopEvent.getId()).create();
+						world = worldFactories.get(deskId).create();
+						world.addListener(new InputListener(){
+							public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+								if(Gdx.input.isKeyPressed(Keys.S)){
+									saveAction();
+								}
+								return true;
+							}
+
+						});
+						
 						findActor("topButtons").setPosition(800, 700);		
 						world.populate();
 						world.setZIndex(1);
@@ -424,7 +453,6 @@ ColorTool paletteTool;
 						worldsPanel.setVisible(false);
 						addActorBefore(abandoningWorld!=null ? abandoningWorld : Workspace.this.findActor(bottomActorName), world);
 
-						world.setId(desktopEvent.getId());
 						world.drawPassport(passport);
 	
 						if(showPopupPref){
@@ -1119,19 +1147,10 @@ ColorTool paletteTool;
 		});
 		setSelectedColor(Color.WHITE);
 		
-/*		
-		this.addListener(new InputListener(){
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				
-			//	popup("Hello\nI'm popup!",x,y).addAction(sequence(delay(4), Actions.removeActor()));
-				return false;
-			}
-		});*/
-		
+
 		
 		errorSnd = ng.getManager().getSound("error");
 		
-		//popup("Выбери игровое поле", 100, 80, "popupChooseWorld").setVisible(false);
 		
 		if(!showNikolLetter){
 			ng.getContext().setProperty(ContextProperty.HALT, null);
@@ -1143,9 +1162,8 @@ ColorTool paletteTool;
 		}
 		
 		
-/*		Cloud cl = new Cloud("Привет, морриконе", ng);
-		addActor(cl);
-		cl.setPosition(300, 300);*/
+	
+		
 		
 		this.addAction(Actions.forever(Actions.sequence(new TemporalAction(5) {
 			
@@ -1261,7 +1279,7 @@ ColorTool paletteTool;
     
     
     public void populateWorldFactories(final NetaGame ng){
-    	worldFactories.put(Integer.valueOf(1), new WorldFactory() {
+    	worldFactories.put("ant", new WorldFactory() {
 			
 			@Override
 			public World create() {
@@ -1269,7 +1287,7 @@ ColorTool paletteTool;
 			}
 		});
     	
-    	worldFactories.put(Integer.valueOf(2), new WorldFactory() {
+    	worldFactories.put("spider", new WorldFactory() {
 			
 			@Override
 			public World create() {
@@ -1277,7 +1295,7 @@ ColorTool paletteTool;
 			}
 		});
     	
-    	worldFactories.put(Integer.valueOf(3), new WorldFactory() {
+    	worldFactories.put("piton", new WorldFactory() {
 			
 			@Override
 			public World create() {
@@ -1285,7 +1303,7 @@ ColorTool paletteTool;
 			}
 		});
     	
-    	worldFactories.put(Integer.valueOf(4), new WorldFactory() {
+    	worldFactories.put("tiger", new WorldFactory() {
 			
 			@Override
 			public World create() {
@@ -1322,9 +1340,78 @@ ColorTool paletteTool;
 
 
  	public void sureWantLeave(){
- 		ExitCloud ex = new ExitCloud(ng, 0, 0, getWidth(), getHeight());
- 		addActor(ex);
- 		Util.center(ex); 		
+
+ 	
+ 		
+ 		
+	 		final ExitCloud ex = new ExitCloud("Точно хочешь выйти?",ng, 0, 0, getWidth(), getHeight(), new ExitCloud.Callback() {
+				
+				@Override
+				public void doAction(ExitCloud instance, Option o) {
+					if(o == Option.YES){
+						Gdx.app.exit();
+					}
+					else{
+						instance.remove();
+					}
+				}
+			});
+	 		addActor(ex);
+ 		
+	 		
+	 		Cloud c = new Cloud("Оцени нас на Google Play!", ng, new Cloud.Callback() {
+				
+				@Override
+				public void run(Cloud cloud) {
+					ng.getNative().openWebPage("https://www.google.com/");
+					cloud.remove();
+				}
+			});
+	 		ex.addActor(c);
+	 		Util.center(c);	 		
+	 		c.setPosition(c.getX()+300, c.getY()+300);
  	}
+ 	
+ 	
+    void saveAction(){
+
+
+		addAction(delay(.1f,run(new Runnable(){
+
+			@Override
+			public void run() {				
+				if (Gdx.files.isExternalStorageAvailable()) {
+				try {
+					final Pixmap pixmap = getScreenshot(0, 0,
+							Gdx.graphics.getWidth(),
+							Gdx.graphics.getHeight(), true);
+					MessageHelper.message(ng, "Пожалуйста, подождите...");	
+					
+					addAction(delay(.1f, Actions.run(new Runnable(){public void run() {	
+					FileHandle handle = Gdx.files.external(String
+							.format("picture%d.png",
+									System.currentTimeMillis()));
+
+					
+					//for(int i = 0; i<50; i++){
+						PixmapIO.writePNG(handle, pixmap);
+				//	}
+					
+					String text ="Изображение сохранено "+  (NetaGame.debug ? new StringBuilder("[файл:").append(handle.file().getAbsolutePath()).append(']').toString() : "");  
+					MessageHelper.notify(ng, text);
+					
+					}})));
+				} catch (Exception ex) {
+					MessageHelper.error(ng, "Ошибка! Изображение не сохранено!", ex);
+				}
+			} else {
+				MessageHelper.error(ng, "Файловое хранилище недоступно!", null);
+
+			}	}})));
+		
+					
+		
+
+    }
 }
 

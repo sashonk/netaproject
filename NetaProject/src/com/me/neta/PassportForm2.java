@@ -121,7 +121,7 @@ public class PassportForm2 extends Window{
 	
 	EventListener hideKeyBoard(){
 		return new InputListener(){
-			public boolean keyTyped (InputEvent event, char character) {
+			public boolean keyTyped (InputEvent event, char character) {/*
 				if(Keys.ENTER==event.getKeyCode()){				
 					//Gdx.input.setOnscreenKeyboardVisible(false);
 					Stage s = event.getStage();
@@ -134,6 +134,8 @@ public class PassportForm2 extends Window{
 				}
 				return true;
 				
+			*/
+			return true;	
 			}
 	 };
 	}

@@ -4,13 +4,13 @@ import com.badlogic.gdx.scenes.scene2d.Event;
 
 public class WorldSelectionEvent extends Event{
 	
-	public WorldSelectionEvent(int id){
+	public WorldSelectionEvent(String id){
 		this.id = id;
 	}
 	
-	public int getId(){
+	public String getId(){
 		return id;
 	}
 
-	private int id;
+	private String id;
 }

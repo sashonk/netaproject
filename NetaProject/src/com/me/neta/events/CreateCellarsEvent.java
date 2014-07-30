@@ -4,13 +4,13 @@ import com.badlogic.gdx.scenes.scene2d.Event;
 
 
 public  class CreateCellarsEvent extends Event{
-	public CreateCellarsEvent(int choise){
+	public CreateCellarsEvent(String choise){
 		this.choice = choise;
 	}
 	
-	public int getChoice(){
+	public String getChoice(){
 		return choice;
 	}
 	
-	private int choice;
+	private String choice;
 }

@@ -30,7 +30,7 @@ public class PassportTool extends PanelTool{
 			onShow();
 			show();
 			
-			panel.addAction(Util.zoomTo(0.4f, 0, null));
+			panel.addAction(Util.zoomTo(0.6f, 0, null));
 			ng.getWorkspace().getPinch2Zoom().setCanPan(false);
 		
 		}		

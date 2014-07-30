@@ -77,7 +77,6 @@ public abstract class World extends Group{
 
 	BrushTool btool;
 	boolean lyricsAdded = false;
-	private int id;
 	TextureManager tm;
 	private boolean colorize;
 	private AbstractFigure selectedActor;
@@ -114,13 +113,7 @@ public abstract class World extends Group{
 		selectedActor =figure;
 	}
 	
-	public int getId(){
-		return id;
-	}
-	
-	public void setId(int id){
-		this.id = id;
-	}
+
 	
 	public void setColorizing(boolean value){
 		colorize = value;
