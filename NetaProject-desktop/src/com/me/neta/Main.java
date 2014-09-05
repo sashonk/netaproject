@@ -10,7 +10,7 @@ public class Main {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		cfg.title = "Run this game for kids on PC";
 		cfg.useGL20 = true;
-	//	cfg.fullscreen = true;
+		cfg.fullscreen = false;
 		cfg.width = 1024;
 		cfg.height = 768;
 		

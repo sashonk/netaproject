@@ -7,6 +7,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import com.google.android.gms.ads.InterstitialAd;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -44,6 +46,21 @@ public class AndroidNative implements Native{
 		Uri uri = Uri.parse("file://" + attachment);
 		intent.putExtra(Intent.EXTRA_STREAM, uri);
 		activity.startActivity(Intent.createChooser(intent, "Отправка письма..."));		
+	}
+
+	@Override
+	public void showInterstitial() {
+
+		
+		activity.runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				MainActivity ma = (MainActivity)activity;
+				ma.displayInterstitial();				
+			}
+		});
+		
 	}
 	
 

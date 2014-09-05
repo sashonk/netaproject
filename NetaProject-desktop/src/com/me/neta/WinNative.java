@@ -39,4 +39,12 @@ public class WinNative implements Native{
 		}
 	}
 
+
+
+	@Override
+	public void showInterstitial() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

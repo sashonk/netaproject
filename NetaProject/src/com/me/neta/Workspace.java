@@ -164,7 +164,7 @@ ColorTool paletteTool;
 	public void initialize(){
 		
 		initContext(ng.getContext());
-
+		
 		
 		final boolean showPopupPref = Gdx.app.getPreferences(NetaGame.class.getName()).getBoolean("showPopup", true);
 		tips.startHasEverBeenClickedOnPopup= !showPopupPref;
@@ -172,6 +172,8 @@ ColorTool paletteTool;
 		passport = new Passport();
 		pinch2Zoom = new Pinch2ZoomListener2();
 		pinch2Zoom.setZMin(.125f);
+		pinch2Zoom.setCanPan(true);
+		pinch2Zoom.setCanZoom(true);
 		this.addCaptureListener(pinch2Zoom);
 			
 		Actor bottom = new Actor();
@@ -472,6 +474,9 @@ ColorTool paletteTool;
 					ng.getContext().setProperty(ContextProperty.CELLARS, null);
 					ng.getContext().setProperty(ContextProperty.INGAME, null);
 					ng.getContext().setProperty(ContextProperty.GAME_END, null);
+					
+					ng.getWorkspace().getPinch2Zoom().setCanPan(true);
+					ng.getWorkspace().getPinch2Zoom().setCanZoom(true);
 
 					lettersPanel.setVariants(world.getLetters());
 
@@ -724,6 +729,8 @@ ColorTool paletteTool;
 					ng.getContext().setProperty(ContextProperty.GAME_END, Boolean.TRUE);
 					ng.getContext().setProperty(ContextProperty.HALT, null);
 					ng.getContext().setProperty(ContextProperty.INGAME, null);
+					ng.getWorkspace().getPinch2Zoom().setCanPan(true);
+					ng.getWorkspace().getPinch2Zoom().setCanZoom(true);
 					
 					
 					
@@ -740,9 +747,11 @@ ColorTool paletteTool;
 							world.refresh();
 							ng.getContext().setProperty(ContextProperty.POPUP, null);		
 							ng.getContext().setProperty(ContextProperty.GAME_END, null);
+
 							
-							
-							flowerTool.setPopup("Выбери буквы для игры", 0, new PopupGroup(flowerTool), 0);
+							if(showPopupPref){
+								flowerTool.setPopup("Выбери буквы для игры", 0, new PopupGroup(flowerTool), 0);
+							}
 							ptGroup.onShow(null);//bTool.setChecked(true);
 							tips = new Tips();
 							tips.makeRoamsTipShown = true;

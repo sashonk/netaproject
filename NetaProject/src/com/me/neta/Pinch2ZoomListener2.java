@@ -44,6 +44,11 @@ public class Pinch2ZoomListener2 extends InputListener implements ContextListene
 	private float initialZoom ;
 	private boolean canPan;
 	private boolean canPanForce = true;
+	private boolean canZoom;
+	
+	public void setCanZoom(boolean cz){
+		canZoom = cz;
+	}
 	
 	private float Zmin = 0.25f;
 	
@@ -120,6 +125,10 @@ public class Pinch2ZoomListener2 extends InputListener implements ContextListene
 	boolean debug = true;
 
 	 void pinchToZoom(Vector2 initialPointer1,Vector2 initialPointer2, Vector2 pointer1,Vector2 pointer2, Stage s){
+		 
+		 if(!canZoom){
+			 return;
+		 }
 
 		 float initialDistance = initialPointer2.dst(initialPointer1);
 		 float distance = pointer2.dst(pointer1);
@@ -314,7 +323,11 @@ public class Pinch2ZoomListener2 extends InputListener implements ContextListene
 
 
 	@Override
-	public void contextChanged(Context ctx) {
-		setCanPan(ctx.getProperty(ContextProperty.LETTERS)!=null && ctx.getProperty(ContextProperty.INGAME)==null );
-	}
+	public void contextChanged(Context ctx) {/*
+		boolean InGame = (ctx.getProperty(ContextProperty.INGAME)!=null); 
+		if(InGame){
+			setCanPan(false);
+			setCanZoom(false);
+		}
+	*/}
 }

@@ -1,7 +1,9 @@
 package com.me.neta;
  
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -10,15 +12,20 @@ import android.widget.RelativeLayout.LayoutParams;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 
 public class MainActivity extends AndroidApplication {
 	
 	  private static final String AD_UNIT_ID = "ca-app-pub-4198140113968724/8806620094";
+	  private static final String AD_UNIT_ID_I =	"ca-app-pub-4198140113968724/9724950092";
 	  private static final String GOOGLE_PLAY_URL = "https://play.google.com/store/apps/developer?id=TheInvader360";
+	  private static final String GIRLFRIENDs_HUAWEY = "C1E23BAF9DEC590B1ADF948CF0B72E47";
 	  protected AdView adView;
+	  protected InterstitialAd interstitial;
 	  protected View gameView;
 	
     @Override
@@ -45,9 +52,25 @@ public class MainActivity extends AndroidApplication {
     	    layout.addView(gameView);
 
     	    setContentView(layout);
-    	    startAdvertising(admobView);
+    	    adView.loadAd(buildRequest());
+    	    
+    	    
+    	    interstitial = createInterstitial();
+    	    interstitial.loadAd(buildRequest());
+    	    
+    	    final TelephonyManager tm =(TelephonyManager)getBaseContext().getSystemService(Context.TELEPHONY_SERVICE);
+
+    	    String deviceid = tm.getDeviceId();
+    	    System.out.println("DEVICE_ID:"+deviceid);
     }
     
+    private InterstitialAd createInterstitial(){
+    	InterstitialAd ad = new InterstitialAd(this);
+    	ad.setAdUnitId(AD_UNIT_ID_I);
+    	return ad;
+    }
+    
+
     
     private AdView createAdView() {
         adView = new AdView(this);
@@ -71,10 +94,25 @@ public class MainActivity extends AndroidApplication {
         gameView.setLayoutParams(params);
         return gameView;
       }
+      
+      // Вызовите displayInterstitial(), когда будете готовы показать межстраничное объявление.
+      public void displayInterstitial() {
+        if (interstitial.isLoaded()) {
+          interstitial.show();
+        }
+      }
+      
+      private AdRequest buildRequest(){
+         return  new AdRequest.Builder().
+        		     addTestDevice(AdRequest.DEVICE_ID_EMULATOR).
+        		     addTestDevice(GIRLFRIENDs_HUAWEY).
+          		build();
+      }
 
-      private void startAdvertising(AdView adView) {
+      public void startAdvertising(AdView adView) {
         AdRequest adRequest = new AdRequest.Builder().
-     
+        		addTestDevice(AdRequest.DEVICE_ID_EMULATOR).
+        		addTestDevice(GIRLFRIENDs_HUAWEY).
         		build();
         adView.loadAd(adRequest);
       }

@@ -1,5 +1,7 @@
 package com.me.neta.tools;
 
+import java.util.Random;
+
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.me.neta.Context;
 import com.me.neta.NetaGame;
@@ -24,6 +26,11 @@ public class QuestionTool extends TopTool{
 
 	@Override
 	public void doAction() {
+		Random rnd = new Random(System.currentTimeMillis());
+		
+		if(rnd.nextBoolean())
+		ng.getNative().showInterstitial();
+		
 		if(!panel.isVisible()){
 			panel.setVisible(true);
 			context.setProperty(ContextProperty.HALT, Boolean.TRUE) ;

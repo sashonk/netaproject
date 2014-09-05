@@ -1,4 +1,4 @@
-package com.me.neta;
+package com.nikolegames;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -6,6 +6,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
+
+import com.me.neta.Native;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -44,6 +46,12 @@ public class AndroidNative implements Native{
 		Uri uri = Uri.parse("file://" + attachment);
 		intent.putExtra(Intent.EXTRA_STREAM, uri);
 		activity.startActivity(Intent.createChooser(intent, "Отправка письма..."));		
+	}
+
+	@Override
+	public void showInterstitial() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 

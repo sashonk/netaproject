@@ -35,6 +35,8 @@ public class StartButton extends AbstractTool{
 	@Override
 	public void doAction() {
 		context.setProperty(ContextProperty.INGAME, Boolean.TRUE);
+		ng.getWorkspace().getPinch2Zoom().setCanPan(false);
+		ng.getWorkspace().getPinch2Zoom().setCanZoom(false);
 		//context.setProperty(ContextProperty.HALT, Boolean.TRUE);
 		world.start();
 		fire(new DragStartEvent()); //to stop workspace pan

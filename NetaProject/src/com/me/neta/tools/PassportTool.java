@@ -2,6 +2,7 @@ package com.me.neta.tools;
 
 import com.me.neta.Context;
 import com.me.neta.NetaGame;
+import com.me.neta.PassportForm2;
 import com.me.neta.Size;
 import com.me.neta.Context.ContextProperty;
 import com.me.neta.Util;
@@ -23,15 +24,20 @@ public class PassportTool extends PanelTool{
 		if(panel.isVisible()){
 			onHide();
 			hide();
-			panel.addAction(Util.zoomTo(1f, 0, null));
+			
+			PassportForm2 form = (PassportForm2)panel;
+			form.end();
 			ng.getWorkspace().getPinch2Zoom().setCanPan(true);
+			ng.getWorkspace().getPinch2Zoom().setCanZoom(true);
 		}
 		else{
 			onShow();
 			show();
 			
-			panel.addAction(Util.zoomTo(0.6f, 0, null));
+			PassportForm2 form = (PassportForm2)panel;
+			form.begin();
 			ng.getWorkspace().getPinch2Zoom().setCanPan(false);
+			ng.getWorkspace().getPinch2Zoom().setCanZoom(false);
 		
 		}		
 	}

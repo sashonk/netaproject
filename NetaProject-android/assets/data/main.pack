@@ -283,14 +283,14 @@ panel
   orig: 155, 38
   offset: 0, 0
   index: -1
-yabloko
+lock
   rotate: false
   xy: 692, 54
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
-yabloko2
+yabloko
   rotate: false
   xy: 794, 69
   size: 100, 100
@@ -318,6 +318,41 @@ ZVET6
   orig: 74, 48
   offset: 0, 0
   index: -1
+yabloko2
+  rotate: false
+  xy: 894, 199
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+PAUK
+  rotate: false
+  xy: 896, 118
+  size: 119, 79
+  orig: 119, 79
+  offset: 0, 0
+  index: -1
+ZEBRA
+  rotate: false
+  xy: 930, 44
+  size: 93, 72
+  orig: 93, 72
+  offset: 0, 0
+  index: -1
+FIGURA15W
+  rotate: false
+  xy: 930, 1
+  size: 42, 41
+  orig: 42, 41
+  offset: 0, 0
+  index: -1
+FIGURA3W
+  rotate: false
+  xy: 974, 1
+  size: 42, 41
+  orig: 42, 41
+  offset: 0, 0
+  index: -1
 FIGURA19W
   rotate: false
   xy: 956, 364
@@ -332,53 +367,11 @@ barrier
   orig: 67, 33
   offset: 0, 0
   index: -1
-ZEBRA
-  rotate: false
-  xy: 930, 231
-  size: 93, 72
-  orig: 93, 72
-  offset: 0, 0
-  index: -1
-PAUK
-  rotate: false
-  xy: 896, 150
-  size: 119, 79
-  orig: 119, 79
-  offset: 0, 0
-  index: -1
-ZVET2
-  rotate: false
-  xy: 896, 69
-  size: 85, 79
-  orig: 85, 79
-  offset: 0, 0
-  index: -1
-frame-tail
-  rotate: false
-  xy: 930, 2
-  size: 52, 65
-  orig: 52, 65
-  offset: 0, 0
-  index: -1
-POVOROT
-  rotate: false
-  xy: 983, 108
-  size: 40, 40
-  orig: 40, 40
-  offset: 0, 0
-  index: -1
 FIGURA9W
   rotate: false
   xy: 856, 837
   size: 50, 42
   orig: 50, 42
-  offset: 0, 0
-  index: -1
-FIGURA20W
-  rotate: false
-  xy: 894, 234
-  size: 32, 65
-  orig: 32, 65
   offset: 0, 0
   index: -1
 button
@@ -402,6 +395,13 @@ FIGURA22W
   orig: 16, 32
   offset: 0, 0
   index: -1
+OBLAKO_STRELKA
+  rotate: false
+  xy: 956, 302
+  size: 50, 25
+  orig: 50, 25
+  offset: 0, 0
+  index: -1
 FIGURA27W
   rotate: false
   xy: 1005, 966
@@ -418,37 +418,16 @@ MUH
   index: -1
 FIGURA21W
   rotate: false
-  xy: 998, 519
+  xy: 896, 70
   size: 23, 46
   orig: 23, 46
   offset: 0, 0
   index: -1
-FIGURA8W
-  rotate: false
-  xy: 983, 76
-  size: 36, 30
-  orig: 36, 30
-  offset: 0, 0
-  index: -1
-FIGURA18W
-  rotate: false
-  xy: 984, 14
-  size: 30, 60
-  orig: 30, 60
-  offset: 0, 0
-  index: -1
 FIGURA24W
   rotate: false
-  xy: 1016, 33
+  xy: 921, 75
   size: 7, 41
   orig: 7, 41
-  offset: 0, 0
-  index: -1
-vknob3
-  rotate: false
-  xy: 956, 305
-  size: 20, 22
-  orig: 20, 22
   offset: 0, 0
   index: -1
 FIGURA26W
@@ -458,32 +437,32 @@ FIGURA26W
   orig: 10, 41
   offset: 0, 0
   index: -1
-FIGURA25W
-  rotate: false
-  xy: 1017, 203
-  size: 6, 26
-  orig: 6, 26
-  offset: 0, 0
-  index: -1
 vscroll
   rotate: false
-  xy: 998, 477
+  xy: 998, 525
   size: 20, 40
   orig: 20, 40
   offset: 0, 0
   index: -1
 FIGURA23W
   rotate: false
-  xy: 1020, 481
+  xy: 1020, 529
   size: 3, 36
   orig: 3, 36
   offset: 0, 0
   index: -1
-FIGURA10W
+FIGURA25W
   rotate: false
-  xy: 984, 1
-  size: 21, 11
-  orig: 21, 11
+  xy: 756, 168
+  size: 6, 26
+  orig: 6, 26
+  offset: 0, 0
+  index: -1
+FIGURA17W
+  rotate: false
+  xy: 998, 486
+  size: 19, 37
+  orig: 19, 37
   offset: 0, 0
   index: -1
 FIGURA13W
@@ -521,30 +500,44 @@ FIGURA11W
   orig: 32, 17
   offset: 0, 0
   index: -1
-unchecked
+vscroll3
   rotate: false
-  xy: 998, 450
-  size: 24, 25
-  orig: 24, 25
+  xy: 998, 456
+  size: 20, 28
+  orig: 20, 28
   offset: 0, 0
   index: -1
 FIGURA7W
   rotate: false
-  xy: 1000, 429
+  xy: 1000, 435
   size: 23, 19
   orig: 23, 19
   offset: 0, 0
   index: -1
-FIGURA17W
+vknob3
   rotate: false
-  xy: 1000, 390
-  size: 19, 37
-  orig: 19, 37
+  xy: 782, 432
+  size: 20, 22
+  orig: 20, 22
+  offset: 0, 0
+  index: -1
+unchecked
+  rotate: false
+  xy: 996, 275
+  size: 24, 25
+  orig: 24, 25
+  offset: 0, 0
+  index: -1
+FIGURA10W
+  rotate: false
+  xy: 253, 504
+  size: 21, 11
+  orig: 21, 11
   offset: 0, 0
   index: -1
 vknob
   rotate: false
-  xy: 253, 509
+  xy: 302, 144
   size: 20, 6
   orig: 20, 6
   offset: 0, 0
@@ -554,255 +547,269 @@ main2.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+ZVET2
+  rotate: false
+  xy: 1, 176
+  size: 85, 79
+  orig: 85, 79
+  offset: 0, 0
+  index: -1
 lyricsBackground2
   rotate: false
-  xy: 1, 60
+  xy: 88, 188
   size: 90, 67
   orig: 90, 67
   offset: 0, 0
   index: -1
-ZVET4
-  rotate: false
-  xy: 1, 1
-  size: 57, 57
-  orig: 57, 57
-  offset: 0, 0
-  index: -1
 ZVETOKOK_A
   rotate: false
-  xy: 93, 57
+  xy: 1, 104
   size: 85, 70
   orig: 85, 70
   offset: 0, 0
   index: -1
 frame
   rotate: false
-  xy: 180, 57
+  xy: 88, 116
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 frame_w
   rotate: false
-  xy: 252, 57
+  xy: 1, 32
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 circle
   rotate: false
-  xy: 324, 63
+  xy: 180, 191
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 fill
   rotate: false
-  xy: 390, 63
+  xy: 246, 191
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 nperror
   rotate: false
-  xy: 456, 63
+  xy: 312, 191
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 npsystem
   rotate: false
-  xy: 522, 63
+  xy: 378, 191
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 FLOWER2
   rotate: false
-  xy: 588, 64
+  xy: 444, 192
   size: 63, 63
   orig: 63, 63
   offset: 0, 0
   index: -1
+FIGURA14W
+  rotate: false
+  xy: 1, 1
+  size: 30, 29
+  orig: 30, 29
+  offset: 0, 0
+  index: -1
+FIGURA2W
+  rotate: false
+  xy: 33, 1
+  size: 30, 29
+  orig: 30, 29
+  offset: 0, 0
+  index: -1
+ZVET3
+  rotate: false
+  xy: 160, 113
+  size: 57, 73
+  orig: 57, 73
+  offset: 0, 0
+  index: -1
 I
   rotate: false
-  xy: 653, 64
+  xy: 219, 126
   size: 63, 63
   orig: 63, 63
   offset: 0, 0
   index: -1
 heart
   rotate: false
-  xy: 324, 1
+  xy: 284, 129
   size: 60, 60
   orig: 60, 60
   offset: 0, 0
   index: -1
-ZVET3
-  rotate: false
-  xy: 718, 54
-  size: 57, 73
-  orig: 57, 73
-  offset: 0, 0
-  index: -1
-frame-tail-right
-  rotate: false
-  xy: 777, 60
-  size: 52, 67
-  orig: 52, 67
-  offset: 0, 0
-  index: -1
 ZVET1
   rotate: false
-  xy: 386, 16
+  xy: 346, 144
   size: 71, 45
   orig: 71, 45
   offset: 0, 0
   index: -1
+frame-tail-right
+  rotate: false
+  xy: 73, 35
+  size: 52, 67
+  orig: 52, 67
+  offset: 0, 0
+  index: -1
+FIGURA18W
+  rotate: false
+  xy: 127, 54
+  size: 30, 60
+  orig: 30, 60
+  offset: 0, 0
+  index: -1
+ZVET4
+  rotate: false
+  xy: 159, 54
+  size: 57, 57
+  orig: 57, 57
+  offset: 0, 0
+  index: -1
 TIGR
   rotate: false
-  xy: 831, 77
+  xy: 127, 2
   size: 58, 50
   orig: 58, 50
   offset: 0, 0
   index: -1
-bubble_tail
-  rotate: false
-  xy: 891, 63
-  size: 43, 64
-  orig: 43, 64
-  offset: 0, 0
-  index: -1
-bubble_tail2
-  rotate: false
-  xy: 936, 63
-  size: 43, 64
-  orig: 43, 64
-  offset: 0, 0
-  index: -1
-FIGURA15W
-  rotate: false
-  xy: 981, 86
-  size: 42, 41
-  orig: 42, 41
-  offset: 0, 0
-  index: -1
-FIGURA3W
-  rotate: false
-  xy: 981, 43
-  size: 42, 41
-  orig: 42, 41
-  offset: 0, 0
-  index: -1
 FIGURA6W
   rotate: false
-  xy: 459, 20
+  xy: 187, 11
   size: 42, 41
   orig: 42, 41
   offset: 0, 0
   index: -1
-ZAPERED
+FIGURA20W
   rotate: false
-  xy: 503, 21
-  size: 40, 40
-  orig: 40, 40
+  xy: 419, 124
+  size: 32, 65
+  orig: 32, 65
   offset: 0, 0
   index: -1
-brush
+frame-tail
   rotate: false
-  xy: 545, 21
-  size: 40, 40
-  orig: 40, 40
-  offset: 0, 0
-  index: -1
-OBLAKO_STRELKA
-  rotate: false
-  xy: 831, 50
-  size: 50, 25
-  orig: 50, 25
-  offset: 0, 0
-  index: -1
-lyricsDrawable
-  rotate: false
-  xy: 587, 1
-  size: 40, 40
-  orig: 40, 40
-  offset: 0, 0
-  index: -1
-lyricsDrawable2
-  rotate: false
-  xy: 629, 1
-  size: 40, 40
-  orig: 40, 40
-  offset: 0, 0
-  index: -1
-question
-  rotate: false
-  xy: 671, 1
-  size: 40, 40
-  orig: 40, 40
-  offset: 0, 0
-  index: -1
-PARPAR
-  rotate: false
-  xy: 713, 14
-  size: 38, 38
-  orig: 38, 38
-  offset: 0, 0
-  index: -1
-FIGURA14W
-  rotate: false
-  xy: 60, 29
-  size: 30, 29
-  orig: 30, 29
-  offset: 0, 0
-  index: -1
-POPUGAI
-  rotate: false
-  xy: 92, 25
-  size: 43, 30
-  orig: 43, 30
-  offset: 0, 0
-  index: -1
-FIGURA12W
-  rotate: false
-  xy: 137, 32
-  size: 44, 23
-  orig: 44, 23
-  offset: 0, 0
-  index: -1
-FIGURA2W
-  rotate: false
-  xy: 137, 1
-  size: 30, 29
-  orig: 30, 29
+  xy: 453, 125
+  size: 52, 65
+  orig: 52, 65
   offset: 0, 0
   index: -1
 FIGURA5W
   rotate: false
-  xy: 169, 1
+  xy: 65, 1
   size: 30, 29
   orig: 30, 29
   offset: 0, 0
   index: -1
 checked2
   rotate: false
-  xy: 753, 24
+  xy: 97, 5
   size: 28, 28
   orig: 28, 28
+  offset: 0, 0
+  index: -1
+FIGURA12W
+  rotate: false
+  xy: 346, 119
+  size: 44, 23
+  orig: 44, 23
+  offset: 0, 0
+  index: -1
+POPUGAI
+  rotate: false
+  xy: 219, 94
+  size: 43, 30
+  orig: 43, 30
+  offset: 0, 0
+  index: -1
+PARPAR
+  rotate: false
+  xy: 218, 54
+  size: 38, 38
+  orig: 38, 38
+  offset: 0, 0
+  index: -1
+POVOROT
+  rotate: false
+  xy: 231, 12
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
+FIGURA8W
+  rotate: false
+  xy: 264, 94
+  size: 36, 30
+  orig: 36, 30
+  offset: 0, 0
+  index: -1
+ZAPERED
+  rotate: false
+  xy: 302, 87
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
+bubble_tail
+  rotate: false
+  xy: 344, 53
+  size: 43, 64
+  orig: 43, 64
+  offset: 0, 0
+  index: -1
+bubble_tail2
+  rotate: false
+  xy: 389, 53
+  size: 43, 64
+  orig: 43, 64
   offset: 0, 0
   index: -1
 unchecked2
   rotate: false
-  xy: 783, 30
+  xy: 258, 64
   size: 28, 28
   orig: 28, 28
   offset: 0, 0
   index: -1
-vscroll3
+brush
   rotate: false
-  xy: 883, 33
-  size: 20, 28
-  orig: 20, 28
+  xy: 434, 82
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
+lyricsDrawable
+  rotate: false
+  xy: 434, 40
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
+lyricsDrawable2
+  rotate: false
+  xy: 288, 45
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
+question
+  rotate: false
+  xy: 273, 3
+  size: 40, 40
+  orig: 40, 40
   offset: 0, 0
   index: -1

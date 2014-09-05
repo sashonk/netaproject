@@ -8,4 +8,6 @@ public interface Native {
 
 	public void setForEmail(String to, File attachment, String subject);
 
+	
+	public void showInterstitial();
 }

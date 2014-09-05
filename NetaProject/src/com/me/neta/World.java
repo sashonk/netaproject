@@ -214,6 +214,9 @@ public abstract class World extends Group{
 								
 								@Override
 								public void run() {
+									ng.getWorkspace().getPinch2Zoom().setCanPan(true);
+									ng.getWorkspace().getPinch2Zoom().setCanZoom(true);
+									
 									cg.setEnabled(true);	
 									ng.getContext().setProperty(ContextProperty.BETWEEN_CELLARS, Boolean.TRUE);
 									cg.addListener(new InputListener(){
@@ -244,6 +247,9 @@ public abstract class World extends Group{
 			
 											ng.getContext().setProperty(ContextProperty.BETWEEN_CELLARS, null);
 											ng.getWorkspace().getPtGroup().onShow(null);
+											
+											ng.getWorkspace().getPinch2Zoom().setCanPan(false);
+											ng.getWorkspace().getPinch2Zoom().setCanZoom(false);
 										}
 											return true;
 										}

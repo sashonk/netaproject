@@ -1,6 +1,7 @@
 package com.me.neta;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -22,6 +23,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldFilter;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
+import com.badlogic.gdx.scenes.scene2d.utils.FocusListener.FocusEvent;
 import com.me.neta.events.PassportEvent;
 
 public class PassportForm2 extends Window{
@@ -35,7 +38,22 @@ public class PassportForm2 extends Window{
 	TextField tfState;
 	TextField tfCity;
 	TextField tfYear;
-	public PassportForm2(NetaGame ng){
+	
+	Vector2 originalCamPosition;
+	
+	public void end(){
+		this.addAction( Util.zoomTo(1f, 0, null));
+		originalCamPosition = null;
+		//getStage().getCamera().position.set(0, 0, 0);
+	}
+	
+	public void begin(){
+		this.addAction(Util.zoomTo(0.6f, 0, null));
+		//originalCamPosition = new Vector2(getStage().getCamera().position.x, getStage().getCamera().position.y);
+		
+	}
+	
+	public PassportForm2(final NetaGame ng){
 		super("", ng.getManager().getSkin());
 		this.setClip(false);
 
@@ -50,57 +68,54 @@ public class PassportForm2 extends Window{
 		tfName.setWidth(250);
 		tfName.setMessageText("Имя ребёнка");
 		//tfName.setBounds(PADX, 240, 228, H);
-		tfName.addListener(hideKeyBoard());
+		//tfName.addListener(focusListener());
 		tfName.setFocusTraversal(true);
+		wrap(tfName);
 	//	tfName.setFocusTraversal(focusTraversal)
 
 		add(tfName).row();
 				
 		 tfAge = new TextField("", skin, TEXT_FIELD_STYLE);
-		 tfAge.addListener(hideKeyBoard());
+		// tfAge.addListener(focusListener());
 		tfAge.setMessageText("Возраст");
 		//tfAge.setBounds(PADX, 205, 228, H);
 		tfAge.setMaxLength(2);
 		tfAge.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
 		add(tfAge).row();
+		wrap(tfAge);
 				
 		 tfCity = new TextField("", skin, TEXT_FIELD_STYLE);
 		tfCity.setMessageText("Город (село)");
 		//tfCity.setBounds(PADX, 170, 228, H);
-		tfCity.addListener(hideKeyBoard());
-
+		//tfCity.addListener(focusListener());
+		wrap(tfCity);
 		add(tfCity).row();
 		
 		 tfState = new TextField("", skin, TEXT_FIELD_STYLE);
 		tfState.setMessageText("Страна");
 		//tfState.setBounds(PADX, 138, 228, H);
-		tfState.addListener(hideKeyBoard());
+		//tfState.addListener(focusListener());
 
 		add(tfState).row();
-				
+		wrap(tfState);		
+		
 		 tfYear = new TextField("", skin, TEXT_FIELD_STYLE);
 		tfYear.setMessageText("Год");
 		tfYear.setMaxLength(4);
 		//tfYear.setBounds(PADX, 105, 228, H);
 		tfYear.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
-		tfYear.addListener(new InputListener(){
-			public boolean keyTyped (InputEvent event, char character) {
-				if(Keys.ENTER==event.getKeyCode()){
-					PassportForm2.this.addAction(Util.zoomTo(1, 0, null));
-					fire(new PassportEvent());
-				}
-				return true;
-				
-			}
-	 });
+		//tfYear.addListener(focusListener());
 		
 		add(tfYear).padBottom(5).row();
+		wrap(tfYear);
 		
 		final TextButton tbOk = new TextButton("OK", skin, "button");
 		add(tbOk);
 		tbOk.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				PassportForm2.this.addAction(Util.zoomTo(1, 0, null));
+				PassportForm2.this.end();
+				ng.getWorkspace().getPinch2Zoom().setCanPan(true);
+				ng.getWorkspace().getPinch2Zoom().setCanZoom(true);
 				fire(new PassportEvent());
 				return true;
 			}
@@ -119,26 +134,55 @@ public class PassportForm2 extends Window{
 		
 	}
 	
-	EventListener hideKeyBoard(){
-		return new InputListener(){
-			public boolean keyTyped (InputEvent event, char character) {/*
-				if(Keys.ENTER==event.getKeyCode()){				
-					//Gdx.input.setOnscreenKeyboardVisible(false);
-					Stage s = event.getStage();
-					OrthographicCamera cam =  (OrthographicCamera) s.getCamera();
-					cam.translate(new Vector2(0, -H));
-					
-					TextField listener =  (TextField) event.getListenerActor();
-					listener.next(false);
-					return true;
-				}
-				return true;
-				
-			*/
-			return true;	
-			}
-	 };
+	void wrap(final TextField textField){
+		   textField.setOnscreenKeyboard(new TextField.OnscreenKeyboard() {
+		        @Override
+		        public void show(boolean visible) {
+		            //Gdx.input.setOnscreenKeyboardVisible(true);
+		            Gdx.input.getTextInput(new Input.TextInputListener() {
+		                @Override
+		                public void input(String text) {
+		                    textField.setText(text);
+		                }
+
+		                @Override
+		                public void canceled() {
+		                    System.out.println("Cancelled.");
+		                }
+		            },textField.getMessageText(), "");
+		        }
+		    });
 	}
+	
+/*	EventListener focusListener(){
+		return new FocusListener() {
+			
+			public void keyboardFocusChanged (FocusEvent event, Actor actor, boolean focused) {
+				if(originalCamPosition==null){
+					originalCamPosition = new Vector2(getStage().getCamera().position.x, getStage().getCamera().position.y);
+				}
+				
+				if(event.isFocused()){
+				//	OrthographicCamera cam = (OrthographicCamera) actor.getStage().getCamera();
+				//	cam.position.set(originalCamPosition.x, originalCamPosition.y, 0);
+					
+					Vector2 target = new Vector2(tfName.getX(), tfName.getY());
+					Vector2 origin = new Vector2(actor.getX(), actor.getY());
+					Vector2 diff = target.sub(origin);
+					
+
+					//cam.translate(-diff.x, -diff.y);
+					
+					actor.addAction(Util.zoomTo(0.6f, 0, null));
+					
+				}
+				
+			}
+			
+		};
+		
+	
+	}*/
 	
 	public void update(Passport passport){
 		if(tfName.getText().length()>0){
