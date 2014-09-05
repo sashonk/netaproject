@@ -2,6 +2,7 @@ package com.me.neta;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -28,7 +29,7 @@ public class WorldsPanel extends Window{
 	
 
 	
-	public WorldsPanel(NetaGame ng, float width, float height){
+	public WorldsPanel(final NetaGame ng, float width, float height){
 		super("", ng.getManager().getSkin());
 		this.setWidth(width);
 		this.setHeight(height);
@@ -41,10 +42,10 @@ public class WorldsPanel extends Window{
 
 		this.setBackground(new TextureRegionDrawable(region));
 
-		float w = 60, h = 60;
+/*		float w = 60, h = 60;
 		float dx = 0, dy = -60;
 
-		TextureRegion lockRegion = ng.getManager().getAtlas().findRegion("lock");
+		TextureRegion lockRegion = ng.getManager().getAtlas().findRegion("lock");*/
 		
 /*		Image lock1 = new Image(new TextureRegion(lockRegion));
 		lock1.setBounds(215+dx, 270+dy, w, h);
@@ -96,6 +97,10 @@ public class WorldsPanel extends Window{
 				}
 				
 				if(id != null){
+					
+					Random rnd = new Random(System.currentTimeMillis());					
+					if(rnd.nextInt(100)>20)
+					ng.getNative().showInterstitial();
 
 						WorldSelectionEvent ev = new WorldSelectionEvent(id);
 						fire(ev);

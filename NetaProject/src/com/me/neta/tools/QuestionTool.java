@@ -26,10 +26,7 @@ public class QuestionTool extends TopTool{
 
 	@Override
 	public void doAction() {
-		Random rnd = new Random(System.currentTimeMillis());
-		
-		if(rnd.nextBoolean())
-		ng.getNative().showInterstitial();
+
 		
 		if(!panel.isVisible()){
 			panel.setVisible(true);
