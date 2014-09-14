@@ -542,6 +542,34 @@ vknob
   orig: 20, 6
   offset: 0, 0
   index: -1
+black
+  rotate: false
+  xy: 170, 1
+  size: 4, 4
+  orig: 4, 4
+  offset: 0, 0
+  index: -1
+blue
+  rotate: false
+  xy: 1019, 767
+  size: 4, 4
+  orig: 4, 4
+  offset: 0, 0
+  index: -1
+gray
+  rotate: false
+  xy: 927, 561
+  size: 4, 4
+  orig: 4, 4
+  offset: 0, 0
+  index: -1
+white
+  rotate: false
+  xy: 176, 1
+  size: 4, 4
+  orig: 4, 4
+  offset: 0, 0
+  index: -1
 
 main2.png
 format: RGBA8888

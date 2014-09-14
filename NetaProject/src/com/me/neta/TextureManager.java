@@ -201,18 +201,19 @@ wondGenerator.dispose();
 		 instructScreenReg =  new TextureRegion(instructScreen, 0, 0, 925, 433);
 	
 		
-
-		 Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
-         pixmap.setColor(Color.WHITE);
-         pixmap.fill();
-         skin.add("white", new Texture(pixmap));
+		 TextureRegion blackReg = getAtlas().findRegion("black");
+         skin.add("black", blackReg, TextureRegion.class);
          
-		 Pixmap pixmap2 = new Pixmap(1, 1, Format.RGBA8888);
-		 pixmap2.setColor(Color.BLACK);
-		 pixmap2.fill();
-         skin.add("black", new Texture(pixmap2));
+		 TextureRegion whiteReg = getAtlas().findRegion("white");
+         skin.add("white", whiteReg, TextureRegion.class);
+         
+		 TextureRegion grayReg = getAtlas().findRegion("gray");
+         skin.add("gray", grayReg, TextureRegion.class);
+         
+		 TextureRegion blueReg = getAtlas().findRegion("blue");
+         skin.add("blue", blueReg, TextureRegion.class);
               
-		 Pixmap pixmap3 = new Pixmap(1, 1, Format.RGBA8888);
+/*		 Pixmap pixmap3 = new Pixmap(1, 1, Format.RGBA8888);
 		 pixmap3.setColor(Color.GRAY);
 		 pixmap3.fill();
          skin.add("gray", new Texture(pixmap3));
@@ -235,7 +236,7 @@ wondGenerator.dispose();
          Pixmap debugTable = new Pixmap(4,4, Format.RGBA8888);
          debugTable.setColor(Color.BLACK);
          debugTable.drawRectangle(0, 0, 4, 4);
-         skin.add("debugTable", new NinePatch(new Texture(debugTable), 1, 1, 1, 1));
+         skin.add("debugTable", new NinePatch(new Texture(debugTable), 1, 1, 1, 1));*/
          
          
          
@@ -665,7 +666,7 @@ wondGenerator.dispose();
  		
  		ScrollPaneStyle spStyle = new ScrollPaneStyle();
  		//spStyle.background = skin.getDrawable("white");
- 		spStyle.corner = skin.getDrawable("debugTable");
+ 		//spStyle.corner = skin.getDrawable("debugTable");
  		spStyle.vScroll =  skin.getDrawable("vscroll");
  		spStyle.vScrollKnob = skin.getDrawable("vknob");
   		

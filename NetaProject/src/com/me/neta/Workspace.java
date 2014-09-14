@@ -750,7 +750,7 @@ ColorTool paletteTool;
 
 							
 							if(showPopupPref){
-								flowerTool.setPopup("Выбери буквы для игры", 0, new PopupGroup(flowerTool), 0);
+							flowerTool.setPopup("Выбери буквы для игры", 0, new PopupGroup(flowerTool), 0);
 							}
 							ptGroup.onShow(null);//bTool.setChecked(true);
 							tips = new Tips();
@@ -1367,7 +1367,7 @@ ColorTool paletteTool;
 			});
 	 		addActor(ex);
  		
-	 		
+/*	 		
 	 		Cloud c = new Cloud("Оцени нас на Google Play!", ng, new Cloud.Callback() {
 				
 				@Override
@@ -1378,7 +1378,7 @@ ColorTool paletteTool;
 			});
 	 		ex.addActor(c);
 	 		Util.center(c);	 		
-	 		c.setPosition(c.getX()+300, c.getY()+300);
+	 		c.setPosition(c.getX()+300, c.getY()+300);*/
  	}
  	
  	
