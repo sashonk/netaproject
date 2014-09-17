@@ -388,7 +388,7 @@ ColorTool paletteTool;
 					boolean showPopupPref = Gdx.app.getPreferences(NetaGame.class.getName()).getBoolean("showPopup", true);
 				if(!tips.makeIllustrationTipShown&& showPopupPref){
 					//popup("Ты можешь выбрать цвет и\n раскрасить фигуры", 550, 80, "popupPalette");
-					figuresTool.setPopup("Сделай иллюстрацию к стихам", 00, new PopupGroup(figuresTool,basketTool, lyricsTool, settingTool), 0);
+					figuresTool.setPopup("Сделай иллюстрацию к стихам", 00, new PopupGroup(figuresTool,basketTool, lyricsTool, settingTool,rTool), 0);
 					tips.makeIllustrationTipShown = true;
 					
 				}

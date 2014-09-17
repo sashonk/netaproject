@@ -47,4 +47,12 @@ public class WinNative implements Native{
 		
 	}
 
+
+
+	@Override
+	public boolean showLock() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

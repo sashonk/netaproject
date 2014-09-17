@@ -10,4 +10,7 @@ public interface Native {
 
 	
 	public void showInterstitial();
+	
+	
+	public boolean showLock();
 }

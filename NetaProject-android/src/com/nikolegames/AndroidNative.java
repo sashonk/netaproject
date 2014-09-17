@@ -53,6 +53,12 @@ public class AndroidNative implements Native{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public boolean showLock() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 
 }

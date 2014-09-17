@@ -52,15 +52,20 @@ public class AndroidNative implements Native{
 	public void showInterstitial() {
 
 		
-		activity.runOnUiThread(new Runnable() {
+/*		activity.runOnUiThread(new Runnable() {
 			
 			@Override
 			public void run() {
 				MainActivity ma = (MainActivity)activity;
 				ma.displayInterstitial();				
 			}
-		});
+		});*/
 		
+	}
+
+	@Override
+	public boolean showLock() {
+		return true;
 	}
 	
 

@@ -42,26 +42,30 @@ public class WorldsPanel extends Window{
 
 		this.setBackground(new TextureRegionDrawable(region));
 
-/*		float w = 60, h = 60;
+		float w = 60, h = 60;
 		float dx = 0, dy = -60;
 
-		TextureRegion lockRegion = ng.getManager().getAtlas().findRegion("lock");*/
+		TextureRegion lockRegion = ng.getManager().getAtlas().findRegion("lock");
 		
-/*		Image lock1 = new Image(new TextureRegion(lockRegion));
-		lock1.setBounds(215+dx, 270+dy, w, h);
-		addActor(lock1);*/
+		final boolean showLock = ng.getNative().showLock();
+		if(showLock){
 		
-/*		Image lock2 = new Image(new TextureRegion(lockRegion));
-		lock2.setBounds(510+dx, 270+dy, w, h);
-		addActor(lock2);
-		
-		Image lock3 = new Image(new TextureRegion(lockRegion));
-		lock3.setBounds(215+dx, 125+dy, w, h);
-		addActor(lock3);
-		
-		Image lock4 = new Image(new TextureRegion(lockRegion));
-		lock4.setBounds(510+dx, 125+dy, w, h);
-		addActor(lock4);*/
+		/*	Image antLock = new Image(new TextureRegion(lockRegion));
+			antLock.setBounds(215+dx, 270+dy, w, h);
+			addActor(antLock);*/
+			
+			Image pitonLock = new Image(new TextureRegion(lockRegion));
+			pitonLock.setBounds(510+dx, 270+dy, w, h);
+			addActor(pitonLock);
+			
+			/*	Image spiderLock = new Image(new TextureRegion(lockRegion));
+			spiderLock.setBounds(215+dx, 125+dy, w, h);
+			addActor(spiderLock);*/
+			
+			Image tigerLock = new Image(new TextureRegion(lockRegion));
+			tigerLock.setBounds(510+dx, 125+dy, w, h);
+			addActor(tigerLock);
+		}
 		
 		final float FIELD_WIDTH = this.getWidth()/2 - 45;
 		final float FIELD_HEIGHT = this.getHeight()/2 - 50;
@@ -83,16 +87,29 @@ public class WorldsPanel extends Window{
 					id = "ant";
 				}
 				else if(tiger.contains(x, y)){
-					//fire(new ForbiddenEvent("Поле \"Тигр\" доступно в платной версии игры.\nПерейти к платной версии?"));
-					id = "tiger";
+					if(showLock){
+						fire(new ForbiddenEvent("Поле \"Тигр\" доступно в платной версии игры.\nПерейти к платной версии?"));
+					}
+					else{
+						id = "tiger";
+					}
+					
+					//
 				}
 				else if(spider.contains(x, y)){
 					//fire(new ForbiddenEvent("Поле \"Паучок\" доступно в платной версии игры.\nПерейти к платной версии?"));
 					id = "spider";
 				}
 				else if(piton.contains(x, y)){
-					id = "piton";
-					//fire(new ForbiddenEvent("Поле \"Питон\" доступно в платной версии игры.\nПерейти к платной версии?"));
+					if(showLock){
+						fire(new ForbiddenEvent("Поле \"Питон\" доступно в платной версии игры.\nПерейти к платной версии?"));
+					}
+					else{
+						id = "piton";
+					}
+					
+					//
+					
 
 				}
 				

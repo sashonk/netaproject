@@ -58,10 +58,7 @@ public class MainActivity extends AndroidApplication {
     	    interstitial = createInterstitial();
     	    interstitial.loadAd(buildRequest());
     	    
-    	    final TelephonyManager tm =(TelephonyManager)getBaseContext().getSystemService(Context.TELEPHONY_SERVICE);
-
-    	    String deviceid = tm.getDeviceId();
-    	    System.out.println("DEVICE_ID:"+deviceid);
+ 
     }
     
     private InterstitialAd createInterstitial(){

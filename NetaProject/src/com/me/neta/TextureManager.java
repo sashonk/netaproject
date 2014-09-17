@@ -873,7 +873,6 @@ wondGenerator.dispose();
 	
 	public   void manage(){
 
-		
 
 		Iterator<Map<Color, Texture>> rootIter =data.values().iterator();
 		while(rootIter.hasNext()){
