@@ -1190,7 +1190,19 @@ ColorTool paletteTool;
 			}
 		})));
 		
-
+		getStage().addListener(new InputListener(){
+			/** Called when a key goes down. When true is returned, the event is {@link Event#handle() handled}. */
+			public boolean keyDown (InputEvent event, int keycode) {
+				 if(keycode == Keys.BACK){
+					 	Workspace.this.sureWantLeave();
+					 	return true;
+			        }
+				
+				return false;
+			}
+		});
+		
+		linkTool.setEnabled(true);
 	}
 
 	public float getVar(){
@@ -1350,7 +1362,10 @@ ColorTool paletteTool;
 
  	public void sureWantLeave(){
 
- 	
+ 			final Actor actor = findActor("exitCloud");
+ 			if(actor!=null){
+ 				return;
+ 			}
  		
  		
 	 		final ExitCloud ex = new ExitCloud("Точно хочешь выйти?",ng, 0, 0, getWidth(), getHeight(), new ExitCloud.Callback() {
@@ -1366,6 +1381,7 @@ ColorTool paletteTool;
 				}
 			});
 	 		addActor(ex);
+	 		ex.setName("exitCloud");
  		
 /*	 		
 	 		Cloud c = new Cloud("Оцени нас на Google Play!", ng, new Cloud.Callback() {

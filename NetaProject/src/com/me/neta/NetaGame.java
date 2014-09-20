@@ -160,8 +160,9 @@ public class NetaGame implements ApplicationListener {
 					space= new Workspace(this, 0, 0, stage.getWidth(), stage.getHeight());
 					Gdx.app.debug(this.getClass().getName(), "initializing workspace");
 
+					stage.addActor(space);	
 					space.initialize();
-					stage.addActor(space);		
+						
 					Gdx.input.setInputProcessor(stage);
 
 					
